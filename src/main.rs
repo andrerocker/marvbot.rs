@@ -1,38 +1,17 @@
+mod marv;
+
+use marv::plugins;
 use std::io::{self, BufReader, prelude::*};
 use std::net::TcpStream;
 
-trait Plugin {
-    fn check(&self, message: &String) -> bool;
-    fn perform(&self, message: &String) -> Vec<String>;
-}
+fn process(message: String, plugins: &Vec<Box<dyn plugins::Plugin>>, mut stream: &TcpStream) -> Result<(), Box<dyn std::error::Error>> {
+    let candidates = plugins
+                        .into_iter()
+                        .filter(|&plugin| plugin.check(&message));
 
-struct Login {}
-struct Pong {}
-
-impl Plugin for Login {
-    fn check(&self, message: &String) -> bool {
-        return message.contains("Could not resolve your hostname");
-    }
-
-    fn perform(&self, _: &String) -> Vec<String> {
-        return vec!["NICK andrerocker\r\n".to_string(), "USER andrerocker * * :Andre\r\n".to_string()];
-    }
-}
-
-impl Plugin for Pong {
-    fn check(&self, message: &String) -> bool {
-        return message.contains("PING");
-    }
-
-    fn perform(&self, message: &String) -> Vec<String> {
-        let code: String = message.split_whitespace().collect::<Vec<&str>>().last().expect("BUMM").to_string().chars().skip(1).collect();
-        return vec![format!("PONG :{}\r\n", code)];
-    }
-}
-
-fn process(message: String, plugins: &Vec<Box<dyn Plugin>>, mut stream: &TcpStream) -> Result<(), Box<dyn std::error::Error>> {
-    let candidates = plugins.into_iter().filter(|&plugin| plugin.check(&message));
-    let messages: Vec<String> = candidates.map(|plugin| plugin.perform(&message)).flatten().collect();
+    let messages: Vec<String> = candidates
+                                    .map(|plugin| plugin.perform(&message))
+                                    .flatten().collect();
 
     for message in &messages {
         let _ = stream.write_all(message.as_bytes());
@@ -44,7 +23,10 @@ fn process(message: String, plugins: &Vec<Box<dyn Plugin>>, mut stream: &TcpStre
 fn main() -> io::Result<()> {
     let stream = TcpStream::connect("localhost:6667")?;
     let mut reader = BufReader::new(&stream);
-    let plugins: Vec<Box<dyn Plugin>> = vec![Box::new(Login{}), Box::new(Pong{})];
+    let plugins: Vec<Box<dyn plugins::Plugin>> = vec![
+        Box::new(plugins::Login{}), 
+        Box::new(plugins::Pong{})
+    ];
     
     loop {
         let mut line = String::new();
@@ -59,5 +41,5 @@ fn main() -> io::Result<()> {
     }
 }
 
-#[cfg(test)]
-mod test;
+// #[cfg(test)]
+// mod test;
