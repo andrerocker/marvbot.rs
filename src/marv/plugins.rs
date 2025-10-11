@@ -5,6 +5,7 @@ pub trait Plugin {
 
 pub struct Login {}
 pub struct Pong {}
+pub struct Channel {}
 
 impl Plugin for Login {
     fn is_enabled(&self, message: &String) -> bool {
@@ -37,6 +38,17 @@ impl Plugin for Pong {
                             .to_string();
 
         return vec![format!("PONG :{}\r\n", code)];
+    }
+}
+
+impl Plugin for Channel {
+    fn is_enabled(&self, message: &String) -> bool {
+        return message.contains("End of message of the da");
+    }
+
+    fn perform(&self, message: &String) -> Vec<String> {
+        println!("--> Executando Channel");
+        return vec![String::from("JOIN #acme\r\n")];
     }
 }
 

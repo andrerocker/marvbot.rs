@@ -7,7 +7,8 @@ use std::net::TcpStream;
 fn plugins_enabled() -> Vec<Box<dyn plugins::Plugin>> {
     return vec![
         Box::new(plugins::Login{}), 
-        Box::new(plugins::Pong{})
+        Box::new(plugins::Pong{}),
+        Box::new(plugins::Channel{}),
     ];
 }
 
