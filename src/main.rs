@@ -4,17 +4,13 @@ use marv::plugins;
 use std::io::{self, BufReader, prelude::*};
 use std::net::TcpStream;
 
-fn process(message: String, plugins: &Vec<Box<dyn plugins::Plugin>>, mut stream: &TcpStream) -> Result<(), Box<dyn std::error::Error>> {
-    let candidates = plugins
-                        .into_iter()
-                        .filter(|&plugin| plugin.check(&message));
+fn process(protocol: String, plugins: &Vec<Box<dyn plugins::Plugin>>, mut stream: &TcpStream) -> Result<(), Box<dyn std::error::Error>> {
+    let candidates = plugins.into_iter().filter(|&plugin| plugin.check(&protocol));
 
-    let messages: Vec<String> = candidates
-                                    .map(|plugin| plugin.perform(&message))
-                                    .flatten().collect();
-
-    for message in &messages {
-        let _ = stream.write_all(message.as_bytes());
+    for plugin in candidates {
+        for result in plugin.perform(&protocol) {
+            stream.write_all(result.as_bytes())?;
+        }
     }
 
     Ok(())
@@ -36,7 +32,7 @@ fn main() -> io::Result<()> {
             break Ok(());
         }
         
-        println!("Received: {}", line);
+        print!("<-- {}", line);
         let _ = process(line, &plugins, &stream);
     }
 }

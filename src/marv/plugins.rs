@@ -12,7 +12,12 @@ impl Plugin for Login {
     }
 
     fn perform(&self, _: &String) -> Vec<String> {
-        return vec!["NICK andrerocker\r\n".to_string(), "USER andrerocker * * :Andre\r\n".to_string()];
+        println!("--> Executando Login");
+
+        return vec![
+            "USER andrerocker * * :Andre\r\n".to_string(),
+            "NICK andrerocker\r\n".to_string(),
+        ];
     }
 }
 
@@ -22,7 +27,18 @@ impl Plugin for Pong {
     }
 
     fn perform(&self, message: &String) -> Vec<String> {
-        let code: String = message.split_whitespace().collect::<Vec<&str>>().last().expect("BUMM").to_string().chars().skip(1).collect();
+        println!("--> Executando Pong");
+
+        let code: String = message
+                            .split_whitespace()
+                            .collect::<Vec<&str>>()
+                            .last()
+                            .expect("BUMM")
+                            .to_string()
+                            .chars()
+                            .skip(1)
+                            .collect();
+
         return vec![format!("PONG :{}\r\n", code)];
     }
 }
