@@ -3,6 +3,7 @@ pub trait Plugin {
     fn perform(&self, message: &String) -> Vec<String>;
 }
 
+pub struct Logger {}
 pub struct Login {}
 pub struct Pong {}
 pub struct Channel {}
@@ -46,9 +47,20 @@ impl Plugin for Channel {
         return message.contains("End of message of the da");
     }
 
-    fn perform(&self, message: &String) -> Vec<String> {
+    fn perform(&self, _message: &String) -> Vec<String> {
         println!("--> Executando Channel");
         return vec![String::from("JOIN #acme\r\n")];
+    }
+}
+
+impl Plugin for Logger {
+    fn is_enabled(&self, _message: &String) -> bool {
+        return true;
+    }
+
+    fn perform(&self, message: &String) -> Vec<String> {
+        print!("<-- {}", message);
+        return vec![];
     }
 }
 

@@ -6,6 +6,7 @@ use std::net::TcpStream;
 
 fn plugins_enabled() -> Vec<Box<dyn plugins::Plugin>> {
     return vec![
+        Box::new(plugins::Logger{}),
         Box::new(plugins::Login{}),
         Box::new(plugins::Pong{}),
         Box::new(plugins::Channel{}),
@@ -22,8 +23,6 @@ fn main() -> io::Result<()> {
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol) {
             if bytes_read != 0 {
-                print!("<-- {}", protocol);
-
                 for plugin in &plugins {
                     if plugin.is_enabled(&protocol) {
                         for result in plugin.perform(&protocol) {
