@@ -1,41 +1,40 @@
 mod marv;
 
 use marv::plugins;
-use std::io::{self, BufReader, prelude::*};
+use std::io::{self, BufReader, BufWriter, prelude::*};
 use std::net::TcpStream;
 
-fn process(protocol: String, plugins: &Vec<Box<dyn plugins::Plugin>>, mut stream: &TcpStream) -> Result<(), Box<dyn std::error::Error>> {
-    let candidates = plugins.into_iter().filter(|&plugin| plugin.check(&protocol));
-
-    for plugin in candidates {
-        for result in plugin.perform(&protocol) {
-            stream.write_all(result.as_bytes())?;
-        }
-    }
-
-    Ok(())
-}
-
-fn main() -> io::Result<()> {
-    let stream = TcpStream::connect("localhost:6667")?;
-    let mut reader = BufReader::new(&stream);
-    let plugins: Vec<Box<dyn plugins::Plugin>> = vec![
+fn plugins_enabled() -> Vec<Box<dyn plugins::Plugin>> {
+    return vec![
         Box::new(plugins::Login{}), 
         Box::new(plugins::Pong{})
     ];
-    
+}
+
+fn main() -> io::Result<()> {
+    let plugins = plugins_enabled();
+    let stream = TcpStream::connect("localhost:6667")?;
+    let mut reader = BufReader::new(&stream);
+    let mut writer = BufWriter::new(&stream);
+
     loop {
-        let mut line = String::new();
-        let bytes_read = reader.read_line(&mut line)?;
+        let mut protocol = String::new();
+        let bytes_read = reader.read_line(&mut protocol)?;
 
         if bytes_read == 0 {
             break Ok(());
+        } else {
+            print!("<-- {}", protocol);
+
+            for plugin in &plugins {
+                if plugin.check(&protocol) {
+                    for result in plugin.perform(&protocol) {
+                        writer.write_all(result.as_bytes())?;
+                    }
+                }
+            }
+
+            writer.flush();
         }
-        
-        print!("<-- {}", line);
-        let _ = process(line, &plugins, &stream);
     }
 }
-
-// #[cfg(test)]
-// mod test;

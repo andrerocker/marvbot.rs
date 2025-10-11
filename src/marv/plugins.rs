@@ -30,15 +30,15 @@ impl Plugin for Pong {
         println!("--> Executando Pong");
 
         let code: String = message
-                            .split_whitespace()
+                            .split(":")
                             .collect::<Vec<&str>>()
                             .last()
                             .expect("BUMM")
-                            .to_string()
-                            .chars()
-                            .skip(1)
-                            .collect();
+                            .to_string();
 
         return vec![format!("PONG :{}\r\n", code)];
     }
 }
+
+#[cfg(test)]
+mod plugins_test;

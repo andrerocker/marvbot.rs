@@ -1,4 +1,3 @@
-// Note this useful idiom: importing names from outer (for mod tests) scope.
 use super::*;
 
 #[test]
@@ -21,14 +20,10 @@ fn plugin_shouldnt_be_selected() {
 fn plugin_should_return_login_payload() {
     let login = Login{};
     let protocol = "".to_string();
-    let response = vec!["NICK andrerocker\r\n".to_string(), "USER andrerocker * * :Andre\r\n".to_string()];
+    let response = vec![
+        "USER andrerocker * * :Andre\r\n".to_string(),
+        "NICK andrerocker\r\n".to_string(), 
+    ];
 
     assert_eq!(login.perform(&protocol), response);
 }
-
-// #[test]
-// fn test_bad_add() {
-//     // This assert would fire and test will fail.
-//     // Please note, that private functions can be tested too!
-//     assert_eq!(bad_add(1, 2), 3);
-// }
