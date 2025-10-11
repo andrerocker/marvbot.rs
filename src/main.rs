@@ -16,9 +16,9 @@ fn main() -> io::Result<()> {
     let stream = TcpStream::connect("localhost:6667")?;
     let mut reader = BufReader::new(&stream);
     let mut writer = BufWriter::new(&stream);
+    let mut protocol = String::new();
 
     loop {
-        let mut protocol = String::new();
         let bytes_read = reader.read_line(&mut protocol)?;
 
         if bytes_read == 0 {
@@ -27,14 +27,15 @@ fn main() -> io::Result<()> {
             print!("<-- {}", protocol);
 
             for plugin in &plugins {
-                if plugin.check(&protocol) {
+                if plugin.is_enabled(&protocol) {
                     for result in plugin.perform(&protocol) {
                         writer.write_all(result.as_bytes())?;
                     }
                 }
             }
 
-            writer.flush();
+            let _ = writer.flush();
+            protocol.clear();
         }
     }
 }

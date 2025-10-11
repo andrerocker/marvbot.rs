@@ -5,7 +5,7 @@ fn plugin_should_be_selected() {
     let login = Login{};
     let protocol = "Blach Blah! Could not resolve your hostname Bleh bleh".to_string();
 
-    assert_eq!(login.check(&protocol), true);
+    assert_eq!(login.is_enabled(&protocol), true);
 }
 
 #[test]
@@ -13,7 +13,7 @@ fn plugin_shouldnt_be_selected() {
     let login = Login{};
     let protocol = "Blach Blah! Bleh bleh".to_string();
 
-    assert_eq!(login.check(&protocol), false);
+    assert_eq!(login.is_enabled(&protocol), false);
 }
 
 #[test]

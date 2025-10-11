@@ -1,5 +1,5 @@
 pub trait Plugin {
-    fn check(&self, message: &String) -> bool;
+    fn is_enabled(&self, message: &String) -> bool;
     fn perform(&self, message: &String) -> Vec<String>;
 }
 
@@ -7,7 +7,7 @@ pub struct Login {}
 pub struct Pong {}
 
 impl Plugin for Login {
-    fn check(&self, message: &String) -> bool {
+    fn is_enabled(&self, message: &String) -> bool {
         return message.contains("Could not resolve your hostname");
     }
 
@@ -22,7 +22,7 @@ impl Plugin for Login {
 }
 
 impl Plugin for Pong {
-    fn check(&self, message: &String) -> bool {
+    fn is_enabled(&self, message: &String) -> bool {
         return message.contains("PING");
     }
 
