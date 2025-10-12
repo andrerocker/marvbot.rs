@@ -1,3 +1,4 @@
+use log;
 use regex::Regex;
 
 pub trait Plugin {
@@ -17,7 +18,7 @@ impl Plugin for Login {
     }
 
     fn perform(&self, _: &String) -> Vec<String> {
-        println!("--> Executando Login");
+        log::info!("--> Executando Login");
 
         return vec![
             "USER marv * * :Marv\r\n".to_string(),
@@ -32,14 +33,14 @@ impl Plugin for Pong {
     }
 
     fn perform(&self, message: &String) -> Vec<String> {
-        println!("--> Executando Pong");
+        log::info!("--> Executando Pong");
 
         let code: String = message
-                            .split(":")
-                            .collect::<Vec<&str>>()
-                            .last()
-                            .expect("BUMM")
-                            .to_string();
+            .split(":")
+            .collect::<Vec<&str>>()
+            .last()
+            .expect("BUMM")
+            .to_string();
 
         return vec![format!("PONG :{}\r\n", code)];
     }
@@ -51,7 +52,7 @@ impl Plugin for Channel {
     }
 
     fn perform(&self, _message: &String) -> Vec<String> {
-        println!("--> Executando Channel");
+        log::info!("--> Executando Channel");
         return vec![String::from("JOIN #acme\r\n")];
     }
 }
@@ -68,7 +69,8 @@ impl Plugin for Logger {
 }
 
 fn extract_metadata(message: &String) -> Option<regex::Captures<'_>> {
-    let regex = Regex::new(r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) JOIN :#(?<channel>\w+)").unwrap();
+    let regex =
+        Regex::new(r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) JOIN :#(?<channel>\w+)").unwrap();
     return regex.captures(message);
 }
 
@@ -78,9 +80,11 @@ impl Plugin for Hello {
     }
 
     fn perform(&self, message: &String) -> Vec<String> {
-        let metadata = extract_metadata(message).unwrap(); 
-        let response = format!("PRIVMSG #{} :{}: Iaaeee tru!\r\n", &metadata["channel"], &metadata["nick"]);
-        print!("--> {} - {:?}", response, metadata);
+        let metadata = extract_metadata(message).unwrap();
+        let response = format!(
+            "PRIVMSG #{} :{}: Iaaeee tru!\r\n",
+            &metadata["channel"], &metadata["nick"]
+        );
 
         return vec![response];
     }
