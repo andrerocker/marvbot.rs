@@ -1,3 +1,5 @@
+use regex::Regex;
+
 pub trait Plugin {
     fn is_enabled(&self, message: &String) -> bool;
     fn perform(&self, message: &String) -> Vec<String>;
@@ -7,6 +9,7 @@ pub struct Logger {}
 pub struct Login {}
 pub struct Pong {}
 pub struct Channel {}
+pub struct Hello {}
 
 impl Plugin for Login {
     fn is_enabled(&self, message: &String) -> bool {
@@ -17,8 +20,8 @@ impl Plugin for Login {
         println!("--> Executando Login");
 
         return vec![
-            "USER andrerocker * * :Andre\r\n".to_string(),
-            "NICK andrerocker\r\n".to_string(),
+            "USER marv * * :Marv\r\n".to_string(),
+            "NICK marv\r\n".to_string(),
         ];
     }
 }
@@ -61,6 +64,25 @@ impl Plugin for Logger {
     fn perform(&self, message: &String) -> Vec<String> {
         print!("<-- {}", message);
         return vec![];
+    }
+}
+
+fn extract_metadata(message: &String) -> Option<regex::Captures<'_>> {
+    let regex = Regex::new(r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) JOIN :#(?<channel>\w+)").unwrap();
+    return regex.captures(message);
+}
+
+impl Plugin for Hello {
+    fn is_enabled(&self, message: &String) -> bool {
+        return message.contains(" JOIN :");
+    }
+
+    fn perform(&self, message: &String) -> Vec<String> {
+        let metadata = extract_metadata(message).unwrap(); 
+        let response = format!("PRIVMSG #{} :{}: Iaaeee tru!\r\n", &metadata["channel"], &metadata["nick"]);
+        print!("--> {} - {:?}", response, metadata);
+
+        return vec![response];
     }
 }
 

@@ -10,6 +10,7 @@ fn plugins_enabled() -> Vec<Box<dyn plugins::Plugin>> {
         Box::new(plugins::Login{}),
         Box::new(plugins::Pong{}),
         Box::new(plugins::Channel{}),
+        Box::new(plugins::Hello{}),
     ];
 }
 
