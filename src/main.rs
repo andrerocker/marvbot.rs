@@ -25,11 +25,11 @@ fn plugins_enabled(config: &config::MarvSetup) -> Vec<Box<dyn plugins::Plugin>> 
 
 fn main() -> io::Result<()> {
     env_logger::init();
-    let hostname = "localhost:6667";
-    let config = config::read_configuration().unwrap();
+    let marv_setup = config::read_configuration().unwrap();
+    let hostname = marv_setup.config.hostname.clone();
     log::info!("Initializing marvbot - {}", hostname);
 
-    let plugins = plugins_enabled(&config);
+    let plugins = plugins_enabled(&marv_setup);
     let stream = TcpStream::connect(hostname)?;
     let mut reader = BufReader::new(&stream);
     let mut writer = BufWriter::new(&stream);

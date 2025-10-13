@@ -10,3 +10,6 @@ server:
 		--interactive \
 		--publish 6667:6667 \
 		inspircd/inspircd-docker
+
+test:
+	cargo test
