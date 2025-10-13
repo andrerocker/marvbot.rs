@@ -1,0 +1,4 @@
+[config]
+hostname = "127.0.0.1:6667"
+nickname = "marvy"
+channel = "#acme"

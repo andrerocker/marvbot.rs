@@ -2,28 +2,35 @@ mod marv;
 
 use env_logger;
 use log;
+use marv::config;
 use marv::plugins;
 use std::io::{self, BufReader, BufWriter, prelude::*};
 use std::net::TcpStream;
 
-fn plugins_enabled() -> Vec<Box<dyn plugins::Plugin>> {
+fn plugins_enabled(config: &config::MarvSetup) -> Vec<Box<dyn plugins::Plugin>> {
+    let config = &config.config;
+
     return vec![
         Box::new(plugins::Logger {}),
-        Box::new(plugins::Login {}),
+        Box::new(plugins::Login {
+            nickname: config.nickname.clone(),
+        }),
         Box::new(plugins::Pong {}),
-        Box::new(plugins::Channel {}),
+        Box::new(plugins::Channel {
+            channel: config.channel.clone(),
+        }),
         Box::new(plugins::Hello {}),
     ];
 }
 
 fn main() -> io::Result<()> {
     env_logger::init();
+    let hostname = "localhost:6667";
+    let config = config::read_configuration().unwrap();
+    log::info!("Initializing marvbot - {}", hostname);
 
-    let server = "localhost:6667";
-    log::info!("Initializing marvbot - {}", server);
-
-    let plugins = plugins_enabled();
-    let stream = TcpStream::connect(server)?;
+    let plugins = plugins_enabled(&config);
+    let stream = TcpStream::connect(hostname)?;
     let mut reader = BufReader::new(&stream);
     let mut writer = BufWriter::new(&stream);
     let mut protocol = String::new();

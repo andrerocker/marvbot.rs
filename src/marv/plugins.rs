@@ -7,9 +7,13 @@ pub trait Plugin {
 }
 
 pub struct Logger {}
-pub struct Login {}
+pub struct Login {
+    pub nickname: String,
+}
 pub struct Pong {}
-pub struct Channel {}
+pub struct Channel {
+    pub channel: String,
+}
 pub struct Hello {}
 
 impl Plugin for Login {
@@ -21,8 +25,8 @@ impl Plugin for Login {
         log::info!("--> Executando Login");
 
         return vec![
-            "USER marv * * :Marv\r\n".to_string(),
-            "NICK marv\r\n".to_string(),
+            format!("USER {} * * :{}\r\n", self.nickname, self.nickname),
+            format!("NICK {}\r\n", self.nickname),
         ];
     }
 }
@@ -53,7 +57,7 @@ impl Plugin for Channel {
 
     fn perform(&self, _message: &String) -> Vec<String> {
         log::info!("--> Executando Channel");
-        return vec![String::from("JOIN #acme\r\n")];
+        return vec![format!("JOIN {}\r\n", self.channel)];
     }
 }
 
