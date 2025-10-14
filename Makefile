@@ -16,7 +16,7 @@ kafka-server:
 		--tty \
 		--interactive \
 		--publish 9092:9092 \
-		apache/kafka
+		apache/kafka:3.7.0
 
 test:
 	cargo test
