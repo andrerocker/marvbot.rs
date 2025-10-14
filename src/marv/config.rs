@@ -7,6 +7,8 @@ pub struct Config {
     pub hostname: String,
     pub nickname: String,
     pub channel: String,
+    pub broker: String,
+    pub topic: String,
 }
 
 #[derive(Deserialize, Debug, Clone)]
