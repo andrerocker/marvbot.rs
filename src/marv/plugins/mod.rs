@@ -1,7 +1,8 @@
-mod core;
-mod kafka;
+pub mod core;
+pub mod kafka;
 
 use super::config;
+use core::{channel, hello, log, login, pong};
 
 pub trait Plugin {
     fn is_enabled(&self, message: &String) -> bool;
@@ -12,14 +13,14 @@ pub fn default(setup: &config::MarvSetup) -> Vec<Box<dyn Plugin>> {
     let config = setup.config.clone();
 
     return vec![
-        Box::new(core::Logger {}),
-        Box::new(core::Login {
+        Box::new(log::Logger {}),
+        Box::new(login::Login {
             nickname: config.nickname,
         }),
-        Box::new(core::Pong {}),
-        Box::new(core::Channel {
+        Box::new(pong::Pong {}),
+        Box::new(channel::Channel {
             channel: config.channel,
         }),
-        Box::new(core::Hello {}),
+        Box::new(hello::Hello {}),
     ];
 }
