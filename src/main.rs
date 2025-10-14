@@ -10,10 +10,10 @@ use std::net::TcpStream;
 fn main() -> io::Result<()> {
     env_logger::init();
     let marv_setup = config::read_configuration().unwrap();
+    let plugins = plugins::default(&marv_setup);
     let hostname = marv_setup.config.hostname.clone();
     log::info!("Initializing marvbot - {}", hostname);
 
-    let plugins = plugins::default(&marv_setup);
     let stream = TcpStream::connect(hostname)?;
     let mut reader = BufReader::new(&stream);
     let mut writer = BufWriter::new(&stream);
