@@ -37,20 +37,20 @@ fn main() -> io::Result<()> {
 
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol) {
-            if bytes_read != 0 {
-                for plugin in &plugins {
-                    if plugin.is_enabled(&protocol) {
-                        for result in plugin.perform(&protocol) {
-                            writer.write_all(result.as_bytes())?;
-                        }
-                    }
-                }
-
-                let _ = writer.flush();
-                protocol.clear();
-            } else {
+            if bytes_read == 0 {
                 break Ok(());
             }
+
+            for plugin in &plugins {
+                if plugin.is_enabled(&protocol) {
+                    for result in plugin.perform(&protocol) {
+                        writer.write_all(result.as_bytes())?;
+                    }
+                }
+            }
+
+            let _ = writer.flush();
+            protocol.clear();
         }
     }
 }
