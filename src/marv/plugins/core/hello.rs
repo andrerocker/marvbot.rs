@@ -11,7 +11,7 @@ fn extract_metadata(message: &String) -> Option<regex::Captures<'_>> {
 }
 
 impl Plugin for Hello {
-    fn initialize(&self, _setup: &crate::marv::config::MarvSetup) {}
+    fn initialize(&mut self, _setup: &crate::marv::config::MarvSetup) {}
 
     fn is_enabled(&self, message: &String) -> bool {
         return message.contains(" JOIN :");

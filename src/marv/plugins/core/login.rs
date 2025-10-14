@@ -7,7 +7,7 @@ pub struct Login {
 }
 
 impl Plugin for Login {
-    fn initialize(&self, _setup: &crate::marv::config::MarvSetup) {}
+    fn initialize(&mut self, _setup: &crate::marv::config::MarvSetup) {}
 
     fn is_enabled(&self, message: &String) -> bool {
         return message.contains("Could not resolve your hostname");
