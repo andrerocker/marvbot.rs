@@ -1,19 +1,25 @@
 use log::info;
 
-use crate::marv::plugins::Plugin;
+use crate::marv::{config::MarvSetup, plugins::Plugin};
 
 pub struct Login {
     pub nickname: String,
 }
 
-impl Plugin for Login {
-    fn initialize(&mut self, _setup: &crate::marv::config::MarvSetup) {}
+impl Login {
+    pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
+        Box::new(Login {
+            nickname: setup.config.nickname.to_string(),
+        })
+    }
+}
 
+impl Plugin for Login {
     fn is_enabled(&self, message: &String) -> bool {
         return message.contains("Could not resolve your hostname");
     }
 
-    fn perform(&self, _: &String) -> Vec<String> {
+    fn perform(&mut self, _: &String) -> Vec<String> {
         info!("--> Executando Login");
 
         return vec![

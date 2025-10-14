@@ -2,31 +2,21 @@ pub mod core;
 pub mod kafka;
 
 use super::config;
-use core::{channel, hello, log, login, pong};
+use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
+use kafka::KafkaForwarder;
 
 pub trait Plugin {
-    fn initialize(&mut self, setup: &config::MarvSetup);
     fn is_enabled(&self, message: &String) -> bool;
-    fn perform(&self, message: &String) -> Vec<String>;
+    fn perform(&mut self, message: &String) -> Vec<String>;
 }
 
 pub fn default(setup: &config::MarvSetup) -> Vec<Box<dyn Plugin>> {
-    let config = setup.config.clone();
-    let mut plugins: Vec<Box<dyn Plugin>> = vec![
-        Box::new(log::Logger {}),
-        Box::new(login::Login {
-            nickname: config.nickname,
-        }),
-        Box::new(pong::Pong {}),
-        Box::new(channel::Channel {
-            channel: config.channel,
-        }),
-        Box::new(hello::Hello {}),
+    return vec![
+        Logger::new(setup),
+        Login::new(setup),
+        Pong::new(setup),
+        Channel::new(setup),
+        Hello::new(setup),
+        KafkaForwarder::new(setup),
     ];
-
-    for plugin in &mut plugins {
-        plugin.initialize(setup);
-    }
-
-    return plugins;
 }

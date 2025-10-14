@@ -1,15 +1,19 @@
-use crate::marv::plugins::Plugin;
+use crate::marv::{config::MarvSetup, plugins::Plugin};
 
 pub struct Logger {}
 
-impl Plugin for Logger {
-    fn initialize(&mut self, _setup: &crate::marv::config::MarvSetup) {}
+impl Logger {
+    pub fn new(_setup: &MarvSetup) -> Box<dyn Plugin> {
+        Box::new(Logger {})
+    }
+}
 
+impl Plugin for Logger {
     fn is_enabled(&self, _message: &String) -> bool {
         return true;
     }
 
-    fn perform(&self, message: &String) -> Vec<String> {
+    fn perform(&mut self, message: &String) -> Vec<String> {
         print!("<-- {}", message);
         return vec![];
     }

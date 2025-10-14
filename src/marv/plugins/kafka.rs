@@ -1,22 +1,40 @@
-use crate::marv::config::MarvSetup;
-
 use super::Plugin;
+use crate::marv::config::MarvSetup;
+use kafka::{
+    client::RequiredAcks,
+    producer::{Producer, Record},
+};
 
 pub struct KafkaForwarder {
-    pub broker: String,
     pub topic: String,
+    pub producer: Producer,
+}
+
+impl KafkaForwarder {
+    pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
+        let brokers = vec![setup.config.broker.to_string()];
+        let producer = Producer::from_hosts(brokers)
+            .with_required_acks(RequiredAcks::One)
+            .create()
+            .unwrap();
+
+        Box::new(KafkaForwarder {
+            topic: setup.config.topic.to_string(),
+            producer: producer,
+        })
+    }
 }
 
 impl Plugin for KafkaForwarder {
-    fn initialize(&mut self, setup: &MarvSetup) {
-        self.broker = setup.config.broker.clone().to_string();
+    fn is_enabled(&self, _message: &String) -> bool {
+        return true;
     }
 
-    fn is_enabled(&self, message: &String) -> bool {
-        return message.contains(" JOIN :");
-    }
+    fn perform(&mut self, message: &String) -> Vec<String> {
+        self.producer
+            .send(&Record::from_value(&self.topic, message.as_bytes()))
+            .unwrap();
 
-    fn perform(&self, _message: &String) -> Vec<String> {
         return vec![];
     }
 }

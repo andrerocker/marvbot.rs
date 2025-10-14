@@ -10,7 +10,7 @@ use std::net::TcpStream;
 fn main() -> io::Result<()> {
     env_logger::init();
     let marv_setup = config::read_configuration().unwrap();
-    let plugins = plugins::default(&marv_setup);
+    let mut plugins = plugins::default(&marv_setup);
     let hostname = marv_setup.config.hostname.clone();
     log::info!("Initializing marvbot - {}", hostname);
 
@@ -25,7 +25,7 @@ fn main() -> io::Result<()> {
                 break Ok(());
             }
 
-            for plugin in &plugins {
+            for plugin in plugins.iter_mut() {
                 if plugin.is_enabled(&protocol) {
                     for result in plugin.perform(&protocol) {
                         writer.write_all(result.as_bytes())?;

@@ -1,17 +1,21 @@
 use log::info;
 
-use crate::marv::plugins::Plugin;
+use crate::marv::{config::MarvSetup, plugins::Plugin};
 
 pub struct Pong {}
 
-impl Plugin for Pong {
-    fn initialize(&mut self, _setup: &crate::marv::config::MarvSetup) {}
+impl Pong {
+    pub fn new(_setup: &MarvSetup) -> Box<dyn Plugin> {
+        Box::new(Pong {})
+    }
+}
 
+impl Plugin for Pong {
     fn is_enabled(&self, message: &String) -> bool {
         return message.contains("PING");
     }
 
-    fn perform(&self, message: &String) -> Vec<String> {
+    fn perform(&mut self, message: &String) -> Vec<String> {
         info!("--> Executando Pong");
 
         let code: String = message
