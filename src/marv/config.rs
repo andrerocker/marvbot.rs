@@ -2,14 +2,14 @@ use serde::Deserialize;
 use std::fs;
 use toml;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Config {
     pub hostname: String,
     pub nickname: String,
     pub channel: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct MarvSetup {
     pub config: Config,
 }
