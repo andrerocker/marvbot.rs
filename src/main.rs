@@ -49,7 +49,7 @@ fn main() -> io::Result<()> {
                 }
             }
 
-            let _ = writer.flush();
+            writer.flush()?;
             protocol.clear();
         }
     }
