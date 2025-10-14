@@ -5,6 +5,8 @@ use crate::marv::plugins::Plugin;
 pub struct Pong {}
 
 impl Plugin for Pong {
+    fn initialize(&self, _setup: &crate::marv::config::MarvSetup) {}
+
     fn is_enabled(&self, message: &String) -> bool {
         return message.contains("PING");
     }
