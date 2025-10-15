@@ -20,3 +20,9 @@ kafka-server:
 
 test:
 	cargo test
+
+compose:
+	docker compose up
+
+consume:
+	 kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic MARV.MESSAGES  --from-beginning

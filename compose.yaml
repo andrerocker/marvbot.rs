@@ -1,0 +1,9 @@
+services:
+  irc:
+    image: "inspircd/inspircd-docker"
+    ports:
+      - "6667:6667"
+  kafka:
+    image: "apache/kafka:3.7.0"
+    ports:
+      - "9092:9092"
