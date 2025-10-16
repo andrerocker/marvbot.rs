@@ -1,13 +1,13 @@
 ## Marv Bot
 
-Awesome IRC Bot composed by plugins (This is a personal pet project used to learn how to code in Rust)
+Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust Language
 
 ### Todo
 
-[] tokio async
-[] kafka / produce
-[] kafka / consume
-[] database
-[] use plugin as crate
-[] monads
-[] dispatch: static vs dynamic
+- [ ] tokio async
+- [ ] kafka / produce
+- [ ] kafka / consume
+- [ ] database
+- [ ] use plugin as crate
+- [ ] monads
+- [ ] dispatch: static vs dynamic (templates/macro vs dyn/polimorphism)
