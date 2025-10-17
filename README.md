@@ -7,13 +7,16 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 
 ### Todo
 
+- [x] modules
 - [ ] tokio async
 - [x] kafka / produce
 - [x] kafka / consume
 - [ ] database
 - [ ] use plugin as crate
 - [ ] config: custom segments for plugins
-- [ ] monads
+- [x] monads
 - [ ] dispatch: static vs dynamic (templates/macro vs dyn/polimorphism)
 - [ ] prometheus / metrics / tracing
 - [ ] tests
+- [ ] threads
+- [ ] write something to the fs
