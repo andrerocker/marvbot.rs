@@ -3,7 +3,7 @@ pub mod kafka;
 
 use super::config;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use kafka::KafkaForwarder;
+use kafka::KafkaProducer;
 
 pub trait Plugin {
     fn is_enabled(&self, message: &String) -> bool;
@@ -17,6 +17,6 @@ pub fn default(setup: &config::MarvSetup) -> Vec<Box<dyn Plugin>> {
         Pong::new(setup),
         Channel::new(setup),
         Hello::new(setup),
-        KafkaForwarder::new(setup),
+        KafkaProducer::new(setup),
     ];
 }

@@ -5,12 +5,12 @@ use kafka::{
     producer::{Producer, Record},
 };
 
-pub struct KafkaForwarder {
+pub struct KafkaProducer {
     pub topic: String,
     pub producer: Producer,
 }
 
-impl KafkaForwarder {
+impl KafkaProducer {
     pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
         let brokers = vec![setup.config.broker.to_string()];
         let producer = Producer::from_hosts(brokers)
@@ -18,14 +18,14 @@ impl KafkaForwarder {
             .create()
             .unwrap();
 
-        Box::new(KafkaForwarder {
+        Box::new(KafkaProducer {
             topic: setup.config.topic.to_string(),
             producer: producer,
         })
     }
 }
 
-impl Plugin for KafkaForwarder {
+impl Plugin for KafkaProducer {
     fn is_enabled(&self, _message: &String) -> bool {
         return true;
     }
