@@ -16,3 +16,4 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] monads
 - [ ] dispatch: static vs dynamic (templates/macro vs dyn/polimorphism)
 - [ ] prometheus / metrics / tracing
+- [ ] tests
