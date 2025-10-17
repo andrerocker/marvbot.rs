@@ -1,5 +1,4 @@
-use super::Plugin;
-use crate::marv::config::MarvSetup;
+use crate::marv::{config::MarvSetup, plugins::Plugin};
 use kafka::{
     client::RequiredAcks,
     producer::{Producer, Record},

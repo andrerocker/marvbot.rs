@@ -1,9 +1,10 @@
 pub mod core;
 pub mod kafka;
 
+use kafka::producer::KafkaProducer;
+
 use super::config;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use kafka::KafkaProducer;
 
 pub trait Plugin {
     fn is_enabled(&self, message: &String) -> bool;
