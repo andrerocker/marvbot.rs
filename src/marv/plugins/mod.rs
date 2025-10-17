@@ -1,7 +1,7 @@
 pub mod core;
 pub mod kafka;
 
-use kafka::producer::KafkaProducer;
+use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
 
 use super::config;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
@@ -19,5 +19,6 @@ pub fn default(setup: &config::MarvSetup) -> Vec<Box<dyn Plugin>> {
         Channel::new(setup),
         Hello::new(setup),
         KafkaProducer::new(setup),
+        KafkaConsumer::new(setup),
     ];
 }
