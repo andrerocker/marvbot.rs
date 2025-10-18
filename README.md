@@ -23,3 +23,18 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] bot single thread
 - [ ] bot muilti thread
 - [ ] bot evented/async
+
+### Plugins
+
+#### Core
+
+[ ] Ping
+[ ] Channel
+[ ]
+
+#### Extras
+
+[ ] kafka consume
+[ ] kafka produce
+[ ] database
+[ ] chatgpt
