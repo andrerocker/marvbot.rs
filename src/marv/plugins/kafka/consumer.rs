@@ -53,7 +53,9 @@ fn handle_messages(group: String, topic: String, brokers: Vec<String>) -> Result
             for message in ms.messages() {
                 println!(
                     "Offset: {}, Key: {:?}, Value: {:?}",
-                    message.offset, message.key, message.value
+                    message.offset,
+                    message.key,
+                    message.value.len()
                 );
             }
             consumer.consume_messageset(ms).unwrap();

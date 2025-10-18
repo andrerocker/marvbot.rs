@@ -4,6 +4,8 @@ use env_logger;
 use log;
 use marv::config;
 use marv::plugins;
+use prometheus_exporter::prometheus::register_counter;
+use prometheus_exporter::{self};
 use std::io::{self, BufReader, BufWriter, prelude::*};
 use std::net::TcpStream;
 
@@ -21,6 +23,10 @@ fn main() -> io::Result<()> {
     let mut protocol = String::new();
     let mut plugins = plugins::default(&setup);
 
+    let binding = "127.0.0.1:9184".parse().unwrap();
+    prometheus_exporter::start(binding).unwrap();
+    let dispatch_counter = register_counter!("marv_plugin_dispatch_counter", "help").unwrap();
+
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol) {
             if bytes_read == 0 {
@@ -29,6 +35,7 @@ fn main() -> io::Result<()> {
 
             for plugin in plugins.iter_mut() {
                 if plugin.is_enabled(&protocol) {
+                    dispatch_counter.inc();
                     for result in plugin.perform(&protocol) {
                         writer.write_all(result.as_bytes())?;
                     }
