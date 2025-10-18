@@ -20,6 +20,6 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] prometheus / metrics / tracing
 - [ ] tests
 - [ ] write something to the fs
-- [ ] bot single thread
+- [x] bot single thread
 - [ ] bot muilti thread
 - [ ] bot evented/async
