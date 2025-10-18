@@ -6,6 +6,7 @@ use kafka::{
 };
 
 use kafka::error::Error as KafkaError;
+use log::info;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
 
@@ -51,7 +52,7 @@ fn handle_messages(group: String, topic: String, brokers: Vec<String>) -> Result
     loop {
         for ms in consumer.poll().unwrap().iter() {
             for message in ms.messages() {
-                println!(
+                info!(
                     "Offset: {}, Key: {:?}, Value: {:?}",
                     message.offset,
                     message.key,
