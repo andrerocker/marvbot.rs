@@ -9,6 +9,10 @@ impl Logger {
 }
 
 impl Plugin for Logger {
+    fn name(&self) -> String {
+        return "Logger".to_string();
+    }
+
     fn is_enabled(&self, _message: &String) -> bool {
         return true;
     }

@@ -7,6 +7,7 @@ use super::config;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
 
 pub trait Plugin {
+    fn name(&self) -> String;
     fn is_enabled(&self, message: &String) -> bool;
     fn perform(&mut self, message: &String) -> Vec<String>;
 }

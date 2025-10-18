@@ -15,6 +15,10 @@ impl Channel {
 }
 
 impl Plugin for Channel {
+    fn name(&self) -> String {
+        return "Channel".to_string();
+    }
+
     fn is_enabled(&self, message: &String) -> bool {
         return message.contains("End of message of the da");
     }
