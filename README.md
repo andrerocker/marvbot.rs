@@ -10,14 +10,14 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] modules
 - [ ] evented-io / async
 - [ ] threads / mutex
-- [ ] closures
+- [x] closures
 - [x] kafka / produce
 - [x] kafka / consume
 - [ ] database
 - [ ] use plugin as crate
 - [ ] config: custom segments for plugins
 - [x] monads
-- [ ] dispatch: static vs dynamic (templates/macro vs dyn/polimorphism)
+- [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] prometheus / metrics / tracing
 - [ ] tests
 - [ ] write something to the fs
@@ -30,8 +30,8 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 #### Core
 
 - [ ] Ping
-- [ ] Channel
-- [ ]
+- [ ] Channel / Join
+- [ ] Log
 
 #### Extras
 
