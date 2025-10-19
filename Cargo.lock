@@ -280,6 +280,7 @@ dependencies = [
  "env_logger",
  "ferris-says",
  "kafka",
+ "lazy_static",
  "log",
  "prometheus 0.14.0",
  "prometheus_exporter",
