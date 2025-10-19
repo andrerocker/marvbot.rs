@@ -23,3 +23,21 @@ pub fn default(setup: &config::MarvSetup) -> Vec<Box<dyn Plugin>> {
         KafkaConsumer::new(setup),
     ];
 }
+
+pub fn dispatch<F: FnMut(String)>(
+    plugins: &mut Vec<Box<dyn Plugin>>,
+    protocol: &String,
+    mut callback: F,
+) {
+    for plugin in plugins.iter_mut() {
+        if plugin.is_enabled(&protocol) {
+            // dispatch_counter.with_label_values(&["all"]).inc();
+            // dispatch_counter.with_label_values(&[&plugin.name()]).inc();
+
+            for result in plugin.perform(&protocol) {
+                // writer.write_all(result.as_bytes())?;
+                callback(result);
+            }
+        }
+    }
+}

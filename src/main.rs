@@ -4,15 +4,18 @@ use env_logger;
 use log;
 use marv::config;
 use marv::plugins;
-use prometheus_exporter::prometheus::register_counter;
 use prometheus_exporter::prometheus::register_counter_vec;
 use prometheus_exporter::{self};
 use std::io::{self, BufReader, BufWriter, prelude::*};
 use std::net::TcpStream;
 
-fn main() -> io::Result<()> {
+fn initialize() {
     env_logger::init();
+    let binding = "127.0.0.1:9184".parse().unwrap();
+    prometheus_exporter::start(binding).unwrap();
+}
 
+fn main() -> io::Result<()> {
     let setup = config::read_configuration().unwrap();
     let hostname = setup.config.hostname.clone();
     log::info!("Initializing marvbot - {}", hostname);
@@ -24,8 +27,6 @@ fn main() -> io::Result<()> {
     let mut protocol = String::new();
     let mut plugins = plugins::default(&setup);
 
-    let binding = "127.0.0.1:9184".parse().unwrap();
-    prometheus_exporter::start(binding).unwrap();
     let dispatch_counter = register_counter_vec!(
         "marv_plugin_dispatch_counter",
         "Used to track how many requests was made to this call",
@@ -39,16 +40,9 @@ fn main() -> io::Result<()> {
                 break;
             }
 
-            for plugin in plugins.iter_mut() {
-                if plugin.is_enabled(&protocol) {
-                    dispatch_counter.with_label_values(&["all"]).inc();
-                    dispatch_counter.with_label_values(&[&plugin.name()]).inc();
-
-                    for result in plugin.perform(&protocol) {
-                        writer.write_all(result.as_bytes())?;
-                    }
-                }
-            }
+            plugins::dispatch(&mut plugins, &protocol, |response: String| {
+                writer.write_all(response.as_bytes()).unwrap()
+            });
 
             writer.flush()?;
             protocol.clear();
