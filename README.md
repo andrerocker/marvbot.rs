@@ -10,6 +10,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] modules
 - [ ] evented-io / async
 - [ ] threads / mutex
+- [ ] closures
 - [x] kafka / produce
 - [x] kafka / consume
 - [ ] database
@@ -28,13 +29,13 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 
 #### Core
 
-[ ] Ping
-[ ] Channel
-[ ]
+- [ ] Ping
+- [ ] Channel
+- [ ]
 
 #### Extras
 
-[ ] kafka consume
-[ ] kafka produce
-[ ] database
-[ ] chatgpt
+- [ ] kafka consume
+- [ ] kafka produce
+- [ ] database
+- [ ] chatgpt
