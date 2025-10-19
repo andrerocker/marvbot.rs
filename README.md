@@ -18,7 +18,9 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] config: custom segments for plugins
 - [x] monads
 - [ ] dispatch: static vs dynamic (templates vs dyn)
-- [ ] prometheus / metrics / tracing
+- [ ] prometheus / metrics
+- [ ] tracing
+- [ ] debug
 - [ ] tests
 - [ ] write something to the fs
 - [x] bot single thread
