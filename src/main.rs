@@ -20,14 +20,12 @@ fn initialize() -> MarvSetup {
     return setup;
 }
 
-fn main() -> io::Result<()> {
-    let setup = initialize();
+fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(setup: MarvSetup, mut handle: F) {
     let stream = TcpStream::connect(&setup.config.hostname).unwrap();
     let mut reader = BufReader::new(&stream);
     let mut writer = BufWriter::new(&stream);
 
     let mut protocol = String::new();
-    let mut plugins = plugins::default(&setup);
 
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol) {
@@ -35,14 +33,23 @@ fn main() -> io::Result<()> {
                 break;
             }
 
-            plugins::dispatch(&mut plugins, &protocol, |response: String| {
-                writer.write_all(response.as_bytes()).unwrap()
-            });
+            handle(&mut writer, &protocol);
 
-            writer.flush()?;
+            writer.flush().unwrap();
             protocol.clear();
         }
     }
+}
+
+fn main() -> io::Result<()> {
+    let setup = initialize();
+    let mut plugins = plugins::default(&setup);
+
+    stream(setup, |writer, protocol| {
+        plugins::dispatch(&mut plugins, &protocol, |response: String| {
+            writer.write_all(response.as_bytes()).unwrap()
+        });
+    });
 
     Ok(())
 }
