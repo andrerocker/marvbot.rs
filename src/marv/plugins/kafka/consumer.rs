@@ -7,7 +7,7 @@ use kafka::{
 
 use kafka::error::Error as KafkaError;
 use log::info;
-use prometheus_exporter::prometheus::{register_counter, register_counter_vec};
+use prometheus_exporter::prometheus::register_counter;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
 
