@@ -35,7 +35,6 @@ pub fn dispatch<F: FnMut(String)>(
             // dispatch_counter.with_label_values(&[&plugin.name()]).inc();
 
             for result in plugin.perform(&protocol) {
-                // writer.write_all(result.as_bytes())?;
                 callback(result);
             }
         }

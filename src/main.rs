@@ -30,13 +30,6 @@ fn main() -> io::Result<()> {
     let mut protocol = String::new();
     let mut plugins = plugins::default(&setup);
 
-    let dispatch_counter = register_counter_vec!(
-        "marv_plugin_dispatch_counter",
-        "Used to track how many requests was made to this call",
-        &["type"]
-    )
-    .unwrap();
-
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol) {
             if bytes_read == 0 {
