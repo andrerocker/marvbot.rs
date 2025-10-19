@@ -7,9 +7,8 @@ use kafka::{
 
 use kafka::error::Error as KafkaError;
 use log::info;
-use prometheus_exporter::prometheus::register_counter;
 
-use crate::marv::{config::MarvSetup, plugins::Plugin};
+use crate::marv::{config::MarvSetup, metrics::MARV_PLUGIN_KAFKA_CONSUME_COUNTER, plugins::Plugin};
 
 pub struct KafkaConsumer {
     // pub topic: String,
@@ -46,12 +45,6 @@ impl Plugin for KafkaConsumer {
 }
 
 fn handle_messages(group: String, topic: String, brokers: Vec<String>) -> Result<(), KafkaError> {
-    let consume_counter = register_counter!(
-        "marv_plugin_kafka_consumer_consume_counter",
-        "Track how many messages was consumed from Kafka Consumer",
-    )
-    .unwrap();
-
     let mut consumer = Consumer::from_hosts(brokers)
         .with_topic(topic.clone())
         .with_group(group.clone())
@@ -63,7 +56,7 @@ fn handle_messages(group: String, topic: String, brokers: Vec<String>) -> Result
     loop {
         for ms in consumer.poll().unwrap().iter() {
             for message in ms.messages() {
-                consume_counter.inc();
+                MARV_PLUGIN_KAFKA_CONSUME_COUNTER.inc();
                 info!(
                     "Offset: {}, Key: {:?}, Value: {:?}",
                     message.offset,
