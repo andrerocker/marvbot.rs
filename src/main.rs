@@ -4,10 +4,10 @@ use env_logger;
 use log;
 use marv::config;
 use marv::config::MarvSetup;
+use marv::network;
 use marv::plugins;
 use prometheus_exporter::{self};
-use std::io::{self, BufReader, BufWriter, prelude::*};
-use std::net::TcpStream;
+use std::io::{self, prelude::*};
 
 fn initialize() -> MarvSetup {
     env_logger::init();
@@ -20,32 +20,11 @@ fn initialize() -> MarvSetup {
     return setup;
 }
 
-fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(setup: MarvSetup, mut handle: F) {
-    let stream = TcpStream::connect(&setup.config.hostname).unwrap();
-    let mut reader = BufReader::new(&stream);
-    let mut writer = BufWriter::new(&stream);
-
-    let mut protocol = String::new();
-
-    loop {
-        if let Ok(bytes_read) = reader.read_line(&mut protocol) {
-            if bytes_read == 0 {
-                break;
-            }
-
-            handle(&mut writer, &protocol);
-
-            writer.flush().unwrap();
-            protocol.clear();
-        }
-    }
-}
-
 fn main() -> io::Result<()> {
     let setup = initialize();
     let mut plugins = plugins::default(&setup);
 
-    stream(setup, |writer, protocol| {
+    network::stream(setup, |writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
             writer.write_all(response.as_bytes()).unwrap()
         });
