@@ -3,17 +3,14 @@ use std::thread;
 use kafka::{
     client::{FetchOffset, GroupOffsetStorage},
     consumer::Consumer,
+    error::Error as KafkaError,
 };
 
-use kafka::error::Error as KafkaError;
 use log::info;
 
 use crate::marv::{config::MarvSetup, metrics::MARV_PLUGIN_KAFKA_CONSUME_COUNTER, plugins::Plugin};
 
-pub struct KafkaConsumer {
-    // pub topic: String,
-    // pub consumer: Consumer,
-}
+pub struct KafkaConsumer {}
 
 impl KafkaConsumer {
     pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
