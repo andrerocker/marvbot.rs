@@ -5,7 +5,6 @@ use log;
 use marv::config;
 use marv::config::MarvSetup;
 use marv::plugins;
-use prometheus_exporter::prometheus::register_counter_vec;
 use prometheus_exporter::{self};
 use std::io::{self, BufReader, BufWriter, prelude::*};
 use std::net::TcpStream;
