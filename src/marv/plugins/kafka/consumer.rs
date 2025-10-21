@@ -1,16 +1,10 @@
-use std::{
-    fs::{self, OpenOptions},
-    io::Write,
-    thread,
-};
+use std::{fs::OpenOptions, io::Write, thread};
 
 use kafka::{
     client::{FetchOffset, GroupOffsetStorage},
     consumer::{Consumer, Message},
     error::Error as KafkaError,
 };
-
-use log::info;
 
 use crate::marv::{
     config::{Config, MarvSetup},

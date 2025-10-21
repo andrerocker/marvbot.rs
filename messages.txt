@@ -80,3 +80,10 @@ PING :LmcUEZ8SEd
 :marvy!marvy@192.168.65.1 JOIN :#acme
 :9268ef7444e0.example.com 353 marvy = #acme :@marvy
 :9268ef7444e0.example.com 366 marvy #acme :End of /NAMES list.
+PING :9268ef7444e0.example.com
+PING :9268ef7444e0.example.com
+PING :9268ef7444e0.example.com
+PING :9268ef7444e0.example.com
+PING :9268ef7444e0.example.com
+PING :9268ef7444e0.example.com
+PING :9268ef7444e0.example.com
