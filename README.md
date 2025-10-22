@@ -13,7 +13,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] closures
 - [x] kafka / produce
 - [x] kafka / consume
-- [ ] database
+- [ ] database / orm
 - [ ] use plugin as crate
 - [ ] config: custom segments for plugins
 - [x] monads
@@ -28,6 +28,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] bot evented/async
 - [ ] build
 - [ ] cross platform build (arm, x86, windows, linux, macos)
+- [ ] dotenv
 
 ### Plugins
 
