@@ -25,4 +25,13 @@ compose:
 	docker compose up
 
 consume:
-	 kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic MARV.MESSAGES  --from-beginning
+	 kafka-console-consumer.sh \
+	 	--bootstrap-server localhost:9092 \
+		--topic MARV.MESSAGES  \
+		--from-beginning
+
+postgresql:
+	docker run \
+		--publish 5432:5432 \
+		--env POSTGRES_PASSWORD=deploy42 \
+		postgres
