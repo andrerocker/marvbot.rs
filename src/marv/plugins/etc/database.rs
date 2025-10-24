@@ -1,5 +1,3 @@
-use std::env;
-
 use crate::marv::models::*;
 use crate::marv::schema::messages;
 use crate::marv::{config::MarvSetup, plugins::Plugin};
@@ -12,8 +10,9 @@ pub struct Database {
 }
 
 impl Database {
-    pub fn new(_setup: &MarvSetup) -> Box<dyn Plugin> {
-        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
+        // let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+        let database_url = setup.config.database_url.clone();
 
         let connection = PgConnection::establish(&database_url)
             .unwrap_or_else(|_| panic!("Error connecting to {}", database_url));
@@ -43,7 +42,7 @@ impl Database {
 
     pub fn create(&mut self, message: &String) -> Message {
         let title = "Acme";
-        let body = &message;
+        let body = message;
 
         let new_post = NewMessage { title, body };
         let connection = &mut self.connection;

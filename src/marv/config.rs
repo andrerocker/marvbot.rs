@@ -11,6 +11,7 @@ pub struct Config {
     pub topic: String,
     pub group: String,
     pub messages_log: String,
+    pub database_url: String,
 }
 
 #[derive(Deserialize, Debug, Clone)]
