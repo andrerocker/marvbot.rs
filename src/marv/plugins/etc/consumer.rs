@@ -61,7 +61,7 @@ fn save_message(config: Config, message: &Message) {
     //     message.value.len()
     // );
 
-    //TODO: Dirty way to dael with files. It`s just a Quick and Dirty Impl
+    //TODO: Dirty way to deal with files. It's just a Quick and Dirty Impl
     let target_file = config.messages_log.clone();
     let contents = message.value; // std::str::from_utf8(message.value).unwrap();
     let mut file = OpenOptions::new()

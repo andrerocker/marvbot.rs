@@ -1,7 +1,7 @@
 pub mod core;
-pub mod kafka;
+pub mod etc;
 
-use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
+use etc::{consumer::KafkaConsumer, producer::KafkaProducer};
 
 use super::{config, metrics::MARV_PLUGIN_HIT_COUNTER};
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};

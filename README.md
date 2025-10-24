@@ -18,14 +18,14 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] config: custom segments for plugins
 - [x] monads
 - [ ] dispatch: static vs dynamic (templates vs dyn)
-- [ ] prometheus / metrics
+- [ ] prometheus / metrics / aumentar cobertura
 - [ ] tracing
 - [ ] debug
 - [ ] tests
 - [ ] write something to the fs
 - [x] bot single thread
 - [ ] bot muilti thread
-- [ ] bot evented/async
+- [ ] bot evented / async
 - [ ] build
 - [ ] cross platform build (arm, x86, windows, linux, macos)
 - [ ] dotenv
