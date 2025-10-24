@@ -1,3 +1,4 @@
+use crate::marv::schema::messages;
 use diesel::prelude::*;
 
 // use crate::marv::{config::MarvSetup, plugins::Plugin};
@@ -10,4 +11,11 @@ pub struct Message {
     pub title: String,
     pub body: String,
     pub published: bool,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = messages)]
+pub struct NewMessage<'a> {
+    pub title: &'a str,
+    pub body: &'a str,
 }

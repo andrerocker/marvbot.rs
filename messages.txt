@@ -87,3 +87,246 @@ PING :9268ef7444e0.example.com
 PING :9268ef7444e0.example.com
 PING :9268ef7444e0.example.com
 PING :9268ef7444e0.example.com
+:9268ef7444e0.example.com NOTICE * :*** Looking up your hostname...
+:9268ef7444e0.example.com NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (192.168.65.1) instead.
+PING :TVTyZl7uni
+:9268ef7444e0.example.com 001 marvy :Welcome to the ExampleNet IRC Network marvy!marvy@192.168.65.1
+:9268ef7444e0.example.com 002 marvy :Your host is 9268ef7444e0.example.com, running version InspIRCd-4
+:9268ef7444e0.example.com 003 marvy :This server was created on 23 Oct 2025 at 22:50:31 UTC
+:9268ef7444e0.example.com 004 marvy 9268ef7444e0.example.com InspIRCd-4 BINRTcgikorswz ACHIKMRTXabcefghijklmnopqrstvz :HIXabefghjkloqv
+:9268ef7444e0.example.com 005 marvy ACCEPT=30 AWAYLEN=200 BOT=B CALLERID=g CASEMAPPING=ascii CHANLIMIT=#:20 CHANMODES=IXbeg,k,Hfjl,ACKMRTcimnprstz CHANNELLEN=60 CHANTYPES=# ELIST=CMNTU ESILENCE=CcdiNnPpTtx EXCEPTS=e :are supported by this server
+:9268ef7444e0.example.com 005 marvy EXTBAN=,ACRTUacjrwz HOSTLEN=64 INVEX=I KEYLEN=30 KICKLEN=300 LINELEN=512 MAXLIST=I:100,X:100,b:100,e:100,g:100 MAXTARGETS=20 MODES=20 MONITOR=30 NAMELEN=130 NETWORK=ExampleNet :are supported by this server
+:9268ef7444e0.example.com 005 marvy NICKLEN=30 PREFIX=(qaohv)~&@%+ SAFELIST SAFERATE SILENCE=32 STATUSMSG=~&@%+ TOPICLEN=330 USERLEN=10 USERMODES=,,s,BINRTcgikorwz WHOX :are supported by this server
+:9268ef7444e0.example.com 251 marvy :There are 1 users and 0 invisible on 1 servers
+:9268ef7444e0.example.com 253 marvy 1 :unknown connections
+:9268ef7444e0.example.com 254 marvy 0 :channels formed
+:9268ef7444e0.example.com 255 marvy :I have 1 clients and 0 servers
+:9268ef7444e0.example.com 265 marvy :Current local users: 1  Max: 2
+:9268ef7444e0.example.com 266 marvy :Current global users: 1  Max: 2
+:9268ef7444e0.example.com 250 marvy :Highest connection count: 2 (2 clients) (13 connections received)
+:9268ef7444e0.example.com 375 marvy :9268ef7444e0.example.com message of the day:
+:9268ef7444e0.example.com 372 marvy : _____                        _____   _____    _____      _
+:9268ef7444e0.example.com 372 marvy :|_   _|                      |_   _| |  __ \  / ____|    | |
+:9268ef7444e0.example.com 372 marvy :  | |    _ __    ___   _ __    | |   | |__) || |       __| |
+:9268ef7444e0.example.com 372 marvy :  | |   | '_ \  / __| | '_ \   | |   |  _  / | |      / _` |
+:9268ef7444e0.example.com 372 marvy : _| |_  | | | | \__ \ | |_) | _| |_  | | \ \ | |____ | (_| |
+:9268ef7444e0.example.com 372 marvy :|_____| |_| |_| |___/ | .__/ |_____| |_|  \_\ \_____| \__,_|
+:9268ef7444e0.example.com 372 marvy : _____________________| |__________________________________
+:9268ef7444e0.example.com 372 marvy :|_____________________|_|__________________________________|
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :                         The IRC server for the 31st century
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :       /\     /\
+:9268ef7444e0.example.com 372 marvy :      {  `---'  }  WELCOME TO AN 13I04N07S08P03I10R12C06D99 NETWORK
+:9268ef7444e0.example.com 372 marvy :      {  O   O  }
+:9268ef7444e0.example.com 372 marvy :      ~~>  V  <~~    If you see this, I'm probably new.
+:9268ef7444e0.example.com 372 marvy :       \  \|/  /       If I'm not new, my owner is lazy. ;-)
+:9268ef7444e0.example.com 372 marvy :        `-----'____
+:9268ef7444e0.example.com 372 marvy :        /     \    \_
+:9268ef7444e0.example.com 372 marvy :       {       }\  )_\_   _
+:9268ef7444e0.example.com 372 marvy :       |  \_/  |/ /  \_\_/ )
+:9268ef7444e0.example.com 372 marvy :        \__/  /(_/     \__/
+:9268ef7444e0.example.com 372 marvy :          (__/
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      +------ To change this see docker.motd -------+
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      |   * Web: https://www.inspircd.org           |
+:9268ef7444e0.example.com 372 marvy :      |   * IRC: ircs://irc.teranova.net/inspircd   |
+:9268ef7444e0.example.com 372 marvy :      |   * Docs: https://docs.inspircd.org         |
+:9268ef7444e0.example.com 372 marvy :      |   * Issues: https://git.io/JIuYi            |
+:9268ef7444e0.example.com 372 marvy :      |   * Discussions: https://git.io/JIuYv       |
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      | We hope you like this software.  Please do  |
+:9268ef7444e0.example.com 372 marvy :      | make sure to customise your configuration,  |
+:9268ef7444e0.example.com 372 marvy :      | though, so you love it.  Enjoy.             |
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      |                        -- The InspIRCd Team |
+:9268ef7444e0.example.com 372 marvy :      +---------------------------------------------+
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :-------------------------------------------------------------
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :                        ##         .
+:9268ef7444e0.example.com 372 marvy :                  ## ## ##        ==
+:9268ef7444e0.example.com 372 marvy :               ## ## ## ## ##    ===
+:9268ef7444e0.example.com 372 marvy :           /"""""""""""""""""\___/ ===
+:9268ef7444e0.example.com 372 marvy :      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+:9268ef7444e0.example.com 372 marvy :           \______ o           __/
+:9268ef7444e0.example.com 372 marvy :             \    \         __/
+:9268ef7444e0.example.com 372 marvy :              \____\_______/
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      A warm welcome from the InspIRCd-Docker Team, too!
+:9268ef7444e0.example.com 372 marvy :      For Issues:
+:9268ef7444e0.example.com 372 marvy :      https://github.com/inspircd/docker/issues
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      Have fun with the image!
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 376 marvy :End of message of the day.
+:9268ef7444e0.example.com 501 marvy x :is not a recognised user mode.
+:marvy!marvy@192.168.65.1 MODE marvy :+c
+:marvy!marvy@192.168.65.1 JOIN :#acme
+:9268ef7444e0.example.com 353 marvy = #acme :@marvy
+:9268ef7444e0.example.com 366 marvy #acme :End of /NAMES list.
+:9268ef7444e0.example.com NOTICE * :*** Looking up your hostname...
+:9268ef7444e0.example.com NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (192.168.65.1) instead.
+PING :yiu5YRrVOo
+:9268ef7444e0.example.com 001 marvy :Welcome to the ExampleNet IRC Network marvy!marvy@192.168.65.1
+:9268ef7444e0.example.com 002 marvy :Your host is 9268ef7444e0.example.com, running version InspIRCd-4
+:9268ef7444e0.example.com 003 marvy :This server was created on 23 Oct 2025 at 22:50:31 UTC
+:9268ef7444e0.example.com 004 marvy 9268ef7444e0.example.com InspIRCd-4 BINRTcgikorswz ACHIKMRTXabcefghijklmnopqrstvz :HIXabefghjkloqv
+:9268ef7444e0.example.com 005 marvy ACCEPT=30 AWAYLEN=200 BOT=B CALLERID=g CASEMAPPING=ascii CHANLIMIT=#:20 CHANMODES=IXbeg,k,Hfjl,ACKMRTcimnprstz CHANNELLEN=60 CHANTYPES=# ELIST=CMNTU ESILENCE=CcdiNnPpTtx EXCEPTS=e :are supported by this server
+:9268ef7444e0.example.com 005 marvy EXTBAN=,ACRTUacjrwz HOSTLEN=64 INVEX=I KEYLEN=30 KICKLEN=300 LINELEN=512 MAXLIST=I:100,X:100,b:100,e:100,g:100 MAXTARGETS=20 MODES=20 MONITOR=30 NAMELEN=130 NETWORK=ExampleNet :are supported by this server
+:9268ef7444e0.example.com 005 marvy NICKLEN=30 PREFIX=(qaohv)~&@%+ SAFELIST SAFERATE SILENCE=32 STATUSMSG=~&@%+ TOPICLEN=330 USERLEN=10 USERMODES=,,s,BINRTcgikorwz WHOX :are supported by this server
+:9268ef7444e0.example.com 251 marvy :There are 1 users and 0 invisible on 1 servers
+:9268ef7444e0.example.com 253 marvy 1 :unknown connections
+:9268ef7444e0.example.com 254 marvy 0 :channels formed
+:9268ef7444e0.example.com 255 marvy :I have 1 clients and 0 servers
+:9268ef7444e0.example.com 265 marvy :Current local users: 1  Max: 2
+:9268ef7444e0.example.com 266 marvy :Current global users: 1  Max: 2
+:9268ef7444e0.example.com 250 marvy :Highest connection count: 2 (2 clients) (14 connections received)
+:9268ef7444e0.example.com 375 marvy :9268ef7444e0.example.com message of the day:
+:9268ef7444e0.example.com 372 marvy : _____                        _____   _____    _____      _
+:9268ef7444e0.example.com 372 marvy :|_   _|                      |_   _| |  __ \  / ____|    | |
+:9268ef7444e0.example.com 372 marvy :  | |    _ __    ___   _ __    | |   | |__) || |       __| |
+:9268ef7444e0.example.com 372 marvy :  | |   | '_ \  / __| | '_ \   | |   |  _  / | |      / _` |
+:9268ef7444e0.example.com 372 marvy : _| |_  | | | | \__ \ | |_) | _| |_  | | \ \ | |____ | (_| |
+:9268ef7444e0.example.com 372 marvy :|_____| |_| |_| |___/ | .__/ |_____| |_|  \_\ \_____| \__,_|
+:9268ef7444e0.example.com 372 marvy : _____________________| |__________________________________
+:9268ef7444e0.example.com 372 marvy :|_____________________|_|__________________________________|
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :                         The IRC server for the 31st century
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :       /\     /\
+:9268ef7444e0.example.com 372 marvy :      {  `---'  }  WELCOME TO AN 13I04N07S08P03I10R12C06D99 NETWORK
+:9268ef7444e0.example.com 372 marvy :      {  O   O  }
+:9268ef7444e0.example.com 372 marvy :      ~~>  V  <~~    If you see this, I'm probably new.
+:9268ef7444e0.example.com 372 marvy :       \  \|/  /       If I'm not new, my owner is lazy. ;-)
+:9268ef7444e0.example.com 372 marvy :        `-----'____
+:9268ef7444e0.example.com 372 marvy :        /     \    \_
+:9268ef7444e0.example.com 372 marvy :       {       }\  )_\_   _
+:9268ef7444e0.example.com 372 marvy :       |  \_/  |/ /  \_\_/ )
+:9268ef7444e0.example.com 372 marvy :        \__/  /(_/     \__/
+:9268ef7444e0.example.com 372 marvy :          (__/
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      +------ To change this see docker.motd -------+
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      |   * Web: https://www.inspircd.org           |
+:9268ef7444e0.example.com 372 marvy :      |   * IRC: ircs://irc.teranova.net/inspircd   |
+:9268ef7444e0.example.com 372 marvy :      |   * Docs: https://docs.inspircd.org         |
+:9268ef7444e0.example.com 372 marvy :      |   * Issues: https://git.io/JIuYi            |
+:9268ef7444e0.example.com 372 marvy :      |   * Discussions: https://git.io/JIuYv       |
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      | We hope you like this software.  Please do  |
+:9268ef7444e0.example.com 372 marvy :      | make sure to customise your configuration,  |
+:9268ef7444e0.example.com 372 marvy :      | though, so you love it.  Enjoy.             |
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      |                        -- The InspIRCd Team |
+:9268ef7444e0.example.com 372 marvy :      +---------------------------------------------+
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :-------------------------------------------------------------
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :                        ##         .
+:9268ef7444e0.example.com 372 marvy :                  ## ## ##        ==
+:9268ef7444e0.example.com 372 marvy :               ## ## ## ## ##    ===
+:9268ef7444e0.example.com 372 marvy :           /"""""""""""""""""\___/ ===
+:9268ef7444e0.example.com 372 marvy :      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+:9268ef7444e0.example.com 372 marvy :           \______ o           __/
+:9268ef7444e0.example.com 372 marvy :             \    \         __/
+:9268ef7444e0.example.com 372 marvy :              \____\_______/
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      A warm welcome from the InspIRCd-Docker Team, too!
+:9268ef7444e0.example.com 372 marvy :      For Issues:
+:9268ef7444e0.example.com 372 marvy :      https://github.com/inspircd/docker/issues
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      Have fun with the image!
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 376 marvy :End of message of the day.
+:9268ef7444e0.example.com 501 marvy x :is not a recognised user mode.
+:marvy!marvy@192.168.65.1 MODE marvy :+c
+:marvy!marvy@192.168.65.1 JOIN :#acme
+:9268ef7444e0.example.com 353 marvy = #acme :@marvy
+:9268ef7444e0.example.com 366 marvy #acme :End of /NAMES list.
+:9268ef7444e0.example.com NOTICE * :*** Looking up your hostname...
+:9268ef7444e0.example.com NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (192.168.65.1) instead.
+PING :Jzn84Jv369
+:9268ef7444e0.example.com 001 marvy :Welcome to the ExampleNet IRC Network marvy!marvy@192.168.65.1
+:9268ef7444e0.example.com 002 marvy :Your host is 9268ef7444e0.example.com, running version InspIRCd-4
+:9268ef7444e0.example.com 003 marvy :This server was created on 23 Oct 2025 at 22:50:31 UTC
+:9268ef7444e0.example.com 004 marvy 9268ef7444e0.example.com InspIRCd-4 BINRTcgikorswz ACHIKMRTXabcefghijklmnopqrstvz :HIXabefghjkloqv
+:9268ef7444e0.example.com 005 marvy ACCEPT=30 AWAYLEN=200 BOT=B CALLERID=g CASEMAPPING=ascii CHANLIMIT=#:20 CHANMODES=IXbeg,k,Hfjl,ACKMRTcimnprstz CHANNELLEN=60 CHANTYPES=# ELIST=CMNTU ESILENCE=CcdiNnPpTtx EXCEPTS=e :are supported by this server
+:9268ef7444e0.example.com 005 marvy EXTBAN=,ACRTUacjrwz HOSTLEN=64 INVEX=I KEYLEN=30 KICKLEN=300 LINELEN=512 MAXLIST=I:100,X:100,b:100,e:100,g:100 MAXTARGETS=20 MODES=20 MONITOR=30 NAMELEN=130 NETWORK=ExampleNet :are supported by this server
+:9268ef7444e0.example.com 005 marvy NICKLEN=30 PREFIX=(qaohv)~&@%+ SAFELIST SAFERATE SILENCE=32 STATUSMSG=~&@%+ TOPICLEN=330 USERLEN=10 USERMODES=,,s,BINRTcgikorwz WHOX :are supported by this server
+:9268ef7444e0.example.com 251 marvy :There are 1 users and 0 invisible on 1 servers
+:9268ef7444e0.example.com 253 marvy 1 :unknown connections
+:9268ef7444e0.example.com 254 marvy 0 :channels formed
+:9268ef7444e0.example.com 255 marvy :I have 1 clients and 0 servers
+:9268ef7444e0.example.com 265 marvy :Current local users: 1  Max: 2
+:9268ef7444e0.example.com 266 marvy :Current global users: 1  Max: 2
+:9268ef7444e0.example.com 250 marvy :Highest connection count: 2 (2 clients) (15 connections received)
+:9268ef7444e0.example.com 375 marvy :9268ef7444e0.example.com message of the day:
+:9268ef7444e0.example.com 372 marvy : _____                        _____   _____    _____      _
+:9268ef7444e0.example.com 372 marvy :|_   _|                      |_   _| |  __ \  / ____|    | |
+:9268ef7444e0.example.com 372 marvy :  | |    _ __    ___   _ __    | |   | |__) || |       __| |
+:9268ef7444e0.example.com 372 marvy :  | |   | '_ \  / __| | '_ \   | |   |  _  / | |      / _` |
+:9268ef7444e0.example.com 372 marvy : _| |_  | | | | \__ \ | |_) | _| |_  | | \ \ | |____ | (_| |
+:9268ef7444e0.example.com 372 marvy :|_____| |_| |_| |___/ | .__/ |_____| |_|  \_\ \_____| \__,_|
+:9268ef7444e0.example.com 372 marvy : _____________________| |__________________________________
+:9268ef7444e0.example.com 372 marvy :|_____________________|_|__________________________________|
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :                         The IRC server for the 31st century
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :       /\     /\
+:9268ef7444e0.example.com 372 marvy :      {  `---'  }  WELCOME TO AN 13I04N07S08P03I10R12C06D99 NETWORK
+:9268ef7444e0.example.com 372 marvy :      {  O   O  }
+:9268ef7444e0.example.com 372 marvy :      ~~>  V  <~~    If you see this, I'm probably new.
+:9268ef7444e0.example.com 372 marvy :       \  \|/  /       If I'm not new, my owner is lazy. ;-)
+:9268ef7444e0.example.com 372 marvy :        `-----'____
+:9268ef7444e0.example.com 372 marvy :        /     \    \_
+:9268ef7444e0.example.com 372 marvy :       {       }\  )_\_   _
+:9268ef7444e0.example.com 372 marvy :       |  \_/  |/ /  \_\_/ )
+:9268ef7444e0.example.com 372 marvy :        \__/  /(_/     \__/
+:9268ef7444e0.example.com 372 marvy :          (__/
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      +------ To change this see docker.motd -------+
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      |   * Web: https://www.inspircd.org           |
+:9268ef7444e0.example.com 372 marvy :      |   * IRC: ircs://irc.teranova.net/inspircd   |
+:9268ef7444e0.example.com 372 marvy :      |   * Docs: https://docs.inspircd.org         |
+:9268ef7444e0.example.com 372 marvy :      |   * Issues: https://git.io/JIuYi            |
+:9268ef7444e0.example.com 372 marvy :      |   * Discussions: https://git.io/JIuYv       |
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      | We hope you like this software.  Please do  |
+:9268ef7444e0.example.com 372 marvy :      | make sure to customise your configuration,  |
+:9268ef7444e0.example.com 372 marvy :      | though, so you love it.  Enjoy.             |
+:9268ef7444e0.example.com 372 marvy :      |                                             |
+:9268ef7444e0.example.com 372 marvy :      |                        -- The InspIRCd Team |
+:9268ef7444e0.example.com 372 marvy :      +---------------------------------------------+
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :-------------------------------------------------------------
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :                        ##         .
+:9268ef7444e0.example.com 372 marvy :                  ## ## ##        ==
+:9268ef7444e0.example.com 372 marvy :               ## ## ## ## ##    ===
+:9268ef7444e0.example.com 372 marvy :           /"""""""""""""""""\___/ ===
+:9268ef7444e0.example.com 372 marvy :      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+:9268ef7444e0.example.com 372 marvy :           \______ o           __/
+:9268ef7444e0.example.com 372 marvy :             \    \         __/
+:9268ef7444e0.example.com 372 marvy :              \____\_______/
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      A warm welcome from the InspIRCd-Docker Team, too!
+:9268ef7444e0.example.com 372 marvy :      For Issues:
+:9268ef7444e0.example.com 372 marvy :      https://github.com/inspircd/docker/issues
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 372 marvy :      Have fun with the image!
+:9268ef7444e0.example.com 372 marvy : 
+:9268ef7444e0.example.com 376 marvy :End of message of the day.
+:9268ef7444e0.example.com 501 marvy x :is not a recognised user mode.
+:marvy!marvy@192.168.65.1 MODE marvy :+c
+:marvy!marvy@192.168.65.1 JOIN :#acme
+:9268ef7444e0.example.com 353 marvy = #acme :@marvy
+:9268ef7444e0.example.com 366 marvy #acme :End of /NAMES list.

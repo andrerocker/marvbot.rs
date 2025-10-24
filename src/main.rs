@@ -31,9 +31,9 @@ fn check_messages() {
         .limit(5)
         .select(Message::as_select())
         .load(connection)
-        .expect("Error loading messages");
+        .expect("Error loading posts");
 
-    println!("Displaying {} messages", results.len());
+    println!("Displaying {} posts", results.len());
     for post in results {
         println!("{}", post.title);
         println!("-----------\n");

@@ -1,7 +1,7 @@
 pub mod core;
 pub mod etc;
 
-use etc::{consumer::KafkaConsumer, producer::KafkaProducer};
+use etc::{consumer::KafkaConsumer, database::Database, producer::KafkaProducer};
 
 use super::{config, metrics::MARV_PLUGIN_HIT_COUNTER};
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
@@ -21,6 +21,7 @@ pub fn default(setup: &config::MarvSetup) -> Vec<Box<dyn Plugin>> {
         Hello::new(setup),
         KafkaProducer::new(setup),
         KafkaConsumer::new(setup),
+        Database::new(setup),
     ];
 }
 
