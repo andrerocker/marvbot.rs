@@ -29,7 +29,8 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] build
 - [ ] cross platform build (arm, x86, windows, linux, macos)
 - [ ] dotenv
-- [ ] singleton
+- [ ] singleton (lazy_static?)
+- [ ] argparse
 
 ### Plugins
 
