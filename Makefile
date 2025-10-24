@@ -35,3 +35,6 @@ postgresql:
 		--publish 5432:5432 \
 		--env POSTGRES_PASSWORD=deploy42 \
 		postgres
+
+migrate:
+	diesel migration run

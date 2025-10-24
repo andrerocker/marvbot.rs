@@ -1,7 +1,9 @@
 mod marv;
 
+use self::marv::models::*;
 use diesel::Connection;
 use diesel::PgConnection;
+use diesel::prelude::*;
 use dotenv::dotenv;
 use env_logger;
 use log;
@@ -20,11 +22,31 @@ pub fn establish_connection() -> PgConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
+fn check_messages() {
+    use self::marv::schema::messages::dsl::*;
+
+    let connection = &mut establish_connection();
+    let results = messages
+        .filter(published.eq(true))
+        .limit(5)
+        .select(Message::as_select())
+        .load(connection)
+        .expect("Error loading messages");
+
+    println!("Displaying {} messages", results.len());
+    for post in results {
+        println!("{}", post.title);
+        println!("-----------\n");
+        println!("{}", post.body);
+    }
+}
+
 fn initialize() -> MarvSetup {
     dotenv().ok();
     env_logger::init();
     prometheus_exporter::start("127.0.0.1:9184".parse().unwrap()).unwrap();
     establish_connection();
+    check_messages();
 
     let setup = config::read_configuration().unwrap();
     let hostname = setup.config.hostname.clone();
