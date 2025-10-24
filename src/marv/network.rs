@@ -5,10 +5,11 @@ use std::{
 };
 
 pub fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(setup: MarvSetup, mut handle: F) {
-    let stream = TcpStream::connect(&setup.config.hostname).unwrap();
+    let stream = TcpStream::connect(&setup.config.hostname)
+        .expect("Problems trying to connect to the server");
+
     let mut reader = BufReader::new(&stream);
     let mut writer = BufWriter::new(&stream);
-
     let mut protocol = String::new();
 
     loop {
@@ -19,7 +20,9 @@ pub fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(setup: MarvSetup, m
 
             handle(&mut writer, &protocol);
 
-            writer.flush().unwrap();
+            writer
+                .flush()
+                .expect("Problems trying to flush network data");
             protocol.clear();
         }
     }

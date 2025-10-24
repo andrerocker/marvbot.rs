@@ -15,7 +15,7 @@ impl KafkaProducer {
         let producer = Producer::from_hosts(brokers)
             .with_required_acks(RequiredAcks::One)
             .create()
-            .unwrap();
+            .expect("Problems trying to initialize Producer");
 
         Box::new(KafkaProducer {
             topic: setup.config.topic.to_string(),
@@ -34,9 +34,10 @@ impl Plugin for KafkaProducer {
     }
 
     fn perform(&mut self, message: &String) -> Vec<String> {
+        let record = &Record::from_value(&self.topic, message.as_bytes());
         self.producer
-            .send(&Record::from_value(&self.topic, message.as_bytes()))
-            .unwrap();
+            .send(record)
+            .expect("Problems trying to write message");
 
         return vec![];
     }

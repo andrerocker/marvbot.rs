@@ -9,7 +9,7 @@ pub struct Login {
 impl Login {
     pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
         Box::new(Login {
-            nickname: setup.config.nickname.to_string(),
+            nickname: setup.config.nickname.clone(),
         })
     }
 }

@@ -38,7 +38,7 @@ fn handle_messages(setup: MarvSetup) -> Result<(), KafkaError> {
         .with_fallback_offset(FetchOffset::Earliest)
         .with_offset_storage(Some(GroupOffsetStorage::Kafka))
         .create()
-        .unwrap();
+        .expect("Problems trying to initialize Consumer");
 
     loop {
         for ms in consumer.poll().unwrap().iter() {
@@ -49,18 +49,13 @@ fn handle_messages(setup: MarvSetup) -> Result<(), KafkaError> {
             consumer.consume_messageset(ms).unwrap();
         }
 
-        consumer.commit_consumed().unwrap();
+        consumer
+            .commit_consumed()
+            .expect("Problems trying to commit consumed messages");
     }
 }
 
 fn save_message(config: Config, message: &Message) {
-    // info!(
-    //     "Offset: {}, Key: {:?}, Value: {:?}",
-    //     message.offset,
-    //     message.key,
-    //     message.value.len()
-    // );
-
     //TODO: Dirty way to deal with files. It's just a Quick and Dirty Impl
     let target_file = config.messages_log.clone();
     let contents = message.value; // std::str::from_utf8(message.value).unwrap();
@@ -68,9 +63,10 @@ fn save_message(config: Config, message: &Message) {
         .append(true)
         .create(true)
         .open(target_file)
-        .unwrap();
+        .expect("Problems trying to open the messages file");
 
-    file.write_all(contents).unwrap()
+    file.write_all(contents)
+        .expect("Problems trying to write to the messages file")
 }
 
 impl Plugin for KafkaConsumer {

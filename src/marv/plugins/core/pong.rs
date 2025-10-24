@@ -26,7 +26,7 @@ impl Plugin for Pong {
             .split(":")
             .collect::<Vec<&str>>()
             .last()
-            .expect("BUMM")
+            .expect("Problems trying to parse PONG message")
             .to_string();
 
         return vec![format!("PONG :{}\r\n", code)];

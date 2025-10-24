@@ -11,7 +11,6 @@ pub struct Database {
 
 impl Database {
     pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
-        // let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
         let database_url = setup.config.database_url.clone();
 
         let connection = PgConnection::establish(&database_url)

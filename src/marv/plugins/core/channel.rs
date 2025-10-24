@@ -9,7 +9,7 @@ pub struct Channel {
 impl Channel {
     pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
         Box::new(Channel {
-            channel: setup.config.channel.to_string(),
+            channel: setup.config.channel.clone(),
         })
     }
 }

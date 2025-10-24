@@ -7,10 +7,10 @@ lazy_static! {
         "Number of calls made to a plugin",
         &["type"]
     )
-    .unwrap();
+    .expect("Problems trying to initialize Plugin HIT Counter");
     pub static ref MARV_PLUGIN_KAFKA_CONSUME_COUNTER: IntCounter = register_int_counter!(
         "marv_plugin_kafka_consumer_consume_counter",
         "Track how many messages was consumed from Kafka Consumer",
     )
-    .unwrap();
+    .expect("Problems trying to initialize Kafka Consumer Counter");
 }
