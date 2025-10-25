@@ -1,3 +1,5 @@
+use log::info;
+
 use super::config::MarvSetup;
 use std::{
     io::{BufReader, BufWriter, prelude::*},
@@ -15,6 +17,7 @@ pub fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(setup: MarvSetup, m
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol) {
             if bytes_read == 0 {
+                info!("Connection closed");
                 break;
             }
 
