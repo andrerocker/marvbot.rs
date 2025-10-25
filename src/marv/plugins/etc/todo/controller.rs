@@ -2,7 +2,11 @@ use crate::marv::plugins::etc::todo::helper;
 use std::{collections::HashMap, io::Error};
 
 fn create(metadata: HashMap<String, String>) -> Result<Vec<String>, Error> {
-    return Ok(vec![helper::channel_user_message(metadata, "created!")]);
+    Ok(vec![helper::channel_user_message(metadata, "created!")?])
+}
+
+fn default(metadata: HashMap<String, String>, message: &str) -> Result<Vec<String>, Error> {
+    Ok(vec![helper::channel_message(metadata, message)?])
 }
 
 pub fn dispatch(message: &String) -> Result<Vec<String>, Error> {
@@ -12,6 +16,6 @@ pub fn dispatch(message: &String) -> Result<Vec<String>, Error> {
 
     return match command {
         "create" => create(metadata),
-        _ => Ok(vec![helper::channel_message(metadata, "Nothing to do!")]),
+        _ => default(metadata, "Nothing to do!"),
     };
 }

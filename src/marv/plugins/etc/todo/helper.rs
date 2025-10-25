@@ -1,6 +1,19 @@
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    io::{Error, ErrorKind},
+};
 
 use regex::Regex;
+
+fn safe_get(metadata: &HashMap<String, String>, key: &str) -> Result<String, Error> {
+    metadata
+        .get(key)
+        .ok_or(Error::new(
+            ErrorKind::Other,
+            ":metadata doesn't have key :{key}",
+        ))
+        .cloned()
+}
 
 pub fn regex_to_map(pattern: &str, payload: &String) -> HashMap<String, String> {
     let regex = Regex::new(pattern).expect("Problems trying to initialize Regex pattern");
@@ -19,19 +32,17 @@ pub fn regex_to_map(pattern: &str, payload: &String) -> HashMap<String, String> 
     return results;
 }
 
-pub fn channel_message(metadata: HashMap<String, String>, message: &str) -> String {
-    return format!(
-        "PRIVMSG #{} - {}\r\n",
-        metadata.get("channel").unwrap(),
-        message,
-    );
+pub fn channel_message(metadata: HashMap<String, String>, message: &str) -> Result<String, Error> {
+    let channel = safe_get(&metadata, "channel")?;
+    Ok(format!("PRIVMSG #{} - {}\r\n", channel, message))
 }
 
-pub fn channel_user_message(metadata: HashMap<String, String>, message: &str) -> String {
-    return format!(
-        "PRIVMSG #{} {}: {}\r\n",
-        metadata.get("channel").unwrap(),
-        metadata.get("user").unwrap(),
-        message,
-    );
+pub fn channel_user_message(
+    metadata: HashMap<String, String>,
+    message: &str,
+) -> Result<String, Error> {
+    let nick = safe_get(&metadata, "nick")?;
+    let channel = safe_get(&metadata, "channel")?;
+
+    Ok(format!("PRIVMSG #{} {}: {}\r\n", channel, nick, message))
 }
