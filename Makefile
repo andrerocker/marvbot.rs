@@ -24,6 +24,9 @@ test:
 compose:
 	docker compose up
 
+produce:
+	 echo "hack3d" | kafka-console-producer.sh --bootstrap-server localhost:9092 --topic MARV.MESSAGES
+
 consume:
 	 kafka-console-consumer.sh \
 	 	--bootstrap-server localhost:9092 \
@@ -38,3 +41,5 @@ postgresql:
 
 migrate:
 	diesel migration run
+
+setup: produce migrate
