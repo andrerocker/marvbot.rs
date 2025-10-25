@@ -18,3 +18,20 @@ pub fn regex_to_map(pattern: &str, payload: &String) -> HashMap<String, String> 
 
     return results;
 }
+
+pub fn channel_message(metadata: HashMap<String, String>, message: &str) -> String {
+    return format!(
+        "PRIVMSG #{} - {}\r\n",
+        metadata.get("channel").unwrap(),
+        message,
+    );
+}
+
+pub fn channel_user_message(metadata: HashMap<String, String>, message: &str) -> String {
+    return format!(
+        "PRIVMSG #{} {}: {}\r\n",
+        metadata.get("channel").unwrap(),
+        metadata.get("user").unwrap(),
+        message,
+    );
+}
