@@ -32,6 +32,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] singleton (lazy_static?)
 - [ ] argparse
 - [ ] housekeeping
+- [ ] plugin contract should return Result
 
 ### Plugins
 

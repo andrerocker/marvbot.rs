@@ -1,4 +1,8 @@
-use std::{fs::OpenOptions, io::Write, thread};
+use std::{
+    fs::OpenOptions,
+    io::{Error, Write},
+    thread,
+};
 
 use kafka::{
     client::{FetchOffset, GroupOffsetStorage},
@@ -78,7 +82,7 @@ impl Plugin for KafkaConsumer {
         return false;
     }
 
-    fn perform(&mut self, _message: &String) -> Vec<String> {
-        return vec![];
+    fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
+        return Ok(vec![]);
     }
 }

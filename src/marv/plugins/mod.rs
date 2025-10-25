@@ -5,15 +5,16 @@ use etc::{consumer::KafkaConsumer, database::Database, producer::KafkaProducer, 
 
 use super::{config, metrics::MARV_PLUGIN_HIT_COUNTER};
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
+use std::io::Error;
 
 pub trait Plugin {
     fn name(&self) -> String;
     fn is_enabled(&self, message: &String) -> bool;
-    fn perform(&mut self, message: &String) -> Vec<String>;
+    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error>;
 }
 
-pub fn default(setup: &config::MarvSetup) -> Vec<Box<dyn Plugin>> {
-    return vec![
+pub fn default(setup: &config::MarvSetup) -> Result<Vec<Box<dyn Plugin>>, Error> {
+    return Ok(vec![
         Logger::new(setup),
         Login::new(setup),
         Pong::new(setup),
@@ -23,7 +24,7 @@ pub fn default(setup: &config::MarvSetup) -> Vec<Box<dyn Plugin>> {
         KafkaConsumer::new(setup),
         Database::new(setup),
         Todo::new(setup),
-    ];
+    ]);
 }
 
 pub fn dispatch<F: FnMut(String)>(
@@ -37,8 +38,15 @@ pub fn dispatch<F: FnMut(String)>(
                 .with_label_values(&[&plugin.name()])
                 .inc();
 
-            for result in plugin.perform(&protocol) {
-                callback(result);
+            match plugin.perform(&protocol) {
+                Ok(response) => {
+                    for result in response {
+                        callback(result);
+                    }
+                }
+                Err(error) => {
+                    log::error!("Problems processing plugin {}", error)
+                }
             }
         }
     }

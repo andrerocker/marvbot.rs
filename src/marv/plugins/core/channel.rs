@@ -1,3 +1,5 @@
+use std::io::Error;
+
 use log::info;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
@@ -23,8 +25,8 @@ impl Plugin for Channel {
         return message.contains("End of message of the da");
     }
 
-    fn perform(&mut self, _message: &String) -> Vec<String> {
+    fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Channel");
-        return vec![format!("JOIN {}\r\n", self.channel)];
+        return Ok(vec![format!("JOIN {}\r\n", self.channel)]);
     }
 }

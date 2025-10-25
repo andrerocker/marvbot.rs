@@ -1,3 +1,5 @@
+use std::io::Error;
+
 use log::info;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
@@ -23,12 +25,12 @@ impl Plugin for Login {
         return message.contains("Could not resolve your hostname");
     }
 
-    fn perform(&mut self, _: &String) -> Vec<String> {
+    fn perform(&mut self, _: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Login");
 
-        return vec![
+        return Ok(vec![
             format!("USER {} * * :{}\r\n", self.nickname, self.nickname),
             format!("NICK {}\r\n", self.nickname),
-        ];
+        ]);
     }
 }

@@ -1,34 +1,16 @@
-use std::{collections::HashMap, hash::Hash};
+pub mod controller;
+pub mod helper;
 
-use kafka::client::metadata;
-use log::info;
-use regex::{Captures, Regex};
+use std::io::Error;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
+use log::info;
 
 pub struct Todo {}
 
 impl Todo {
     pub fn new(_setup: &MarvSetup) -> Box<dyn Plugin> {
         Box::new(Todo {})
-    }
-
-    pub fn extract_metadata(&self, message: &String) -> HashMap<String, String> {
-        let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :todo: (?<command>\w+): (?<argument>.*)";
-        let regex = Regex::new(pattern).expect("Problems trying to initialize Regex pattern");
-        let mut results: HashMap<String, String> = HashMap::new();
-
-        for caps in regex.captures_iter(message) {
-            for name in regex.capture_names() {
-                if let Some(name_str) = name {
-                    if let Some(matched_value) = caps.name(name_str) {
-                        results.insert(name_str.to_string(), matched_value.as_str().to_string());
-                    }
-                }
-            }
-        }
-
-        return results;
     }
 }
 
@@ -41,9 +23,10 @@ impl Plugin for Todo {
         return message.contains(" PRIVMSG ") && message.contains(" :todo: ");
     }
 
-    fn perform(&mut self, message: &String) -> Vec<String> {
+    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Todo");
-        let metadata = self.extract_metadata(message);
+        let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :todo: (?<command>\w+): (?<argument>.*)";
+        let metadata = helper::regex_to_map(pattern, message);
 
         let response = format!(
             "PRIVMSG #{} - {} - {} - {} - {} - {}\r\n",
@@ -57,6 +40,6 @@ impl Plugin for Todo {
 
         info!("--> Response: {response}");
 
-        return vec![response];
+        return Ok(vec![response]);
     }
 }

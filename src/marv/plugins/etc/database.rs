@@ -1,3 +1,5 @@
+use std::io::Error;
+
 use crate::marv::models::*;
 use crate::marv::schema::messages;
 use crate::marv::{config::MarvSetup, plugins::Plugin};
@@ -63,9 +65,9 @@ impl Plugin for Database {
         return true;
     }
 
-    fn perform(&mut self, message: &String) -> Vec<String> {
+    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         self.create(message);
 
-        return vec![];
+        return Ok(vec![]);
     }
 }

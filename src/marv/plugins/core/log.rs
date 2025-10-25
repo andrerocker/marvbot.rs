@@ -1,3 +1,5 @@
+use std::io::Error;
+
 use crate::marv::{config::MarvSetup, plugins::Plugin};
 
 pub struct Logger {}
@@ -17,8 +19,8 @@ impl Plugin for Logger {
         return true;
     }
 
-    fn perform(&mut self, message: &String) -> Vec<String> {
+    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         print!("<-- {}", message);
-        return vec![];
+        return Ok(vec![]);
     }
 }

@@ -1,3 +1,5 @@
+use std::io::Error;
+
 use log::info;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
@@ -19,7 +21,7 @@ impl Plugin for Pong {
         return message.contains("PING");
     }
 
-    fn perform(&mut self, message: &String) -> Vec<String> {
+    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Pong");
 
         let code: String = message
@@ -29,6 +31,6 @@ impl Plugin for Pong {
             .expect("Problems trying to parse PONG message")
             .to_string();
 
-        return vec![format!("PONG :{}\r\n", code)];
+        return Ok(vec![format!("PONG :{}\r\n", code)]);
     }
 }

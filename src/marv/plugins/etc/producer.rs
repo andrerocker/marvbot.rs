@@ -1,3 +1,5 @@
+use std::io::Error;
+
 use crate::marv::{config::MarvSetup, plugins::Plugin};
 use kafka::{
     client::RequiredAcks,
@@ -33,12 +35,12 @@ impl Plugin for KafkaProducer {
         return true;
     }
 
-    fn perform(&mut self, message: &String) -> Vec<String> {
+    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         let record = &Record::from_value(&self.topic, message.as_bytes());
         self.producer
             .send(record)
             .expect("Problems trying to write message");
 
-        return vec![];
+        return Ok(vec![]);
     }
 }

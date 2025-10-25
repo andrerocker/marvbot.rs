@@ -1,3 +1,5 @@
+use std::io::Error;
+
 use regex::Regex;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
@@ -19,7 +21,7 @@ impl Plugin for Hello {
         return message.contains(" JOIN :");
     }
 
-    fn perform(&mut self, message: &String) -> Vec<String> {
+    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) JOIN :#(?<channel>\w+)";
         let regex = Regex::new(pattern).unwrap();
         let metadata = regex.captures(message).unwrap();
@@ -29,6 +31,6 @@ impl Plugin for Hello {
             &metadata["channel"], &metadata["nick"]
         );
 
-        return vec![response];
+        return Ok(vec![response]);
     }
 }
