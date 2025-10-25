@@ -45,7 +45,7 @@ pub fn dispatch<F: FnMut(String)>(
                     }
                 }
                 Err(error) => {
-                    log::error!("Problems processing plugin {}", error)
+                    log::error!("Problems processing plugin: {}", error)
                 }
             }
         }

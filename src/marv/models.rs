@@ -1,4 +1,4 @@
-use crate::marv::schema::messages;
+use crate::marv::schema::{messages, todos};
 use diesel::prelude::*;
 
 // use crate::marv::{config::MarvSetup, plugins::Plugin};
@@ -17,5 +17,19 @@ pub struct Message {
 #[diesel(table_name = messages)]
 pub struct NewMessage<'a> {
     pub title: &'a str,
+    pub body: &'a str,
+}
+
+#[derive(Queryable, Selectable)]
+#[diesel(table_name = crate::marv::schema::todos)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct Todo {
+    pub id: i32,
+    pub body: String,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = todos)]
+pub struct NewTodo<'a> {
     pub body: &'a str,
 }

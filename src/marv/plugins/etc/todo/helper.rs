@@ -1,16 +1,15 @@
+use regex::Regex;
 use std::{
     collections::HashMap,
     io::{Error, ErrorKind},
 };
 
-use regex::Regex;
-
-fn safe_get(metadata: &HashMap<String, String>, key: &str) -> Result<String, Error> {
+pub fn safe_get(metadata: &HashMap<String, String>, key: &str) -> Result<String, Error> {
     metadata
         .get(key)
         .ok_or(Error::new(
             ErrorKind::Other,
-            ":metadata doesn't have key :{key}",
+            format!(":metadata doesn't have key :{key}"),
         ))
         .cloned()
 }
