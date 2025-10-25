@@ -46,10 +46,16 @@ impl Plugin for Todo {
         let metadata = self.extract_metadata(message);
 
         let response = format!(
-            "PRIVMSG #{} - {} \r\n",
+            "PRIVMSG #{} - {} - {} - {} - {} - {}\r\n",
             metadata.get("channel").unwrap(),
-            metadata.get("command").unwrap()
+            metadata.get("name").unwrap(),
+            metadata.get("server").unwrap(),
+            metadata.get("channel").unwrap(),
+            metadata.get("command").unwrap(),
+            metadata.get("argument").unwrap(),
         );
+
+        info!("--> Response: {response}");
 
         return vec![response];
     }

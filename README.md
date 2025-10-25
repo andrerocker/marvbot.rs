@@ -31,6 +31,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] dotenv
 - [ ] singleton (lazy_static?)
 - [ ] argparse
+- [ ] housekeeping
 
 ### Plugins
 
