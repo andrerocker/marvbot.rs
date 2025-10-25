@@ -1,10 +1,8 @@
 pub mod controller;
 pub mod helper;
 
-use std::io::Error;
-
 use crate::marv::{config::MarvSetup, plugins::Plugin};
-use log::info;
+use std::io::Error;
 
 pub struct Todo {}
 
@@ -24,22 +22,6 @@ impl Plugin for Todo {
     }
 
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
-        info!("--> Executando Todo");
-        let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :todo: (?<command>\w+): (?<argument>.*)";
-        let metadata = helper::regex_to_map(pattern, message);
-
-        let response = format!(
-            "PRIVMSG #{} - {} - {} - {} - {} - {}\r\n",
-            metadata.get("channel").unwrap(),
-            metadata.get("name").unwrap(),
-            metadata.get("server").unwrap(),
-            metadata.get("channel").unwrap(),
-            metadata.get("command").unwrap(),
-            metadata.get("argument").unwrap(),
-        );
-
-        info!("--> Response: {response}");
-
-        return Ok(vec![response]);
+        return controller::dispatch(message);
     }
 }
