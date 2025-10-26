@@ -34,7 +34,7 @@ fn main() -> io::Result<()> {
 
     network::stream(setup, |writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
-            info!("Sending response to the server: '{}'", response);
+            info!("Sending response to the server: '{}'", response.trim());
             writer
                 .write_all(response.as_bytes())
                 .expect("Problems trying to write to the network")
