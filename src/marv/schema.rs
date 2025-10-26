@@ -8,3 +8,12 @@ diesel::table! {
         published -> Bool,
     }
 }
+
+diesel::table! {
+    todos (id) {
+        id -> Int4,
+        body -> Text,
+    }
+}
+
+diesel::allow_tables_to_appear_in_same_query!(messages, todos,);

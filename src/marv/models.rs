@@ -33,3 +33,9 @@ pub struct Todo {
 pub struct NewTodo<'a> {
     pub body: &'a str,
 }
+
+impl Todo {
+    pub fn to_string(&self) -> String {
+        format!("{} - {}", self.id, self.body)
+    }
+}

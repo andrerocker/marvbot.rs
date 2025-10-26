@@ -3,6 +3,7 @@ mod marv;
 use dotenv::dotenv;
 use env_logger;
 use log;
+use log::info;
 use marv::config;
 use marv::config::MarvSetup;
 use marv::network;
@@ -33,6 +34,7 @@ fn main() -> io::Result<()> {
 
     network::stream(setup, |writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
+            info!("Sending response to the server: '{}'", response);
             writer
                 .write_all(response.as_bytes())
                 .expect("Problems trying to write to the network")

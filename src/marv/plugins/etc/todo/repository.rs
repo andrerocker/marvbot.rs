@@ -28,4 +28,17 @@ impl TodoRepository {
             )),
         }
     }
+
+    pub fn list(&mut self) -> Result<Vec<Todo>, Error> {
+        use crate::marv::schema::todos::dsl::*;
+        let results = todos.select(Todo::as_select()).load(&mut self.connection);
+
+        match results {
+            Ok(results) => Ok(results),
+            Err(error) => Err(Error::new(
+                ErrorKind::Other,
+                format!("Problems trying to save Todo, {}", error),
+            )),
+        }
+    }
 }

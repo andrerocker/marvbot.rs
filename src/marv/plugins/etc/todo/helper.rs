@@ -37,7 +37,7 @@ pub fn channel_message(metadata: HashMap<String, String>, message: &str) -> Resu
 }
 
 pub fn channel_user_message(
-    metadata: HashMap<String, String>,
+    metadata: &HashMap<String, String>,
     message: &str,
 ) -> Result<String, Error> {
     let nick = safe_get(&metadata, "nick")?;

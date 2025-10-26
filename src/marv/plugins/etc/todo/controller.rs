@@ -1,7 +1,6 @@
-use crate::marv::plugins::etc::todo::helper::{self, safe_get};
-use std::{collections::HashMap, io::Error};
-
 use super::repository::TodoRepository;
+use crate::marv::plugins::etc::todo::helper::{self};
+use std::{collections::HashMap, io::Error};
 
 pub struct TodoController {
     pub repository: TodoRepository,
@@ -9,13 +8,28 @@ pub struct TodoController {
 
 impl TodoController {
     pub fn create(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>, Error> {
-        let message = safe_get(&metadata, "argument")?;
+        let message = helper::safe_get(&metadata, "argument")?;
 
         match self.repository.create(&message) {
-            Ok(_) => Ok(vec![helper::channel_user_message(metadata, "created!")?]),
+            Ok(_) => Ok(vec![helper::channel_user_message(&metadata, "created!")?]),
             Err(error) => Ok(vec![helper::channel_user_message(
-                metadata,
+                &metadata,
                 &format!("Failed! {}", error),
+            )?]),
+        }
+    }
+
+    pub fn list(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>, Error> {
+        match self.repository.list() {
+            Ok(response) => Ok(response
+                .into_iter()
+                .map(|current| {
+                    helper::channel_user_message(&metadata, &current.to_string()).unwrap()
+                })
+                .collect::<Vec<String>>()),
+            Err(error) => Ok(vec![helper::channel_user_message(
+                &metadata,
+                &format!("Failed listing Todos: {}", error),
             )?]),
         }
     }
@@ -31,10 +45,11 @@ impl TodoController {
     pub fn dispatch(&mut self, message: &String) -> Result<Vec<String>, Error> {
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :todo: (?<command>\w+): (?<argument>.*)";
         let metadata = helper::regex_to_map(pattern, message);
-        let command = metadata.get("command").unwrap().as_str();
+        let command = helper::safe_get(&metadata, "command")?;
 
-        return match command {
+        return match command.as_str() {
             "create" => self.create(metadata),
+            "list" => self.list(metadata),
             _ => self.default(metadata, "Nothing to do!"),
         };
     }
