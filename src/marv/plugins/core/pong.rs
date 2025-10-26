@@ -1,8 +1,5 @@
-use std::io::Error;
-
-use log::info;
-
 use crate::marv::{config::MarvSetup, plugins::Plugin};
+use std::io::{Error, ErrorKind};
 
 pub struct Pong {}
 
@@ -22,14 +19,14 @@ impl Plugin for Pong {
     }
 
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
-        info!("--> Executando Pong");
-
-        let code: String = message
+        let code = message
             .split(":")
-            .collect::<Vec<&str>>()
             .last()
-            .expect("Problems trying to parse PONG message")
-            .to_string();
+            .ok_or(Error::new(
+                ErrorKind::Other,
+                "Problems trying to extract :host from PONG message",
+            ))?
+            .trim();
 
         return Ok(vec![format!("PONG :{}\r\n", code)]);
     }
