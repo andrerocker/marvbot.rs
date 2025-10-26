@@ -13,7 +13,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] closures
 - [x] kafka / produce
 - [x] kafka / consume
-- [ ] database / orm
+- [x] database / orm
 - [ ] use plugin as crate
 - [ ] config: custom segments for plugins
 - [x] monads
@@ -22,30 +22,31 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] tracing
 - [ ] debug
 - [ ] tests
-- [ ] write something to the fs
+- [x] write something to the fs
 - [x] bot single thread
 - [ ] bot muilti thread
 - [ ] bot evented / async
 - [ ] build
 - [ ] cross platform build (arm, x86, windows, linux, macos)
-- [ ] dotenv
-- [ ] singleton (lazy_static?)
+- [x] dotenv
+- [x] singleton (lazy_static?)
 - [ ] argparse
 - [ ] housekeeping
-- [ ] plugin contract should return Result
-- [ ] error handling vs monads
+- [x] plugin contract should return Result
+- [x] error handling vs monads (unwrap, Option, Result, ?, etc)
 
 ### Plugins
 
 #### Core
 
-- [ ] Ping
-- [ ] Channel / Join
-- [ ] Log
+- [x] Ping
+- [x] Channel / Join
+- [x] Log
 
 #### Extras
 
-- [ ] kafka consume
-- [ ] kafka produce
-- [ ] database
+- [x] kafka consume
+- [x] kafka produce
+- [x] database
+- [ ] todo (create a todolist)
 - [ ] chatgpt
