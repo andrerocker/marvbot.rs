@@ -34,6 +34,18 @@ impl TodoController {
         }
     }
 
+    pub fn delete(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>, Error> {
+        let message = helper::safe_get(&metadata, "argument")?;
+
+        match self.repository.delete(&message) {
+            Ok(_) => Ok(vec![helper::channel_user_message(&metadata, "deleted!")?]),
+            Err(error) => Ok(vec![helper::channel_user_message(
+                &metadata,
+                &format!("Failed! {}", error),
+            )?]),
+        }
+    }
+
     pub fn default(
         &self,
         metadata: HashMap<String, String>,
@@ -50,6 +62,7 @@ impl TodoController {
         return match command.as_str() {
             "create" => self.create(metadata),
             "list" => self.list(metadata),
+            "delete" => self.delete(metadata),
             _ => self.default(metadata, "Nothing to do!"),
         };
     }

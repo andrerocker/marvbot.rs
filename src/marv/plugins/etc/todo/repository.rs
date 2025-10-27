@@ -41,4 +41,28 @@ impl TodoRepository {
             )),
         }
     }
+
+    pub fn delete(&mut self, message: &String) -> Result<usize, Error> {
+        use crate::marv::schema::todos::dsl::*;
+
+        match message.trim().parse::<i32>() {
+            Ok(current_id) => {
+                match diesel::delete(todos.filter(id.eq(current_id))).execute(&mut self.connection)
+                {
+                    Ok(results) => Ok(results),
+                    Err(error) => Err(Error::new(
+                        ErrorKind::Other,
+                        format!("Problems trying to delete Todo, {}", error),
+                    )),
+                }
+            }
+            Err(error) => Err(Error::new(
+                ErrorKind::Other,
+                format!(
+                    "Problems trying to parse Todo ID: '{}' - {}",
+                    message, error
+                ),
+            )),
+        }
+    }
 }

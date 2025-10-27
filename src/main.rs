@@ -30,8 +30,17 @@ fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>), Error> {
 fn main() -> Result<(), Error> {
     let (setup, mut plugins) = initialize()?;
     let hostname = setup.config.hostname.clone();
+    let plugins_names = &plugins
+        .iter()
+        .map(|current| current.name())
+        .collect::<Vec<String>>()
+        .join(",");
 
-    log::info!("Initializing marvbot - {}", hostname);
+    log::info!(
+        "Initializing Marvbot: {} plugins: {}",
+        hostname,
+        plugins_names
+    );
     network::stream(setup, |writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
             Ok(writer.write_all(response.as_bytes())?)
