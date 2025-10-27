@@ -8,32 +8,36 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 ### Todo
 
 - [x] modules
-- [ ] evented-io / async
-- [ ] threads / mutex
 - [x] closures
 - [x] kafka / produce
 - [x] kafka / consume
-- [x] database / orm
+- [x] database / orm (diesel / sqlx)
+- [x] monads
+- [x] write something to the fs
+- [x] bot single thread
+- [x] dotenv
+- [x] singleton (lazy_static?)
+- [x] plugin contract should return Result (stop using :expect)
+- [x] error handling vs monads (unwrap, Option, Result, ?, etc)
+- [ ] macros
+- [ ] evented-io
+- [ ] async
+- [ ] actor model
+- [ ] threads / mutex
 - [ ] use plugin as crate
 - [ ] config: custom segments for plugins
-- [x] monads
 - [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] prometheus / metrics / aumentar cobertura
 - [ ] tracing
 - [ ] debug
 - [ ] tests
-- [x] write something to the fs
-- [x] bot single thread
 - [ ] bot muilti thread
 - [ ] bot evented / async
+- [ ] bot actor model
 - [ ] build
 - [ ] cross platform build (arm, x86, windows, linux, macos)
-- [x] dotenv
-- [x] singleton (lazy_static?)
 - [ ] argparse
 - [ ] housekeeping
-- [x] plugin contract should return Result
-- [x] error handling vs monads (unwrap, Option, Result, ?, etc)
 
 ### Plugins
 
@@ -49,4 +53,4 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] kafka produce
 - [x] database
 - [ ] todo (create a todolist)
-- [ ] chatgpt
+- [ ] default ask chatgpt
