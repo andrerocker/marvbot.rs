@@ -27,7 +27,7 @@ pub fn default(setup: &config::MarvSetup) -> Result<Vec<Box<dyn Plugin>>, Error>
     ]);
 }
 
-pub fn dispatch<F: FnMut(String)>(
+pub fn dispatch<F: FnMut(String) -> Result<(), Error>>(
     plugins: &mut Vec<Box<dyn Plugin>>,
     protocol: &String,
     mut callback: F,
@@ -41,7 +41,13 @@ pub fn dispatch<F: FnMut(String)>(
             match plugin.perform(&protocol) {
                 Ok(response) => {
                     for result in response {
-                        callback(result);
+                        log::info!("Sending response to the server: '{}'", result.trim());
+                        match callback(result) {
+                            Ok(_) => continue,
+                            Err(error) => {
+                                log::error!("Problems trying to call callback: {}", error)
+                            }
+                        }
                     }
                 }
                 Err(error) => {
