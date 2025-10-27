@@ -36,7 +36,5 @@ fn main() -> Result<(), Error> {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
             Ok(writer.write_all(response.as_bytes())?)
         });
-    });
-
-    Ok(())
+    })
 }
