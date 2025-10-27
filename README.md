@@ -13,12 +13,14 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] kafka / consume
 - [x] database / orm (diesel / sqlx)
 - [x] monads
+- [x] variables - multi assignements
 - [x] write something to the fs
 - [x] bot single thread
 - [x] dotenv
 - [x] singleton (lazy_static?)
 - [x] plugin contract should return Result (stop using :expect)
 - [x] error handling vs monads (unwrap, Option, Result, ?, etc)
+- [ ] 'awesome rust' (and produtivity stuff like libs and tools)
 - [ ] macros
 - [ ] evented-io
 - [ ] async
@@ -34,7 +36,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] bot muilti thread
 - [ ] bot evented / async
 - [ ] bot actor model
-- [ ] build
+- [ ] build (using docker and pipelines)
 - [ ] cross platform build (arm, x86, windows, linux, macos)
 - [ ] argparse
 - [ ] housekeeping
