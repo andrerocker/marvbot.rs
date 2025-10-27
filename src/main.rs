@@ -3,41 +3,38 @@ mod marv;
 use dotenv::dotenv;
 use env_logger;
 use log;
-use log::info;
 use marv::config;
 use marv::config::MarvSetup;
 use marv::network;
 use marv::plugins;
+use marv::plugins::Plugin;
 use prometheus_exporter::{self};
-use std::io::{self, prelude::*};
+use std::io::Error;
+use std::io::prelude::*;
 
-fn initialize() -> MarvSetup {
+fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>), Error> {
     dotenv().ok();
     env_logger::init();
 
     prometheus_exporter::start("127.0.0.1:9184".parse().unwrap())
-        .expect("Problems trying to initialize metrics");
+        .expect("Problems trying to initialize Metrics");
 
     let setup = config::read_configuration()
         .expect("Problems trying to process Marv.toml configuration file");
 
-    let hostname = setup.config.hostname.clone();
-    log::info!("Initializing marvbot - {}", hostname);
+    let plugins = plugins::default(&setup)?;
 
-    return setup;
+    return Ok((setup, plugins));
 }
 
-fn main() -> io::Result<()> {
-    let setup = initialize();
-    let mut plugins =
-        plugins::default(&setup).expect("Problems trying to initialize default plugins");
+fn main() -> Result<(), Error> {
+    let (setup, mut plugins) = initialize()?;
+    let hostname = setup.config.hostname.clone();
 
+    log::info!("Initializing marvbot - {}", hostname);
     network::stream(setup, |writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
-            info!("Sending response to the server: '{}'", response.trim());
-            writer
-                .write_all(response.as_bytes())
-                .expect("Problems trying to write to the network")
+            Ok(writer.write_all(response.as_bytes())?)
         });
     });
 
