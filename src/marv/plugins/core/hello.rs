@@ -26,11 +26,15 @@ impl Plugin for Hello {
         let regex = Regex::new(pattern).unwrap();
         let metadata = regex.captures(message).unwrap();
 
-        let response = format!(
-            "PRIVMSG #{} :{}: Iaaeee tru!\r\n",
-            &metadata["channel"], &metadata["nick"]
-        );
-
-        return Ok(vec![response]);
+        match &metadata["nick"] {
+            "marvy" => Ok(vec![format!(
+                "PRIVMSG #{} : Salveeeee doideeraa!\r\n",
+                &metadata["channel"]
+            )]),
+            _ => Ok(vec![format!(
+                "PRIVMSG #{} :{}: Salveeeee doideeraa!\r\n",
+                &metadata["channel"], &metadata["nick"]
+            )]),
+        }
     }
 }
