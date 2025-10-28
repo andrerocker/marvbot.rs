@@ -1,8 +1,8 @@
+use crate::marv::{
+    config::MarvSetup,
+    plugins::{Plugin, helper},
+};
 use std::io::Error;
-
-use regex::Regex;
-
-use crate::marv::{config::MarvSetup, plugins::Plugin};
 
 pub struct Hello {}
 
@@ -23,18 +23,11 @@ impl Plugin for Hello {
 
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) JOIN :#(?<channel>\w+)";
-        let regex = Regex::new(pattern).unwrap();
-        let metadata = regex.captures(message).unwrap();
+        let metadata = helper::regex_to_map(pattern, message);
 
-        match &metadata["nick"] {
-            "marvy" => Ok(vec![format!(
-                "PRIVMSG #{} : Salveeeee doideeraa!\r\n",
-                &metadata["channel"]
-            )]),
-            _ => Ok(vec![format!(
-                "PRIVMSG #{} :{}: Salveeeee doideeraa!\r\n",
-                &metadata["channel"], &metadata["nick"]
-            )]),
+        match metadata["nick"].as_str() {
+            "marvy" => helper::simple_channel_message(metadata, "Salveeeee doideeraada!"),
+            _ => helper::simple_channel_user_message(metadata, "Salveeeee doideeraa!\r\n"),
         }
     }
 }

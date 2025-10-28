@@ -1,5 +1,6 @@
 pub mod core;
 pub mod etc;
+pub mod helper;
 
 use etc::{consumer::KafkaConsumer, database::Database, producer::KafkaProducer, todo::Todo};
 
