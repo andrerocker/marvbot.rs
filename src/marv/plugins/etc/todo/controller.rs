@@ -62,7 +62,7 @@ impl TodoController {
     }
 
     pub fn dispatch(&mut self, message: &String) -> Result<Vec<String>, Error> {
-        let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :todo: (?<command>\w+): (?<argument>.*)";
+        let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :todo: (?<command>\w+)(: (?<argument>.*))?";
         let metadata = helper::regex_to_map(pattern, message);
         let command = helper::safe_get(&metadata, "command")?;
 
