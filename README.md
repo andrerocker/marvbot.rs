@@ -36,6 +36,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] bot muilti thread
 - [ ] bot evented / async
 - [ ] bot actor model
+- [ ] bot even driven
 - [ ] build (using docker and pipelines)
 - [ ] cross platform build (arm, x86, windows, linux, macos)
 - [ ] argparse
