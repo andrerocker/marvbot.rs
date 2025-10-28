@@ -11,26 +11,33 @@ impl TodoController {
         let message = helper::safe_get(&metadata, "argument")?;
 
         match self.repository.create(&message) {
-            Ok(_) => Ok(vec![helper::channel_user_message(&metadata, "created!")?]),
-            Err(error) => Ok(vec![helper::channel_user_message(
-                &metadata,
-                &format!("Failed! {}", error),
-            )?]),
+            Ok(_) => helper::simple_channel_user_message(metadata, "created!"),
+            Err(error) => {
+                helper::simple_channel_user_message(metadata, &format!("Failed! {}", error))
+            }
         }
     }
 
     pub fn list(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>, Error> {
         match self.repository.list() {
-            Ok(response) => Ok(response
-                .into_iter()
-                .map(|current| {
-                    helper::channel_user_message(&metadata, &current.to_string()).unwrap()
-                })
-                .collect::<Vec<String>>()),
-            Err(error) => Ok(vec![helper::channel_user_message(
-                &metadata,
+            Ok(response) => {
+                let formatted = response
+                    .into_iter()
+                    .map(|current| {
+                        helper::channel_user_message(&metadata, &current.to_string()).unwrap()
+                    })
+                    .collect::<Vec<String>>();
+
+                if formatted.len() > 0 {
+                    Ok(formatted)
+                } else {
+                    helper::simple_channel_user_message(metadata, "The're no :Todos to list")
+                }
+            }
+            Err(error) => helper::simple_channel_user_message(
+                metadata,
                 &format!("Failed listing Todos: {}", error),
-            )?]),
+            ),
         }
     }
 
