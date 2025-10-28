@@ -2,10 +2,9 @@ pub mod core;
 pub mod etc;
 pub mod helper;
 
-use etc::{consumer::KafkaConsumer, database::Database, producer::KafkaProducer, todo::Todo};
-
 use super::{config, metrics::MARV_PLUGIN_HIT_COUNTER};
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
+use etc::{consumer::KafkaConsumer, producer::KafkaProducer, todo::Todo};
 use std::io::Error;
 
 pub trait Plugin {
@@ -23,7 +22,6 @@ pub fn default(setup: &config::MarvSetup) -> Result<Vec<Box<dyn Plugin>>, Error>
         Hello::new(setup),
         KafkaProducer::new(setup),
         KafkaConsumer::new(setup),
-        Database::new(setup),
         Todo::new(setup),
     ]);
 }
