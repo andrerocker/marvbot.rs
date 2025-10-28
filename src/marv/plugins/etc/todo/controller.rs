@@ -45,11 +45,10 @@ impl TodoController {
         let message = helper::safe_get(&metadata, "argument")?;
 
         match self.repository.delete(&message) {
-            Ok(_) => Ok(vec![helper::channel_user_message(&metadata, "deleted!")?]),
-            Err(error) => Ok(vec![helper::channel_user_message(
-                &metadata,
-                &format!("Failed! {}", error),
-            )?]),
+            Ok(_) => helper::simple_channel_user_message(metadata, "deleted!"),
+            Err(error) => {
+                helper::simple_channel_user_message(metadata, &format!("Failed! {}", error))
+            }
         }
     }
 
@@ -66,11 +65,11 @@ impl TodoController {
         let metadata = helper::regex_to_map(pattern, message);
         let command = helper::safe_get(&metadata, "command")?;
 
-        return match command.as_str() {
+        match command.as_str() {
             "create" => self.create(metadata),
             "list" => self.list(metadata),
             "delete" => self.delete(metadata),
             _ => self.default(metadata, "Nothing to do!"),
-        };
+        }
     }
 }
