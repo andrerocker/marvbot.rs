@@ -26,16 +26,18 @@ pub struct NewMessage<'a> {
 pub struct Todo {
     pub id: i32,
     pub body: String,
+    pub status: String,
 }
 
 #[derive(Insertable)]
 #[diesel(table_name = todos)]
 pub struct NewTodo<'a> {
     pub body: &'a str,
+    pub status: &'a str,
 }
 
 impl Todo {
     pub fn to_string(&self) -> String {
-        format!("{} - {}", self.id, self.body)
+        format!("{} - {} - {}", self.id, self.body, self.status)
     }
 }

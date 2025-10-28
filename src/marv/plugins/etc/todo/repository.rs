@@ -13,7 +13,10 @@ pub struct TodoRepository {
 impl TodoRepository {
     pub fn create(&mut self, message: &String) -> Result<Todo, Error> {
         use crate::marv::schema::todos::dsl::*;
-        let new_todo = NewTodo { body: message };
+        let new_todo = NewTodo {
+            body: message,
+            status: "created",
+        };
 
         let result = diesel::insert_into(todos::table())
             .values(&new_todo)
