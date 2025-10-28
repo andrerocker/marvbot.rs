@@ -33,7 +33,14 @@ pub fn regex_to_map(pattern: &str, payload: &String) -> HashMap<String, String> 
 
 pub fn channel_message(metadata: HashMap<String, String>, message: &str) -> Result<String, Error> {
     let channel = safe_get(&metadata, "channel")?;
-    Ok(format!("PRIVMSG #{} - {}\r\n", channel, message))
+    Ok(format!("PRIVMSG #{} {}\r\n", channel, message))
+}
+
+pub fn simple_channel_message(
+    metadata: HashMap<String, String>,
+    message: &str,
+) -> Result<Vec<String>, Error> {
+    Ok(vec![channel_message(metadata, message)?])
 }
 
 pub fn channel_user_message(
@@ -44,4 +51,11 @@ pub fn channel_user_message(
     let channel = safe_get(&metadata, "channel")?;
 
     Ok(format!("PRIVMSG #{} {}: {}\r\n", channel, nick, message))
+}
+
+pub fn simple_channel_user_message(
+    metadata: HashMap<String, String>,
+    message: &str,
+) -> Result<Vec<String>, Error> {
+    Ok(vec![channel_user_message(&metadata, message)?])
 }

@@ -1,5 +1,4 @@
 pub mod controller;
-pub mod helper;
 pub mod repository;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
