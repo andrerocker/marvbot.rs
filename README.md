@@ -26,7 +26,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] async
 - [ ] actor model
 - [ ] threads / mutex
-- [ ] use plugin as crate
+- [ ] use plugin as crate / external modules
 - [ ] config: custom segments for plugins
 - [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] prometheus / metrics / aumentar cobertura
@@ -41,6 +41,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] cross platform build (arm, x86, windows, linux, macos)
 - [ ] argparse
 - [ ] housekeeping
+- [ ] binstall
 
 ### Plugins
 
