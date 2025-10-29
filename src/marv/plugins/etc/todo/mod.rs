@@ -1,5 +1,6 @@
 pub mod controller;
 pub mod repository;
+pub mod service;
 
 use crate::marv::{config::MarvSetup, plugins::Plugin};
 use controller::TodoController;

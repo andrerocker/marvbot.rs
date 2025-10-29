@@ -18,6 +18,17 @@ impl TodoController {
         }
     }
 
+    pub fn update(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>, Error> {
+        let message = helper::safe_get(&metadata, "argument")?;
+
+        match self.repository.update(&message) {
+            Ok(_) => helper::simple_channel_user_message(metadata, "updated!"),
+            Err(error) => {
+                helper::simple_channel_user_message(metadata, &format!("Failed! {}", error))
+            }
+        }
+    }
+
     pub fn list(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>, Error> {
         match self.repository.list() {
             Ok(response) => {
@@ -68,6 +79,7 @@ impl TodoController {
         match command.as_str() {
             "create" => self.create(metadata),
             "list" => self.list(metadata),
+            "update" => self.update(metadata),
             "delete" => self.delete(metadata),
             _ => self.default(metadata, "Nothing to do!"),
         }

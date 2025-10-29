@@ -1,10 +1,8 @@
-use std::io::{Error, ErrorKind};
-
+use crate::marv::models::{NewTodo, Todo};
 use diesel::PgConnection;
 use diesel::associations::HasTable;
 use diesel::prelude::*;
-
-use crate::marv::models::{NewTodo, Todo};
+use std::io::{self, Error, ErrorKind};
 
 pub struct TodoRepository {
     pub connection: PgConnection,
@@ -28,6 +26,25 @@ impl TodoRepository {
             Err(error) => Err(Error::new(
                 ErrorKind::Other,
                 format!("Problems trying to save Todo, {}", error),
+            )),
+        }
+    }
+
+    pub fn update(&mut self, message: &String) -> io::Result<Todo> {
+        use crate::marv::schema::todos::dsl::*;
+        let parts = message.split(" ").collect::<Vec<&str>>();
+        let todo_id = parts.first().unwrap().trim().parse::<i32>().unwrap();
+        let status0 = parts.last().unwrap();
+
+        let result = diesel::update(todos.filter(id.eq(todo_id)))
+            .set(status.eq(status0))
+            .get_result(&mut self.connection);
+
+        match result {
+            Ok(result) => Ok(result),
+            Err(error) => Err(Error::new(
+                ErrorKind::Other,
+                format!("Problems trying to update Todo, {}", error),
             )),
         }
     }
