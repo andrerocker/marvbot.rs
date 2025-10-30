@@ -42,6 +42,9 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] argparse
 - [ ] housekeeping
 - [ ] binstall
+- [ ] kafka: check for another lib (rdkafka?)
+- [ ] kafka: serialize messages with: cbor, protobuf, messagepack
+- [ ] FFI
 
 ### Plugins
 
