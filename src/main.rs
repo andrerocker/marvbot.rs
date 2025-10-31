@@ -24,7 +24,7 @@ fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>), Error> {
 
     let plugins = plugins::default(&setup)?;
 
-    return Ok((setup, plugins));
+    Ok((setup, plugins))
 }
 
 fn main() -> Result<(), Error> {

@@ -1,4 +1,4 @@
-use crate::marv::models::{NewTodo, Todo};
+use crate::marv::models::{NewTodo, Todo, UpdateTodo};
 use diesel::PgConnection;
 use diesel::associations::HasTable;
 use diesel::prelude::*;
@@ -9,12 +9,8 @@ pub struct TodoRepository {
 }
 
 impl TodoRepository {
-    pub fn create(&mut self, message: &String) -> Result<Todo, Error> {
+    pub fn create(&mut self, new_todo: NewTodo) -> Result<Todo, Error> {
         use crate::marv::schema::todos::dsl::*;
-        let new_todo = NewTodo {
-            body: message,
-            status: "created",
-        };
 
         let result = diesel::insert_into(todos::table())
             .values(&new_todo)
@@ -30,14 +26,11 @@ impl TodoRepository {
         }
     }
 
-    pub fn update(&mut self, message: &String) -> io::Result<Todo> {
+    pub fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
         use crate::marv::schema::todos::dsl::*;
-        let parts = message.split(" ").collect::<Vec<&str>>();
-        let todo_id = parts.first().unwrap().trim().parse::<i32>().unwrap();
-        let status0 = parts.last().unwrap();
 
-        let result = diesel::update(todos.filter(id.eq(todo_id)))
-            .set(status.eq(status0))
+        let result = diesel::update(todos.filter(id.eq(todo.id)))
+            .set(status.eq(todo.status))
             .get_result(&mut self.connection);
 
         match result {

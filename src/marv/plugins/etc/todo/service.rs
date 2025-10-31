@@ -1,5 +1,5 @@
 use super::repository::TodoRepository;
-use crate::marv::models::Todo;
+use crate::marv::models::{NewTodo, Todo, UpdateTodo};
 use std::io::{self, Error};
 
 pub struct TodoService {
@@ -7,12 +7,12 @@ pub struct TodoService {
 }
 
 impl TodoService {
-    pub fn create(&mut self, message: &String) -> Result<Todo, Error> {
-        return self.repository.create(message);
+    pub fn create(&mut self, todo: NewTodo) -> Result<Todo, Error> {
+        return self.repository.create(todo);
     }
 
-    pub fn update(&mut self, message: &String) -> io::Result<Todo> {
-        return self.update(message);
+    pub fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
+        return self.repository.update(todo);
     }
 
     pub fn list(&mut self) -> Result<Vec<Todo>, Error> {

@@ -6,6 +6,8 @@ use crate::marv::{config::MarvSetup, plugins::Plugin};
 use controller::TodoController;
 use diesel::PgConnection;
 use diesel::prelude::*;
+use repository::TodoRepository;
+use service::TodoService;
 use std::io::Error;
 
 pub struct Todo {
@@ -20,8 +22,8 @@ impl Todo {
 
         Box::new(Todo {
             controller: controller::TodoController {
-                repository: repository::TodoRepository {
-                    connection: connection,
+                service: TodoService {
+                    repository: TodoRepository { connection },
                 },
             },
         })
@@ -30,7 +32,7 @@ impl Todo {
 
 impl Plugin for Todo {
     fn name(&self) -> String {
-        return "Todo".to_string();
+        "Todo".to_string()
     }
 
     fn is_enabled(&self, message: &String) -> bool {
