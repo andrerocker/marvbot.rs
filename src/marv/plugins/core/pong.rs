@@ -11,7 +11,7 @@ impl Pong {
 
 impl Plugin for Pong {
     fn name(&self) -> String {
-        return "Pong".to_string();
+        "Pong".to_string()
     }
 
     fn is_enabled(&self, message: &String) -> bool {

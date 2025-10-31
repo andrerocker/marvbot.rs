@@ -28,7 +28,7 @@ impl KafkaProducer {
 
 impl Plugin for KafkaProducer {
     fn name(&self) -> String {
-        return "KafkaProducer".to_string();
+        "KafkaProducer".to_string()
     }
 
     fn is_enabled(&self, _message: &String) -> bool {

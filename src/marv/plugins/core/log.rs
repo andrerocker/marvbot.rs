@@ -1,5 +1,7 @@
 use std::io::Error;
 
+use toml::to_string;
+
 use crate::marv::{config::MarvSetup, plugins::Plugin};
 
 pub struct Logger {}
@@ -12,7 +14,7 @@ impl Logger {
 
 impl Plugin for Logger {
     fn name(&self) -> String {
-        return "Logger".to_string();
+        "Logger".to_string()
     }
 
     fn is_enabled(&self, _message: &String) -> bool {

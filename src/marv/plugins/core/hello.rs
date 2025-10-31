@@ -14,7 +14,7 @@ impl Hello {
 
 impl Plugin for Hello {
     fn name(&self) -> String {
-        return "Hello".to_string();
+        "Hello".to_string()
     }
 
     fn is_enabled(&self, message: &String) -> bool {

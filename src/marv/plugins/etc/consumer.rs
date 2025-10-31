@@ -75,7 +75,7 @@ fn save_message(config: Config, message: &Message) {
 
 impl Plugin for KafkaConsumer {
     fn name(&self) -> String {
-        return "KafkaConsumer".to_string();
+        "KafkaConsumer".to_string()
     }
 
     fn is_enabled(&self, _message: &String) -> bool {

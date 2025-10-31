@@ -18,7 +18,7 @@ impl Login {
 
 impl Plugin for Login {
     fn name(&self) -> String {
-        return "Login".to_string();
+        "Login".to_string()
     }
 
     fn is_enabled(&self, message: &String) -> bool {
