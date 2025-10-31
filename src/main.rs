@@ -12,7 +12,7 @@ use prometheus_exporter::{self};
 use std::io::Error;
 use std::io::prelude::*;
 
-fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>), Error> {
+fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>, String), Error> {
     dotenv().ok();
     env_logger::init();
 
@@ -24,17 +24,19 @@ fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>), Error> {
 
     let plugins = plugins::default(&setup)?;
 
-    Ok((setup, plugins))
-}
-
-fn main() -> Result<(), Error> {
-    let (setup, mut plugins) = initialize()?;
-    let hostname = setup.config.hostname.clone();
-    let plugins_names = &plugins
+    let plugins_names = plugins
         .iter()
         .map(|current| current.name())
         .collect::<Vec<String>>()
-        .join(",");
+        .join(",")
+        .to_owned();
+
+    Ok((setup, plugins, plugins_names))
+}
+
+fn main() -> Result<(), Error> {
+    let (setup, mut plugins, plugins_names) = initialize()?;
+    let hostname = setup.config.hostname.clone();
 
     log::info!(
         "Initializing Marvbot: {} plugins: {}",

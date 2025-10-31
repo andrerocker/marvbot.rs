@@ -14,7 +14,7 @@ pub trait Plugin {
 }
 
 pub fn default(setup: &config::MarvSetup) -> Result<Vec<Box<dyn Plugin>>, Error> {
-    return Ok(vec![
+    Ok(vec![
         Logger::new(setup),
         Login::new(setup),
         Pong::new(setup),
@@ -23,7 +23,7 @@ pub fn default(setup: &config::MarvSetup) -> Result<Vec<Box<dyn Plugin>>, Error>
         KafkaProducer::new(setup),
         KafkaConsumer::new(setup),
         Todo::new(setup),
-    ]);
+    ])
 }
 
 pub fn dispatch<F: FnMut(String) -> Result<(), Error>>(
