@@ -20,7 +20,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] singleton (lazy_static?)
 - [x] plugin contract should return Result (stop using :expect)
 - [x] error handling vs monads (unwrap, Option, Result, ?, etc)
-- [ ] 'awesome rust' (and produtivity stuff like libs and tools)
+- [x] 'awesome rust' (and produtivity stuff like libs and tools)
 - [ ] macros
 - [ ] evented-io
 - [ ] async
