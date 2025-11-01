@@ -1,8 +1,5 @@
-use std::io::Error;
-
-use toml::to_string;
-
 use crate::marv::{config::MarvSetup, plugins::Plugin};
+use std::io::Error;
 
 pub struct Logger {}
 
@@ -18,11 +15,11 @@ impl Plugin for Logger {
     }
 
     fn is_enabled(&self, _message: &String) -> bool {
-        return true;
+        true
     }
 
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         print!("<-- {}", message);
-        return Ok(vec![]);
+        Ok(vec![])
     }
 }

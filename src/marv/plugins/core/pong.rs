@@ -15,7 +15,7 @@ impl Plugin for Pong {
     }
 
     fn is_enabled(&self, message: &String) -> bool {
-        return message.contains("PING");
+        message.contains("PING")
     }
 
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
@@ -28,6 +28,6 @@ impl Plugin for Pong {
             ))?
             .trim();
 
-        return Ok(vec![format!("PONG :{}\r\n", code)]);
+        Ok(vec![format!("PONG :{}\r\n", code)])
     }
 }

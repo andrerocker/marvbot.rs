@@ -22,7 +22,7 @@ impl Plugin for Login {
     }
 
     fn is_enabled(&self, message: &String) -> bool {
-        return message.contains("Could not resolve your hostname");
+        message.contains("Could not resolve your hostname")
     }
 
     fn perform(&mut self, _: &String) -> Result<Vec<String>, Error> {

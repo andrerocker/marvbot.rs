@@ -32,7 +32,7 @@ impl Plugin for KafkaProducer {
     }
 
     fn is_enabled(&self, _message: &String) -> bool {
-        return true;
+        true
     }
 
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
@@ -41,6 +41,6 @@ impl Plugin for KafkaProducer {
             .send(record)
             .expect("Problems trying to write message");
 
-        return Ok(vec![]);
+        Ok(vec![])
     }
 }

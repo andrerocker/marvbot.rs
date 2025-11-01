@@ -9,10 +9,10 @@ use marv::network;
 use marv::plugins;
 use marv::plugins::Plugin;
 use prometheus_exporter::{self};
-use std::io::Error;
+use std::io::Result;
 use std::io::prelude::*;
 
-fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>, String), Error> {
+fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>, String)> {
     dotenv().ok();
     env_logger::init();
 
@@ -28,13 +28,12 @@ fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>, String), Error> {
         .iter()
         .map(|current| current.name())
         .collect::<Vec<String>>()
-        .join(",")
-        .to_owned();
+        .join(",");
 
     Ok((setup, plugins, plugins_names))
 }
 
-fn main() -> Result<(), Error> {
+fn main() -> Result<()> {
     let (setup, mut plugins, plugins_names) = initialize()?;
     let hostname = setup.config.hostname.clone();
 

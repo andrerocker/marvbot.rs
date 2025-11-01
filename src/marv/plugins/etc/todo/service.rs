@@ -8,18 +8,18 @@ pub struct TodoService {
 
 impl TodoService {
     pub fn create(&mut self, todo: NewTodo) -> Result<Todo, Error> {
-        return self.repository.create(todo);
+        self.repository.create(todo)
     }
 
     pub fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
-        return self.repository.update(todo);
+        self.repository.update(todo)
     }
 
     pub fn list(&mut self) -> Result<Vec<Todo>, Error> {
-        return self.repository.list();
+        self.repository.list()
     }
 
     pub fn delete(&mut self, message: &String) -> Result<usize, Error> {
-        return self.repository.delete(message);
+        self.repository.delete(message)
     }
 }

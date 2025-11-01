@@ -26,7 +26,7 @@ impl KafkaConsumer {
             handle_messages(setup).unwrap();
         });
 
-        return Box::new(KafkaConsumer {});
+        Box::new(KafkaConsumer {})
     }
 }
 
@@ -79,10 +79,10 @@ impl Plugin for KafkaConsumer {
     }
 
     fn is_enabled(&self, _message: &String) -> bool {
-        return false;
+        false
     }
 
     fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
-        return Ok(vec![]);
+        Ok(vec![])
     }
 }

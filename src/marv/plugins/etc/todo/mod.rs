@@ -36,10 +36,10 @@ impl Plugin for Todo {
     }
 
     fn is_enabled(&self, message: &String) -> bool {
-        return message.contains(" PRIVMSG ") && message.contains(" :todo: ");
+        message.contains(" PRIVMSG ") && message.contains(" :todo: ")
     }
 
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
-        return self.controller.dispatch(message);
+        self.controller.dispatch(message)
     }
 }

@@ -18,7 +18,7 @@ impl Plugin for Hello {
     }
 
     fn is_enabled(&self, message: &String) -> bool {
-        return message.contains(" JOIN :");
+        message.contains(" JOIN :")
     }
 
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
