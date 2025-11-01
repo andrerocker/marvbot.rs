@@ -5,12 +5,21 @@ pub mod helper;
 use super::{config, metrics::MARV_PLUGIN_HIT_COUNTER};
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
 use etc::{consumer::KafkaConsumer, producer::KafkaProducer, todo::Todo};
-use std::io::Error;
+use std::{
+    fmt::{self, Display},
+    io::Error,
+};
 
 pub trait Plugin {
     fn name(&self) -> String;
     fn is_enabled(&self, message: &String) -> bool;
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error>;
+}
+
+impl Display for dyn Plugin {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.name())
+    }
 }
 
 pub fn default(setup: &config::MarvSetup) -> Result<Vec<Box<dyn Plugin>>, Error> {

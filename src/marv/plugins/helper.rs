@@ -4,6 +4,8 @@ use std::{
     io::{Error, ErrorKind},
 };
 
+use super::Plugin;
+
 pub fn safe_get(metadata: &HashMap<String, String>, key: &str) -> Result<String, Error> {
     metadata
         .get(key)
@@ -66,4 +68,12 @@ pub fn create_error(message: &str) -> Error {
 
 pub fn create_closure_error<T, E>(message: &str) -> impl Fn(E) -> Result<T, Error> {
     |_: E| Err(create_error(message))
+}
+
+pub fn join<T: ToString>(items: &Vec<T>, separator: &str) -> String {
+    items
+        .iter()
+        .map(|current| current.to_string())
+        .collect::<Vec<_>>()
+        .join(separator)
 }

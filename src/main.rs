@@ -8,6 +8,7 @@ use marv::config::MarvSetup;
 use marv::network;
 use marv::plugins;
 use marv::plugins::Plugin;
+use marv::plugins::helper;
 use prometheus_exporter::{self};
 use std::io::Result;
 use std::io::prelude::*;
@@ -23,12 +24,7 @@ fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>, String)> {
         .expect("Problems trying to process Marv.toml configuration file");
 
     let plugins = plugins::default(&setup)?;
-
-    let plugins_names = plugins
-        .iter()
-        .map(|current| current.name())
-        .collect::<Vec<String>>()
-        .join(",");
+    let plugins_names = helper::join(&plugins, ", ");
 
     Ok((setup, plugins, plugins_names))
 }
