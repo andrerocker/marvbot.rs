@@ -1,10 +1,9 @@
 use regex::Regex;
 use std::{
     collections::HashMap,
+    hash::Hash,
     io::{Error, ErrorKind},
 };
-
-use super::Plugin;
 
 pub fn safe_get(metadata: &HashMap<String, String>, key: &str) -> Result<String, Error> {
     metadata
@@ -14,6 +13,14 @@ pub fn safe_get(metadata: &HashMap<String, String>, key: &str) -> Result<String,
             format!(":metadata doesn't have key :{key}"),
         ))
         .cloned()
+}
+
+#[test]
+fn test_safe_get() {
+    let mut metadata: HashMap<String, String> = HashMap::new();
+    metadata.insert("hack3d".to_string(), "1337".to_string());
+
+    assert_eq!(safe_get(&metadata, "hack3d").unwrap(), "1337".to_string());
 }
 
 pub fn regex_to_map(pattern: &str, payload: &String) -> HashMap<String, String> {
