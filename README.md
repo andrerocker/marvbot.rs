@@ -22,13 +22,13 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] error handling vs monads (unwrap, Option, Result, ?, etc)
 - [x] 'awesome rust' (and produtivity stuff like libs and tools)
 - [ ] macros
+- [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] evented-io
 - [ ] async
 - [ ] actor model
 - [ ] threads / mutex
 - [ ] use plugin as crate / external modules
 - [ ] config: custom segments for plugins
-- [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] prometheus / metrics / aumentar cobertura
 - [ ] tracing
 - [ ] debug
@@ -45,6 +45,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] kafka: check for another lib (rdkafka?)
 - [ ] kafka: serialize messages with: cbor, protobuf, messagepack
 - [ ] FFI
+- [ ] change log level by using signals
 
 ### Plugins
 
