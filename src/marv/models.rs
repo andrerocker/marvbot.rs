@@ -1,16 +1,6 @@
 use diesel::prelude::*;
 use std::io::Result;
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = crate::marv::schema::messages)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
-pub struct Message {
-    pub id: i32,
-    pub title: String,
-    pub body: String,
-    pub published: bool,
-}
-
 #[derive(Insertable)]
 #[diesel(table_name = crate::marv::schema::messages)]
 pub struct NewMessage<'a> {
@@ -39,9 +29,7 @@ pub struct UpdateTodo {
     pub status: String,
 }
 
-pub struct TodoAdapter {
-    pub message: String,
-}
+pub struct TodoAdapter {}
 
 impl TodoAdapter {
     pub fn to_create(message: String) -> Result<NewTodo> {
