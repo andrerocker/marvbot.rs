@@ -1,13 +1,13 @@
 use super::{adapter::TodoAdapter, service::TodoService};
 use crate::marv::plugins::helper;
-use std::{collections::HashMap, io::Result};
+use std::{collections::HashMap, io};
 
 pub struct TodoController {
     pub service: TodoService,
 }
 
 impl TodoController {
-    pub fn create(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>> {
+    pub fn create(&mut self, metadata: HashMap<String, String>) -> io::Result<Vec<String>> {
         let message = helper::safe_get(&metadata, "argument")?;
         let todo = TodoAdapter::from_request_to_create(message)?;
 
@@ -19,7 +19,7 @@ impl TodoController {
         }
     }
 
-    pub fn update(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>> {
+    pub fn update(&mut self, metadata: HashMap<String, String>) -> io::Result<Vec<String>> {
         let message = helper::safe_get(&metadata, "argument")?;
         let todo = TodoAdapter::from_request_to_update(message)?;
 
@@ -31,7 +31,7 @@ impl TodoController {
         }
     }
 
-    fn current_or_default<T>(&self, current: Vec<T>, default: Vec<T>) -> Result<Vec<T>> {
+    fn current_or_default<T>(&self, current: Vec<T>, default: Vec<T>) -> io::Result<Vec<T>> {
         if current.len() > 0 {
             Ok(current)
         } else {
@@ -39,7 +39,7 @@ impl TodoController {
         }
     }
 
-    pub fn list(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>> {
+    pub fn list(&mut self, metadata: HashMap<String, String>) -> io::Result<Vec<String>> {
         match self.service.list() {
             Ok(todos) => self.current_or_default(
                 TodoAdapter::from_todos_to_response(&metadata, todos)?,
@@ -52,10 +52,11 @@ impl TodoController {
         }
     }
 
-    pub fn delete(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>> {
+    pub fn delete(&mut self, metadata: HashMap<String, String>) -> io::Result<Vec<String>> {
         let message = helper::safe_get(&metadata, "argument")?;
+        let id = TodoAdapter::from_request_to_delete(message)?;
 
-        match self.service.delete(&message) {
+        match self.service.delete(id) {
             Ok(_) => helper::simple_channel_user_message(metadata, "deleted!"),
             Err(error) => {
                 helper::simple_channel_user_message(metadata, &format!("Failed! {}", error))
@@ -63,11 +64,15 @@ impl TodoController {
         }
     }
 
-    pub fn default(&self, metadata: HashMap<String, String>, message: &str) -> Result<Vec<String>> {
+    pub fn default(
+        &self,
+        metadata: HashMap<String, String>,
+        message: &str,
+    ) -> io::Result<Vec<String>> {
         Ok(vec![helper::channel_message(metadata, message)?])
     }
 
-    pub fn dispatch(&mut self, message: &String) -> Result<Vec<String>> {
+    pub fn dispatch(&mut self, message: &String) -> io::Result<Vec<String>> {
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :todo: (?<command>\w+)(: (?<argument>.*))?";
         let metadata = helper::regex_to_map(pattern, message);
         let command = helper::safe_get(&metadata, "command")?;

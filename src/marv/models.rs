@@ -1,5 +1,4 @@
 use diesel::prelude::*;
-use std::io::Result;
 
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = crate::marv::schema::todos)]

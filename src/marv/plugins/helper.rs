@@ -59,3 +59,11 @@ pub fn simple_channel_user_message(
 ) -> Result<Vec<String>, Error> {
     Ok(vec![channel_user_message(&metadata, message)?])
 }
+
+pub fn create_error(message: &str) -> Error {
+    Error::new(ErrorKind::Other, message)
+}
+
+pub fn create_closure_error<T, E>(message: &str) -> impl Fn(E) -> Result<T, Error> {
+    |_: E| Err(create_error(message))
+}

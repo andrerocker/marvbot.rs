@@ -19,7 +19,7 @@ impl TodoService {
         self.repository.list()
     }
 
-    pub fn delete(&mut self, message: &String) -> Result<usize, Error> {
-        self.repository.delete(message)
+    pub fn delete(&mut self, id: i32) -> Result<usize, Error> {
+        self.repository.delete(id)
     }
 }
