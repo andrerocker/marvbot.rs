@@ -1,5 +1,5 @@
-use super::service::TodoService;
-use crate::marv::{models::TodoAdapter, plugins::helper};
+use super::{adapter::TodoAdapter, service::TodoService};
+use crate::marv::plugins::helper;
 use std::{collections::HashMap, io::Result};
 
 pub struct TodoController {
@@ -9,7 +9,7 @@ pub struct TodoController {
 impl TodoController {
     pub fn create(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>> {
         let message = helper::safe_get(&metadata, "argument")?;
-        let todo = TodoAdapter::to_create(message)?;
+        let todo = TodoAdapter::from_request_to_create(message)?;
 
         match self.service.create(todo) {
             Ok(_) => helper::simple_channel_user_message(metadata, "created!"),
@@ -21,7 +21,7 @@ impl TodoController {
 
     pub fn update(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>> {
         let message = helper::safe_get(&metadata, "argument")?;
-        let todo = TodoAdapter::to_update(message)?;
+        let todo = TodoAdapter::from_request_to_update(message)?;
 
         match self.service.update(todo) {
             Ok(_) => helper::simple_channel_user_message(metadata, "updated!"),
@@ -31,22 +31,20 @@ impl TodoController {
         }
     }
 
+    fn current_or_default<T>(&self, current: Vec<T>, default: Vec<T>) -> Result<Vec<T>> {
+        if current.len() > 0 {
+            Ok(current)
+        } else {
+            Ok(default)
+        }
+    }
+
     pub fn list(&mut self, metadata: HashMap<String, String>) -> Result<Vec<String>> {
         match self.service.list() {
-            Ok(response) => {
-                let formatted = response
-                    .into_iter()
-                    .map(|current| {
-                        helper::channel_user_message(&metadata, &current.to_string()).unwrap()
-                    })
-                    .collect::<Vec<String>>();
-
-                if formatted.len() > 0 {
-                    Ok(formatted)
-                } else {
-                    helper::simple_channel_user_message(metadata, "The're no :Todos to list")
-                }
-            }
+            Ok(todos) => self.current_or_default(
+                TodoAdapter::from_todos_to_response(&metadata, todos)?,
+                helper::simple_channel_user_message(metadata, "The're no :Todos to list")?,
+            ),
             Err(error) => helper::simple_channel_user_message(
                 metadata,
                 &format!("Failed listing Todos: {}", error),
