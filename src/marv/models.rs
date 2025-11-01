@@ -1,13 +1,6 @@
 use diesel::prelude::*;
 use std::io::Result;
 
-#[derive(Insertable)]
-#[diesel(table_name = crate::marv::schema::messages)]
-pub struct NewMessage<'a> {
-    pub title: &'a str,
-    pub body: &'a str,
-}
-
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = crate::marv::schema::todos)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
