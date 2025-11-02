@@ -35,6 +35,24 @@ pub fn default(setup: &config::MarvSetup) -> Result<Vec<Box<dyn Plugin>>, Error>
     ])
 }
 
+#[test]
+fn test_default_plugins() -> Result<(), Box<dyn std::error::Error>> {
+    let setup = &config::read_configuration()?;
+    let plugins = default(setup)?;
+    let detect = |name: &str| plugins.iter().find(|p| p.name().eq(&name));
+
+    assert!(detect("Logger").is_some());
+    assert!(detect("Login").is_some());
+    assert!(detect("Pong").is_some());
+    assert!(detect("Channel").is_some());
+    assert!(detect("Hello").is_some());
+    assert!(detect("KafkaProducer").is_some());
+    assert!(detect("KafkaConsumer").is_some());
+    assert!(detect("Todo").is_some());
+
+    Ok(())
+}
+
 pub fn dispatch<F: FnMut(String) -> Result<(), Error>>(
     plugins: &mut Vec<Box<dyn Plugin>>,
     protocol: &String,
