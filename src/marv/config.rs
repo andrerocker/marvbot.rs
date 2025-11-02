@@ -25,3 +25,23 @@ pub fn read_configuration() -> Result<MarvSetup, Box<dyn std::error::Error>> {
 
     return Ok(config);
 }
+
+#[test]
+fn test_read_configuration() -> Result<(), Box<dyn std::error::Error>> {
+    let setup = read_configuration()?;
+    let config = &setup.config;
+
+    assert_eq!(config.hostname, "127.0.0.1:6667");
+    assert_eq!(config.nickname, "marvy");
+    assert_eq!(config.channel, "#acme");
+    assert_eq!(config.broker, "localhost:9092");
+    assert_eq!(config.topic, "MARV.MESSAGES");
+    assert_eq!(config.group, "MARV");
+    assert_eq!(config.messages_log, "messages.txt");
+    assert_eq!(
+        config.database_url,
+        "postgres://deploy42:deploy42@localhost:5432/deploy42"
+    );
+
+    Ok(())
+}
