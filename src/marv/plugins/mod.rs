@@ -1,14 +1,16 @@
 pub mod core;
 pub mod etc;
 pub mod helper;
+pub mod todo;
 
 use super::{config, metrics::MARV_PLUGIN_HIT_COUNTER};
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use etc::{consumer::KafkaConsumer, producer::KafkaProducer, todo::Todo};
+use etc::{consumer::KafkaConsumer, producer::KafkaProducer};
 use std::{
     fmt::{self, Display},
     io::Error,
 };
+use todo::Todo;
 
 pub trait Plugin {
     fn name(&self) -> String;
