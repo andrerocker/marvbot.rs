@@ -12,9 +12,9 @@ impl TodoController {
         let todo = TodoAdapter::from_request_to_create(message)?;
 
         match self.service.create(todo) {
-            Ok(_) => helper::simple_channel_user_message(metadata, "created!"),
+            Ok(_) => helper::simple_channel_user_message(&metadata, "created!"),
             Err(error) => {
-                helper::simple_channel_user_message(metadata, &format!("Failed! {}", error))
+                helper::simple_channel_user_message(&metadata, &format!("Failed! {}", error))
             }
         }
     }
@@ -24,9 +24,9 @@ impl TodoController {
         let todo = TodoAdapter::from_request_to_update(message)?;
 
         match self.service.update(todo) {
-            Ok(_) => helper::simple_channel_user_message(metadata, "updated!"),
+            Ok(_) => helper::simple_channel_user_message(&metadata, "updated!"),
             Err(error) => {
-                helper::simple_channel_user_message(metadata, &format!("Failed! {}", error))
+                helper::simple_channel_user_message(&metadata, &format!("Failed! {}", error))
             }
         }
     }
@@ -43,10 +43,10 @@ impl TodoController {
         match self.service.list() {
             Ok(todos) => self.current_or_default(
                 TodoAdapter::from_todos_to_response(&metadata, todos)?,
-                helper::simple_channel_user_message(metadata, "The're no :Todos to list")?,
+                helper::simple_channel_user_message(&metadata, "The're no :Todos to list")?,
             ),
             Err(error) => helper::simple_channel_user_message(
-                metadata,
+                &metadata,
                 &format!("Failed listing Todos: {}", error),
             ),
         }
@@ -57,9 +57,9 @@ impl TodoController {
         let id = TodoAdapter::from_request_to_delete(message)?;
 
         match self.service.delete(id) {
-            Ok(_) => helper::simple_channel_user_message(metadata, "deleted!"),
+            Ok(_) => helper::simple_channel_user_message(&metadata, "deleted!"),
             Err(error) => {
-                helper::simple_channel_user_message(metadata, &format!("Failed! {}", error))
+                helper::simple_channel_user_message(&metadata, &format!("Failed! {}", error))
             }
         }
     }
@@ -69,7 +69,7 @@ impl TodoController {
         metadata: HashMap<String, String>,
         message: &str,
     ) -> io::Result<Vec<String>> {
-        Ok(vec![helper::channel_message(metadata, message)?])
+        Ok(vec![helper::channel_message(&metadata, message)?])
     }
 
     pub fn dispatch(&mut self, message: &String) -> io::Result<Vec<String>> {

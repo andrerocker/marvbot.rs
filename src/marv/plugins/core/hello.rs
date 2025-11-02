@@ -26,8 +26,8 @@ impl Plugin for Hello {
         let metadata = helper::regex_to_map(pattern, message);
 
         match metadata["nick"].as_str() {
-            "marvy" => helper::simple_channel_message(metadata, "Salveeeee doideeraada!"),
-            _ => helper::simple_channel_user_message(metadata, "Yo doideeraa!\r\n"),
+            "marvy" => helper::simple_channel_message(&metadata, "Salveeeee doideeraada!"),
+            _ => helper::simple_channel_user_message(&metadata, "Yo doideeraa!\r\n"),
         }
     }
 }
