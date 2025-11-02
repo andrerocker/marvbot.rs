@@ -29,18 +29,30 @@ fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>, String)> {
     Ok((setup, plugins, plugins_names))
 }
 
-fn main() -> Result<()> {
-    let (setup, mut plugins, plugins_names) = initialize()?;
-    let hostname = setup.config.hostname.clone();
-
-    log::info!(
-        "Initializing Marvbot: {} plugins: {}",
-        hostname,
-        plugins_names
-    );
+fn single(setup: MarvSetup, mut plugins: Vec<Box<dyn Plugin>>) -> Result<()> {
     network::single::stream(setup, |writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
             Ok(writer.write_all(response.as_bytes())?)
         });
     })
+}
+
+fn threaded(setup: MarvSetup, mut plugins: Vec<Box<dyn Plugin>>) -> Result<()> {
+    network::single::stream(setup, |writer, protocol| {
+        plugins::dispatch(&mut plugins, &protocol, |response: String| {
+            Ok(writer.write_all(response.as_bytes())?)
+        });
+    })
+}
+
+fn main() -> Result<()> {
+    let (setup, plugins, plugins_names) = initialize()?;
+
+    log::info!(
+        "Initializing Marvbot: {} plugins: {}",
+        setup.config.hostname.clone(),
+        plugins_names
+    );
+
+    single(setup, plugins)
 }
