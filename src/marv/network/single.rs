@@ -1,6 +1,5 @@
+use crate::marv::config::MarvSetup;
 use log::info;
-
-use super::config::MarvSetup;
 use std::{
     io::{BufReader, BufWriter, Error, prelude::*},
     net::TcpStream,

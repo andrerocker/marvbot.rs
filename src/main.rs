@@ -38,7 +38,7 @@ fn main() -> Result<()> {
         hostname,
         plugins_names
     );
-    network::stream(setup, |writer, protocol| {
+    network::single::stream(setup, |writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
             Ok(writer.write_all(response.as_bytes())?)
         });
