@@ -48,6 +48,8 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] kafka: serialize messages with: cbor, protobuf, messagepack
 - [ ] FFI
 - [ ] change log level by using signals
+- [ ] logs: add debug messages
+- [ ] logs: make it possible to change log level by using signals
 
 ### Plugins
 
