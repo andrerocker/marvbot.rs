@@ -1,6 +1,6 @@
 use crate::marv::{
     config::MarvSetup,
-    plugins::{self, Plugin, helper},
+    plugins::{self, helper},
 };
 use log::info;
 use std::{

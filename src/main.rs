@@ -3,6 +3,7 @@ mod marv;
 use dotenv::dotenv;
 use env_logger;
 use log;
+use log::info;
 use marv::config;
 use marv::config::MarvSetup;
 use marv::network;
@@ -10,6 +11,7 @@ use marv::plugins;
 use marv::plugins::Plugin;
 use marv::plugins::helper;
 use prometheus_exporter::{self};
+use std::io;
 use std::io::Result;
 use std::io::prelude::*;
 
@@ -29,7 +31,7 @@ fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>, String)> {
     Ok((setup, plugins, plugins_names))
 }
 
-fn single(setup: MarvSetup, mut plugins: Vec<Box<dyn Plugin>>) -> Result<()> {
+fn single(setup: MarvSetup, mut plugins: Vec<Box<dyn Plugin>>) -> io::Result<()> {
     network::single::stream(setup, |writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
             Ok(writer.write_all(response.as_bytes())?)
@@ -37,13 +39,11 @@ fn single(setup: MarvSetup, mut plugins: Vec<Box<dyn Plugin>>) -> Result<()> {
     })
 }
 
-fn threaded(setup: MarvSetup) -> Result<()> {
-    network::threaded::stream(setup);
-
-    Ok(())
+fn threaded(setup: MarvSetup) -> io::Result<()> {
+    network::threaded::stream(setup)
 }
 
-fn main() -> Result<()> {
+pub(crate) fn main() -> io::Result<()> {
     let (setup, plugins, plugins_names) = initialize()?;
 
     log::info!(
@@ -52,6 +52,9 @@ fn main() -> Result<()> {
         plugins_names
     );
 
-    // single(setup, plugins)
-    threaded(setup)
+    match setup.config.mode.as_str() {
+        "thread" => threaded(setup),
+        "single" => single(setup, plugins),
+        _ => Ok(info!("You need to expecify a execution mode (config.mode)")),
+    }
 }
