@@ -19,7 +19,7 @@ kafka-server:
 		apache/kafka:3.7.0
 
 test:
-	cargo test
+	cargo watch -x test
 
 compose:
 	docker compose up
