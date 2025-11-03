@@ -1,7 +1,7 @@
 use regex::Regex;
 use std::{
     collections::HashMap,
-    io::{Error, ErrorKind},
+    io::{self, Error, ErrorKind},
 };
 
 pub fn safe_get(metadata: &HashMap<String, String>, key: &str) -> Result<String, Error> {
@@ -148,11 +148,18 @@ fn test_simple_channel_user_message() {
 pub fn create_error(message: &str) -> Error {
     Error::new(ErrorKind::Other, message)
 }
-
 #[test]
-fn test_create_error() {
+fn test_create_err() {
     assert_eq!(create_error("super-error").kind(), ErrorKind::Other);
     assert_eq!(create_error("super-error").to_string(), "super-error");
+}
+
+pub fn create_result_error<T>(message: &str) -> io::Result<T> {
+    Err(create_error(message))
+}
+#[test]
+fn test_create_result_err() {
+    assert!(create_result_error::<String>("Hack3d").is_err());
 }
 
 pub fn create_closure_error<T, E>(message: &str) -> impl Fn(E) -> Result<T, Error> {

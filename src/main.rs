@@ -37,12 +37,10 @@ fn single(setup: MarvSetup, mut plugins: Vec<Box<dyn Plugin>>) -> Result<()> {
     })
 }
 
-fn threaded(setup: MarvSetup, mut plugins: Vec<Box<dyn Plugin>>) -> Result<()> {
-    network::single::stream(setup, |writer, protocol| {
-        plugins::dispatch(&mut plugins, &protocol, |response: String| {
-            Ok(writer.write_all(response.as_bytes())?)
-        });
-    })
+fn threaded(setup: MarvSetup) -> Result<()> {
+    network::threaded::stream(setup);
+
+    Ok(())
 }
 
 fn main() -> Result<()> {
@@ -54,5 +52,6 @@ fn main() -> Result<()> {
         plugins_names
     );
 
-    single(setup, plugins)
+    // single(setup, plugins)
+    threaded(setup)
 }
