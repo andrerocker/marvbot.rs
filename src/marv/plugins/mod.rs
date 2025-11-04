@@ -3,7 +3,7 @@ pub mod etc;
 pub mod helper;
 pub mod todo;
 
-use super::{config, metrics::MARV_PLUGIN_HIT_COUNTER};
+use super::metrics::MARV_PLUGIN_HIT_COUNTER;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
 use etc::{consumer::KafkaConsumer, producer::KafkaProducer};
 use std::{
@@ -24,23 +24,22 @@ impl Display for dyn Plugin {
     }
 }
 
-pub fn default(setup: &config::MarvSetup) -> Result<Vec<Box<dyn Plugin>>, Error> {
+pub fn default() -> Result<Vec<Box<dyn Plugin>>, Error> {
     Ok(vec![
-        Logger::new(setup),
-        Login::new(setup),
-        Pong::new(setup),
-        Channel::new(setup),
-        Hello::new(setup),
-        KafkaProducer::new(setup),
-        KafkaConsumer::new(setup),
-        Todo::new(setup),
+        Logger::new(),
+        Login::new(),
+        Pong::new(),
+        Channel::new(),
+        Hello::new(),
+        KafkaProducer::new(),
+        KafkaConsumer::new(),
+        Todo::new(),
     ])
 }
 
 #[test]
 fn test_default_plugins() -> Result<(), Box<dyn std::error::Error>> {
-    let setup = &config::read_configuration()?;
-    let plugins = default(setup)?;
+    let plugins = default()?;
     let detect = |name: &str| plugins.iter().find(|p| p.name().eq(&name));
 
     assert!(detect("Logger").is_some());

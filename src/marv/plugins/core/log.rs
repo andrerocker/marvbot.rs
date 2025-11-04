@@ -1,10 +1,10 @@
-use crate::marv::{config::MarvSetup, plugins::Plugin};
+use crate::marv::plugins::Plugin;
 use std::io::Error;
 
 pub struct Logger {}
 
 impl Logger {
-    pub fn new(_setup: &MarvSetup) -> Box<dyn Plugin> {
+    pub fn new() -> Box<dyn Plugin> {
         Box::new(Logger {})
     }
 }

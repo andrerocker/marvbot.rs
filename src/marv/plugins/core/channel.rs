@@ -2,16 +2,18 @@ use std::io::Error;
 
 use log::info;
 
-use crate::marv::{config::MarvSetup, plugins::Plugin};
+use crate::marv::{config, plugins::Plugin};
 
 pub struct Channel {
     pub channel: String,
 }
 
 impl Channel {
-    pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
+    pub fn new() -> Box<dyn Plugin> {
+        let config = &config::CONFIG.lock().unwrap().config;
+
         Box::new(Channel {
-            channel: setup.config.channel.clone(),
+            channel: config.channel.clone(),
         })
     }
 }

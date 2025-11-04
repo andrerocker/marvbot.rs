@@ -1,16 +1,13 @@
-use crate::marv::config::MarvSetup;
+use crate::marv::config::{self};
 use log::info;
 use std::{
     io::{BufReader, BufWriter, Error, prelude::*},
     net::TcpStream,
 };
 
-pub fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(
-    setup: MarvSetup,
-    mut handle: F,
-) -> Result<(), Error> {
-    let stream = TcpStream::connect(&setup.config.hostname)
-        .expect("Problems trying to connect to the server");
+pub fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(mut handle: F) -> Result<(), Error> {
+    let config = &config::CONFIG.lock().unwrap().config;
+    let stream = TcpStream::connect(config.hostname.clone())?;
 
     let mut reader = BufReader::new(&stream);
     let mut writer = BufWriter::new(&stream);

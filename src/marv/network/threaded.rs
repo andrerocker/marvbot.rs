@@ -1,5 +1,5 @@
 use crate::marv::{
-    config::MarvSetup,
+    config::{self},
     plugins::{self, helper},
 };
 use log::info;
@@ -7,11 +7,12 @@ use std::{
     io::{self, BufReader, BufWriter, prelude::*},
     net::TcpStream,
     sync::mpsc::{self, Receiver, Sender},
-    thread::{self, JoinHandle},
+    thread::{self},
 };
 
-pub fn stream(setup: MarvSetup) -> io::Result<()> {
-    let stream = TcpStream::connect(&setup.config.hostname)?;
+pub fn stream() -> io::Result<()> {
+    let config = &config::CONFIG.lock().unwrap().config;
+    let stream = TcpStream::connect(config.hostname.clone())?;
     let mut threads = Vec::new();
 
     let (network_sender, network_receiver) = mpsc::channel::<String>();
@@ -28,7 +29,7 @@ pub fn stream(setup: MarvSetup) -> io::Result<()> {
     }));
 
     threads.push(thread::spawn(move || {
-        plugin_handler(&setup, network_receiver, plugin_sender)
+        plugin_handler(network_receiver, plugin_sender)
     }));
 
     for handle in threads.into_iter() {
@@ -77,12 +78,8 @@ fn writer_handler(stream: TcpStream, plugin_input: Receiver<String>) {
     }
 }
 
-fn plugin_handler(
-    setup: &MarvSetup,
-    network_input: Receiver<String>,
-    network_output: Sender<String>,
-) {
-    let mut plugins = plugins::default(setup).unwrap();
+fn plugin_handler(network_input: Receiver<String>, network_output: Sender<String>) {
+    let mut plugins = plugins::default().unwrap();
 
     loop {
         match network_input.recv() {

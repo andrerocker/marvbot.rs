@@ -3,7 +3,8 @@ pub mod controller;
 pub mod repository;
 pub mod service;
 
-use crate::marv::{config::MarvSetup, plugins::Plugin};
+use crate::marv::config;
+use crate::marv::plugins::Plugin;
 use controller::TodoController;
 use diesel::PgConnection;
 use diesel::prelude::*;
@@ -16,8 +17,9 @@ pub struct Todo {
 }
 
 impl Todo {
-    pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
-        let database_url = setup.config.database_url.clone();
+    pub fn new() -> Box<dyn Plugin> {
+        let config = &config::CONFIG.lock().unwrap().config;
+        let database_url = config.database_url.clone();
         let connection = PgConnection::establish(&database_url)
             .unwrap_or_else(|_| panic!("Error connecting to {}", database_url));
 

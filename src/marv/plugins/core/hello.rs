@@ -1,13 +1,10 @@
-use crate::marv::{
-    config::MarvSetup,
-    plugins::{Plugin, helper},
-};
+use crate::marv::plugins::{Plugin, helper};
 use std::io::Error;
 
 pub struct Hello {}
 
 impl Hello {
-    pub fn new(_setup: &MarvSetup) -> Box<dyn Plugin> {
+    pub fn new() -> Box<dyn Plugin> {
         Box::new(Hello {})
     }
 }

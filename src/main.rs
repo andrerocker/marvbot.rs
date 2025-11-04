@@ -5,7 +5,6 @@ use env_logger;
 use log;
 use log::info;
 use marv::config;
-use marv::config::MarvSetup;
 use marv::network;
 use marv::plugins;
 use marv::plugins::Plugin;
@@ -15,46 +14,44 @@ use std::io;
 use std::io::Result;
 use std::io::prelude::*;
 
-fn initialize() -> Result<(MarvSetup, Vec<Box<dyn Plugin>>, String)> {
+fn initialize() -> Result<(Vec<Box<dyn Plugin>>, String)> {
     dotenv().ok();
     env_logger::init();
 
     prometheus_exporter::start("127.0.0.1:9184".parse().unwrap())
         .expect("Problems trying to initialize Metrics");
 
-    let setup = config::read_configuration()
-        .expect("Problems trying to process Marv.toml configuration file");
-
-    let plugins = plugins::default(&setup)?;
+    let plugins = plugins::default()?;
     let plugins_names = helper::join(&plugins, ", ");
 
-    Ok((setup, plugins, plugins_names))
+    Ok((plugins, plugins_names))
 }
 
-fn single(setup: MarvSetup, mut plugins: Vec<Box<dyn Plugin>>) -> io::Result<()> {
-    network::single::stream(setup, |writer, protocol| {
+fn single(mut plugins: Vec<Box<dyn Plugin>>) -> io::Result<()> {
+    network::single::stream(|writer, protocol| {
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
             Ok(writer.write_all(response.as_bytes())?)
         });
     })
 }
 
-fn threaded(setup: MarvSetup) -> io::Result<()> {
-    network::threaded::stream(setup)
+fn threaded() -> io::Result<()> {
+    network::threaded::stream()
 }
 
 pub(crate) fn main() -> io::Result<()> {
-    let (setup, plugins, plugins_names) = initialize()?;
+    let config = &config::CONFIG.lock().unwrap().config;
+    let (plugins, plugins_names) = initialize()?;
 
     log::info!(
         "Initializing Marvbot: {} plugins: {}",
-        setup.config.hostname.clone(),
+        config.hostname.clone(),
         plugins_names
     );
 
-    match setup.config.mode.as_str() {
-        "thread" => threaded(setup),
-        "single" => single(setup, plugins),
-        _ => Ok(info!("You need to expecify a execution mode (config.mode)")),
+    match config.mode.as_str() {
+        "thread" => threaded(),
+        "single" => single(plugins),
+        _ => Ok(info!("You need to expecify a execution mode")),
     }
 }

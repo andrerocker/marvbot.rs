@@ -1,6 +1,9 @@
 use std::io::Error;
 
-use crate::marv::{config::MarvSetup, plugins::Plugin};
+use crate::marv::{
+    config::{self},
+    plugins::Plugin,
+};
 use kafka::{
     client::RequiredAcks,
     producer::{Producer, Record},
@@ -12,15 +15,17 @@ pub struct KafkaProducer {
 }
 
 impl KafkaProducer {
-    pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
-        let brokers = vec![setup.config.broker.to_string()];
+    pub fn new() -> Box<dyn Plugin> {
+        let config = &config::CONFIG.lock().unwrap().config;
+
+        let brokers = vec![config.broker.to_string()];
         let producer = Producer::from_hosts(brokers)
             .with_required_acks(RequiredAcks::One)
             .create()
             .expect("Problems trying to initialize Producer");
 
         Box::new(KafkaProducer {
-            topic: setup.config.topic.to_string(),
+            topic: config.topic.to_string(),
             producer: producer,
         })
     }

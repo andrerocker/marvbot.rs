@@ -11,7 +11,7 @@ use kafka::{
 };
 
 use crate::marv::{
-    config::{Config, MarvSetup},
+    config::{self},
     metrics::MARV_PLUGIN_KAFKA_CONSUME_COUNTER,
     plugins::Plugin,
 };
@@ -19,19 +19,17 @@ use crate::marv::{
 pub struct KafkaConsumer {}
 
 impl KafkaConsumer {
-    pub fn new(setup: &MarvSetup) -> Box<dyn Plugin> {
-        let setup = setup.clone();
-
+    pub fn new() -> Box<dyn Plugin> {
         thread::spawn(|| {
-            handle_messages(setup).unwrap();
+            handle_messages().unwrap();
         });
 
         Box::new(KafkaConsumer {})
     }
 }
 
-fn handle_messages(setup: MarvSetup) -> Result<(), KafkaError> {
-    let config = setup.config.clone();
+fn handle_messages() -> Result<(), KafkaError> {
+    let config = &config::CONFIG.lock().unwrap().config;
     let topic = config.topic.clone();
     let group = config.group.clone();
     let brokers = vec![config.broker.clone()];
@@ -48,7 +46,7 @@ fn handle_messages(setup: MarvSetup) -> Result<(), KafkaError> {
         for ms in consumer.poll().unwrap().iter() {
             for message in ms.messages() {
                 MARV_PLUGIN_KAFKA_CONSUME_COUNTER.inc();
-                save_message(config.clone(), message);
+                save_message(message);
             }
             consumer.consume_messageset(ms).unwrap();
         }
@@ -59,8 +57,9 @@ fn handle_messages(setup: MarvSetup) -> Result<(), KafkaError> {
     }
 }
 
-fn save_message(config: Config, message: &Message) {
+fn save_message(message: &Message) {
     //TODO: Dirty way to deal with files. It's just a Quick and Dirty Impl
+    let config = &config::CONFIG.lock().unwrap().config;
     let target_file = config.messages_log.clone();
     let contents = message.value; // std::str::from_utf8(message.value).unwrap();
     let mut file = OpenOptions::new()
