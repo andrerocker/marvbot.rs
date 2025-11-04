@@ -16,7 +16,7 @@ pub struct KafkaProducer {
 
 impl KafkaProducer {
     pub fn new() -> Box<dyn Plugin> {
-        let config = &config::CONFIG.lock().unwrap().config;
+        let config = &config::CONFIG.config;
 
         let brokers = vec![config.broker.to_string()];
         let producer = Producer::from_hosts(brokers)

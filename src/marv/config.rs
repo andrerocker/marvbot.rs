@@ -1,6 +1,6 @@
 use once_cell::sync::Lazy;
 use serde::Deserialize;
-use std::{fs, sync::Mutex};
+use std::fs;
 use toml;
 
 #[derive(Deserialize, Debug, Clone)]
@@ -49,8 +49,6 @@ fn test_read_configuration() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub static CONFIG: Lazy<Mutex<MarvSetup>> = Lazy::new(|| {
-    Mutex::new(
-        read_configuration().expect("Problems trying to process Marv.toml configuration file"),
-    )
+pub static CONFIG: Lazy<MarvSetup> = Lazy::new(|| {
+    read_configuration().expect("Problems trying to process Marv.toml configuration file")
 });

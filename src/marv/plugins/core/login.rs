@@ -13,7 +13,7 @@ pub struct Login {
 
 impl Login {
     pub fn new() -> Box<dyn Plugin> {
-        let config = &config::CONFIG.lock().unwrap().config;
+        let config = &config::CONFIG.config;
 
         Box::new(Login {
             nickname: config.nickname.clone(),

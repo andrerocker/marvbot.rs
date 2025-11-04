@@ -29,7 +29,7 @@ impl KafkaConsumer {
 }
 
 fn handle_messages() -> Result<(), KafkaError> {
-    let config = &config::CONFIG.lock().unwrap().config;
+    let config = &config::CONFIG.config;
     let topic = config.topic.clone();
     let group = config.group.clone();
     let brokers = vec![config.broker.clone()];
@@ -59,7 +59,7 @@ fn handle_messages() -> Result<(), KafkaError> {
 
 fn save_message(message: &Message) {
     //TODO: Dirty way to deal with files. It's just a Quick and Dirty Impl
-    let config = &config::CONFIG.lock().unwrap().config;
+    let config = &config::CONFIG.config;
     let target_file = config.messages_log.clone();
     let contents = message.value; // std::str::from_utf8(message.value).unwrap();
     let mut file = OpenOptions::new()

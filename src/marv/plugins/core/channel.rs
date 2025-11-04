@@ -10,7 +10,7 @@ pub struct Channel {
 
 impl Channel {
     pub fn new() -> Box<dyn Plugin> {
-        let config = &config::CONFIG.lock().unwrap().config;
+        let config = &config::CONFIG.config;
 
         Box::new(Channel {
             channel: config.channel.clone(),

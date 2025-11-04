@@ -11,7 +11,7 @@ use std::{
 };
 
 pub fn stream() -> io::Result<()> {
-    let config = &config::CONFIG.lock().unwrap().config;
+    let config = &config::CONFIG.config;
     let stream = TcpStream::connect(config.hostname.clone())?;
     let mut threads = Vec::new();
 

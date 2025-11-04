@@ -40,7 +40,7 @@ fn threaded() -> io::Result<()> {
 }
 
 pub(crate) fn main() -> io::Result<()> {
-    let config = &config::CONFIG.lock().unwrap().config;
+    let config = &config::CONFIG.config;
     let (plugins, plugins_names) = initialize()?;
 
     log::info!(
