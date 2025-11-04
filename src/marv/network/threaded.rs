@@ -7,27 +7,33 @@ use std::{
     io::{self, BufReader, BufWriter, prelude::*},
     net::TcpStream,
     sync::mpsc::{self, Receiver, Sender},
-    thread::{self},
+    thread::{self, JoinHandle},
 };
 
 pub fn stream(setup: MarvSetup) -> io::Result<()> {
     let stream = TcpStream::connect(&setup.config.hostname)?;
+    let mut threads = Vec::new();
 
     let (network_sender, network_receiver) = mpsc::channel::<String>();
     let (plugin_sender, plugin_receiver) = mpsc::channel::<String>();
 
     let reader_stream = stream.try_clone()?;
-    let reader_thread = thread::spawn(move || reader_handler(reader_stream, network_sender));
+    threads.push(thread::spawn(move || {
+        reader_handler(reader_stream, network_sender)
+    }));
 
     let writer_stream = stream.try_clone()?;
-    let writer_thread = thread::spawn(move || writer_handler(writer_stream, plugin_receiver));
+    threads.push(thread::spawn(move || {
+        writer_handler(writer_stream, plugin_receiver)
+    }));
 
-    let plugin_thread =
-        thread::spawn(move || plugin_handler(&setup, network_receiver, plugin_sender));
+    threads.push(thread::spawn(move || {
+        plugin_handler(&setup, network_receiver, plugin_sender)
+    }));
 
-    let _ = reader_thread.join();
-    let _ = writer_thread.join();
-    let _ = plugin_thread.join();
+    for handle in threads.into_iter() {
+        handle.join().unwrap();
+    }
 
     Ok(())
 }
