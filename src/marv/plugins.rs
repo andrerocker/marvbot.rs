@@ -1,11 +1,11 @@
 pub mod core;
-pub mod etc;
 pub mod helper;
+pub mod kafka;
 pub mod todo;
 
 use super::metrics::MARV_PLUGIN_HIT_COUNTER;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use etc::{consumer::KafkaConsumer, producer::KafkaProducer};
+use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
 use std::{
     fmt::{self, Display},
     io::Error,
