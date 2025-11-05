@@ -23,12 +23,14 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] 'awesome rust' (and produtivity stuff like libs and tools)
 - [x] singleton with lazy (once_cell)
 - [x] custom types (to :return signature and :parameters)
+- [x] threads / mutex - network-io and plugin dispatch
+- [ ] threads / mutex - individual plugin execution
 - [ ] macros
 - [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] evented-io
 - [ ] async
 - [ ] actor model
-- [ ] threads / mutex
+
 - [ ] use plugin as crate / external modules
 - [ ] config: custom segments for plugins
 - [ ] prometheus / metrics / aumentar cobertura
