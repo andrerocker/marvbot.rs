@@ -13,13 +13,13 @@ use kafka::{
 use crate::marv::{
     config::{self},
     metrics::MARV_PLUGIN_KAFKA_CONSUME_COUNTER,
-    plugins::Plugin,
+    plugins::{DynamicPlugin, Plugin},
 };
 
 pub struct KafkaConsumer {}
 
 impl KafkaConsumer {
-    pub fn new() -> Box<dyn Plugin> {
+    pub fn new() -> DynamicPlugin {
         thread::spawn(|| {
             handle_messages().unwrap();
         });

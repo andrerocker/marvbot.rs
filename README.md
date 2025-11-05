@@ -22,7 +22,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] error handling vs monads (unwrap, Option, Result, ?, etc)
 - [x] 'awesome rust' (and produtivity stuff like libs and tools)
 - [x] singleton with lazy (once_cell)
-- [ ] custom types (to :return signature and :parameters)
+- [x] custom types (to :return signature and :parameters)
 - [ ] macros
 - [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] evented-io

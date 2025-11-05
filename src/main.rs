@@ -14,7 +14,7 @@ use std::io;
 use std::io::Result;
 use std::io::prelude::*;
 
-fn initialize() -> Result<(Vec<Box<dyn Plugin>>, String)> {
+fn initialize() -> Result<(plugins::DynamicPluginVec, String)> {
     dotenv().ok();
     env_logger::init();
 

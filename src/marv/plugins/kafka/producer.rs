@@ -2,7 +2,7 @@ use std::io::Error;
 
 use crate::marv::{
     config::{self},
-    plugins::Plugin,
+    plugins::{DynamicPlugin, Plugin},
 };
 use kafka::{
     client::RequiredAcks,
@@ -15,7 +15,7 @@ pub struct KafkaProducer {
 }
 
 impl KafkaProducer {
-    pub fn new() -> Box<dyn Plugin> {
+    pub fn new() -> DynamicPlugin {
         let config = &config::CONFIG.config;
 
         let brokers = vec![config.broker.to_string()];

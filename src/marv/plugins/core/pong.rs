@@ -1,10 +1,10 @@
-use crate::marv::plugins::Plugin;
+use crate::marv::plugins::{DynamicPlugin, Plugin};
 use std::io::{Error, ErrorKind};
 
 pub struct Pong {}
 
 impl Pong {
-    pub fn new() -> Box<dyn Plugin> {
+    pub fn new() -> DynamicPlugin {
         Box::new(Pong {})
     }
 }

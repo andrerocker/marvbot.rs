@@ -1,10 +1,10 @@
-use crate::marv::plugins::{Plugin, helper};
+use crate::marv::plugins::{DynamicPlugin, Plugin, helper};
 use std::io::Error;
 
 pub struct Hello {}
 
 impl Hello {
-    pub fn new() -> Box<dyn Plugin> {
+    pub fn new() -> DynamicPlugin {
         Box::new(Hello {})
     }
 }

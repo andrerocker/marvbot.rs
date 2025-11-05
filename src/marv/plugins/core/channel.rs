@@ -2,14 +2,17 @@ use std::io::Error;
 
 use log::info;
 
-use crate::marv::{config, plugins::Plugin};
+use crate::marv::{
+    config,
+    plugins::{DynamicPlugin, Plugin},
+};
 
 pub struct Channel {
     pub channel: String,
 }
 
 impl Channel {
-    pub fn new() -> Box<dyn Plugin> {
+    pub fn new() -> DynamicPlugin {
         let config = &config::CONFIG.config;
 
         Box::new(Channel {

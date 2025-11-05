@@ -12,6 +12,9 @@ use std::{
 };
 use todo::Todo;
 
+pub type DynamicPlugin = Box<dyn Plugin>;
+pub type DynamicPluginVec = Vec<DynamicPlugin>;
+
 pub trait Plugin {
     fn name(&self) -> String;
     fn is_enabled(&self, message: &String) -> bool;
@@ -24,7 +27,7 @@ impl Display for dyn Plugin {
     }
 }
 
-pub fn default() -> Result<Vec<Box<dyn Plugin>>, Error> {
+pub fn default() -> Result<DynamicPluginVec, Error> {
     Ok(vec![
         Logger::new(),
         Login::new(),
@@ -55,7 +58,7 @@ fn test_default_plugins() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 pub fn dispatch<F: FnMut(String) -> Result<(), Error>>(
-    plugins: &mut Vec<Box<dyn Plugin>>,
+    plugins: &mut DynamicPluginVec,
     protocol: &String,
     mut callback: F,
 ) {

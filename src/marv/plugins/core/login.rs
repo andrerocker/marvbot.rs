@@ -4,7 +4,7 @@ use log::info;
 
 use crate::marv::{
     config::{self},
-    plugins::Plugin,
+    plugins::{DynamicPlugin, Plugin},
 };
 
 pub struct Login {
@@ -12,7 +12,7 @@ pub struct Login {
 }
 
 impl Login {
-    pub fn new() -> Box<dyn Plugin> {
+    pub fn new() -> DynamicPlugin {
         let config = &config::CONFIG.config;
 
         Box::new(Login {

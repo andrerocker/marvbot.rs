@@ -12,12 +12,14 @@ use repository::TodoRepository;
 use service::TodoService;
 use std::io::Error;
 
+use super::DynamicPlugin;
+
 pub struct Todo {
     pub controller: TodoController,
 }
 
 impl Todo {
-    pub fn new() -> Box<dyn Plugin> {
+    pub fn new() -> DynamicPlugin {
         let config = &config::CONFIG.config;
         let database_url = config.database_url.clone();
         let connection = PgConnection::establish(&database_url)
