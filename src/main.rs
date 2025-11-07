@@ -5,7 +5,7 @@ use env_logger;
 use log;
 use log::info;
 use marv::config;
-use marv::network;
+use marv::engine;
 use marv::plugins;
 use prometheus_exporter;
 use std::io;
@@ -21,15 +21,14 @@ fn initialize() -> Result<()> {
 
     Ok(())
 }
-
-fn main() -> io::Result<()> {
+pub fn main() -> io::Result<()> {
     initialize()?;
     let config = &config::CONFIG.config;
 
     match config.mode.as_str() {
-        "thread" => network::threaded::stream(),
-        "event" => network::event::stream(),
-        "single" => network::single::stream(|writer, protocol| {
+        "thread" => engine::threaded::stream(),
+        "event" => engine::event::stream(),
+        "single" => engine::single::stream(|writer, protocol| {
             let mut plugins = plugins::default().unwrap();
             plugins::dispatch(&mut plugins, &protocol, |response: String| {
                 Ok(writer.write_all(response.as_bytes())?)
