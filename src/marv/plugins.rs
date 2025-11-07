@@ -37,7 +37,6 @@ pub fn default() -> Result<DynamicPluginVec, Error> {
         KafkaProducer::new(),
         KafkaConsumer::new(),
         Todo::new(),
-        KafkaV2Consumer::new(),
     ])
 }
 

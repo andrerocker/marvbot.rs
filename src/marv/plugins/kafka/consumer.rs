@@ -31,7 +31,8 @@ impl KafkaConsumer {
 fn handle_messages() -> Result<(), KafkaError> {
     let config = &config::CONFIG.config;
     let topic = config.topic.clone();
-    let group = config.group.clone();
+
+let group = config.group.clone() + "-legacy";
     let brokers = vec![config.broker.clone()];
 
     let mut consumer = Consumer::from_hosts(brokers)
