@@ -30,7 +30,6 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] evented-io
 - [ ] async
 - [ ] actor model
-
 - [ ] use plugin as crate / external modules
 - [ ] config: custom segments for plugins
 - [ ] prometheus / metrics / aumentar cobertura
@@ -66,5 +65,5 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] kafka consume
 - [x] kafka produce
 - [x] database
-- [ ] todo (create a todolist)
+- [x] todo (create a todolist)
 - [ ] default ask chatgpt
