@@ -25,6 +25,8 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] custom types (to :return signature and :parameters)
 - [x] threads / mutex - network-io and plugin dispatch
 - [ ] threads / mutex - individual plugin execution
+- [ ] data-parallelism / rayon
+- [ ] thread pool
 - [ ] macros
 - [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] evented-io
