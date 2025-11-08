@@ -10,7 +10,7 @@ use tokio::{
 
 #[tokio::main]
 pub async fn stream() -> Result<()> {
-    let config = &config::CONFIG.config;
+    let config = &config::MARV.config;
 
     let addr = config.hostname.clone().parse().unwrap();
     let socket = TcpSocket::new_v4()?;

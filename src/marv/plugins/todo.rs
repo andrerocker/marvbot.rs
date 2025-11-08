@@ -20,7 +20,7 @@ pub struct Todo {
 
 impl Todo {
     pub fn new() -> DynamicPlugin {
-        let config = &config::CONFIG.config;
+        let config = &config::MARV.config;
         let database_url = config.database_url.clone();
         let connection = PgConnection::establish(&database_url)
             .unwrap_or_else(|_| panic!("Error connecting to {}", database_url));

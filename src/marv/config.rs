@@ -49,6 +49,6 @@ fn test_read_configuration() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub static CONFIG: Lazy<MarvSetup> = Lazy::new(|| {
+pub static MARV: Lazy<MarvSetup> = Lazy::new(|| {
     read_configuration().expect("Problems trying to process Marv.toml configuration file")
 });

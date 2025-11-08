@@ -6,7 +6,7 @@ use std::{
 };
 
 fn internal<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(mut handle: F) -> Result<(), Error> {
-    let config = &config::CONFIG.config;
+    let config = &config::MARV.config;
     let stream = TcpStream::connect(config.hostname.clone())?;
 
     let mut reader = BufReader::new(&stream);

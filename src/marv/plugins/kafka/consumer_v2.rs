@@ -33,7 +33,7 @@ impl Plugin for KafkaV2Consumer {
 }
 
 async fn handle_messages_v2() {
-    let config = &config::CONFIG.config;
+    let config = &config::MARV.config;
     let topic = config.topic.clone();
     let group = config.group.clone();
     let brokers = config.broker.clone();

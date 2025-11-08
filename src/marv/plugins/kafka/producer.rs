@@ -16,7 +16,7 @@ pub struct KafkaProducer {
 
 impl KafkaProducer {
     pub fn new() -> DynamicPlugin {
-        let config = &config::CONFIG.config;
+        let config = &config::MARV.config;
 
         let brokers = vec![config.broker.to_string()];
         let producer = Producer::from_hosts(brokers)
