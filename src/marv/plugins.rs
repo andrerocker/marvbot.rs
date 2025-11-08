@@ -5,7 +5,7 @@ pub mod todo;
 
 use super::metrics::MARV_PLUGIN_HIT_COUNTER;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use kafka::{consumer::KafkaConsumer, consumer_v2::KafkaV2Consumer, producer::KafkaProducer};
+use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
 use std::{
     fmt::{self, Display},
     io::Error,

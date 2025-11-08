@@ -31,8 +31,9 @@ fn internal<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(mut handle: F) -> Res
 }
 
 pub fn stream() -> Result<(), Error> {
+    let mut plugins = plugins::default().unwrap();
+
     internal(|writer, protocol| {
-        let mut plugins = plugins::default().unwrap();
         plugins::dispatch(&mut plugins, &protocol, |response: String| {
             Ok(writer.write_all(response.as_bytes())?)
         });
