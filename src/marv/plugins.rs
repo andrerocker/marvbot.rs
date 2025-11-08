@@ -15,7 +15,7 @@ use todo::Todo;
 pub type DynamicPlugin = Box<dyn Plugin>;
 pub type DynamicPluginVec = Vec<DynamicPlugin>;
 
-pub trait Plugin {
+pub trait Plugin: Send {
     fn name(&self) -> String;
     fn is_enabled(&self, message: &String) -> bool;
     fn perform(&mut self, message: &String) -> Result<Vec<String>, Error>;
@@ -73,6 +73,37 @@ pub fn dispatch<F: FnMut(String) -> Result<(), Error>>(
                     for result in response {
                         log::info!("Sending response to the server: '{}'", result.trim());
                         match callback(result) {
+                            Ok(_) => continue,
+                            Err(error) => {
+                                log::error!("Problems trying to call callback: {}", error)
+                            }
+                        }
+                    }
+                }
+                Err(error) => {
+                    log::error!("Problems processing plugin: {}", error)
+                }
+            }
+        }
+    }
+}
+
+pub async fn dispatch_async<F: AsyncFnMut(String) -> Result<(), Error>>(
+    plugins: &mut DynamicPluginVec,
+    protocol: &String,
+    mut callback: F,
+) {
+    for plugin in plugins.iter_mut() {
+        if plugin.is_enabled(&protocol) {
+            MARV_PLUGIN_HIT_COUNTER
+                .with_label_values(&[&plugin.name()])
+                .inc();
+
+            match plugin.perform(&protocol) {
+                Ok(response) => {
+                    for result in response {
+                        log::info!("Sending response to the server: '{}'", result.trim());
+                        match callback(result).await {
                             Ok(_) => continue,
                             Err(error) => {
                                 log::error!("Problems trying to call callback: {}", error)
