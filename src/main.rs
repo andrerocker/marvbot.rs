@@ -6,11 +6,9 @@ use log;
 use log::info;
 use marv::config;
 use marv::engine;
-use marv::plugins;
 use prometheus_exporter;
 use std::io;
 use std::io::Result;
-use std::io::prelude::*;
 
 fn initialize() -> Result<()> {
     dotenv().ok();
@@ -26,14 +24,11 @@ pub fn main() -> io::Result<()> {
     let config = &config::CONFIG.config;
 
     match config.mode.as_str() {
-        "thread" => engine::threaded::stream(),
         "event" => engine::event::stream(),
-        "single" => engine::single::stream(|writer, protocol| {
-            let mut plugins = plugins::default().unwrap();
-            plugins::dispatch(&mut plugins, &protocol, |response: String| {
-                Ok(writer.write_all(response.as_bytes())?)
-            });
-        }),
-        _ => Ok(info!("You need to expecify a execution mode")),
+        "single" => engine::single::stream(),
+        "thread" => engine::threaded::stream(),
+        _ => Ok(info!(
+            "Set a execution mode on the configuration file [thread|event|single]"
+        )),
     }
 }

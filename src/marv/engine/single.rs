@@ -1,11 +1,11 @@
-use crate::marv::config::{self};
+use crate::marv::{config, plugins};
 use log::info;
 use std::{
     io::{BufReader, BufWriter, Error, prelude::*},
     net::TcpStream,
 };
 
-pub fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(mut handle: F) -> Result<(), Error> {
+fn internal<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(mut handle: F) -> Result<(), Error> {
     let config = &config::CONFIG.config;
     let stream = TcpStream::connect(config.hostname.clone())?;
 
@@ -28,4 +28,13 @@ pub fn stream<F: FnMut(&mut BufWriter<&TcpStream>, &String)>(mut handle: F) -> R
             protocol.clear();
         }
     }
+}
+
+pub fn stream() -> Result<(), Error> {
+    internal(|writer, protocol| {
+        let mut plugins = plugins::default().unwrap();
+        plugins::dispatch(&mut plugins, &protocol, |response: String| {
+            Ok(writer.write_all(response.as_bytes())?)
+        });
+    })
 }
