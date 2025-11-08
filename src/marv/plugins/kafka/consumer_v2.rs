@@ -12,7 +12,9 @@ pub struct KafkaV2Consumer {}
 
 impl KafkaV2Consumer {
     pub fn new() -> DynamicPlugin {
-        tokio::task::spawn_blocking(|| handle_messages_v2());
+        tokio::task::spawn(async {
+            handle_messages_v2().await;
+        });
 
         Box::new(KafkaV2Consumer {})
     }
@@ -46,19 +48,19 @@ async fn handle_messages_v2() {
 
     consumer.subscribe(&[topic.as_str()]).unwrap();
 
-    // loop {
-    match consumer.recv().await {
-        Ok(msg) => {
-            let payload = msg
-                .payload_view()
-                .map(|res| res.unwrap_or("<invalid utf-8>"))
-                .unwrap_or("<no payload>");
+    loop {
+        match consumer.recv().await {
+            Ok(msg) => {
+                let payload = msg
+                    .payload_view()
+                    .map(|res| res.unwrap_or("<invalid utf-8>"))
+                    .unwrap_or("<no payload>");
 
-            log::info!("@{}: {}", msg.offset(), payload);
+                log::info!("+++>> {}: {}", msg.offset(), payload);
 
-            consumer.commit_message(&msg, CommitMode::Async).unwrap();
+                consumer.commit_message(&msg, CommitMode::Async).unwrap();
+            }
+            Err(e) => log::error!("Kafka error: {e}"),
         }
-        Err(e) => log::error!("Kafka error: {e}"),
     }
-    // }
 }
