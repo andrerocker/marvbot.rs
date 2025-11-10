@@ -24,13 +24,16 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] singleton with lazy (once_cell)
 - [x] custom types (to :return signature and :parameters)
 - [x] threads / mutex - network-io and plugin dispatch
+- [x] evented-io
+- [x] kafka: rdkafka: consumer / tokio
+- [ ] kafka: rdkafka: producer / tokio
+- [ ] plugins: plugin sync vs async
+- [ ] async
 - [ ] threads / mutex - individual plugin execution
 - [ ] data-parallelism / rayon
 - [ ] thread pool
 - [ ] macros
 - [ ] dispatch: static vs dynamic (templates vs dyn)
-- [ ] evented-io
-- [ ] async
 - [ ] actor model
 - [ ] use plugin as crate / external modules
 - [ ] config: custom segments for plugins
@@ -47,7 +50,6 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] argparse
 - [ ] housekeeping
 - [ ] binstall
-- [ ] kafka: check for another lib (rdkafka?)
 - [ ] kafka: serialize messages with: cbor, protobuf, messagepack
 - [ ] FFI
 - [ ] change log level by using signals
