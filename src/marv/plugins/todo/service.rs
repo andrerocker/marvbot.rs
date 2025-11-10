@@ -1,8 +1,5 @@
 use super::repository::TodoRepository;
-use crate::marv::{
-    models::{NewTodo, Todo, UpdateTodo},
-    plugins::helper,
-};
+use crate::marv::models::{NewTodo, Todo, UpdateTodo};
 use std::io::{self, Error};
 
 pub struct TodoService {
@@ -11,22 +8,18 @@ pub struct TodoService {
 
 impl TodoService {
     pub fn create(&mut self, todo: NewTodo) -> Result<Todo, Error> {
-        // self.repository.create(todo)
-        Err(helper::create_error("hack3d"))
+        self.repository.create(todo)
     }
 
     pub fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
-        // self.repository.update(todo)
-        Err(helper::create_error("hack3d"))
+        self.repository.update(todo)
     }
 
     pub fn list(&mut self) -> Result<Vec<Todo>, Error> {
-        // self.repository.list()
-        Err(helper::create_error("hack3d"))
+        self.repository.list()
     }
 
     pub fn delete(&mut self, id: i32) -> Result<usize, Error> {
-        // self.repository.delete(id)
-        Err(helper::create_error("hack3d"))
+        self.repository.delete(id)
     }
 }
