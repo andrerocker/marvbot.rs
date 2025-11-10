@@ -1,3 +1,5 @@
+use async_trait::async_trait;
+
 use crate::marv::plugins::{DynamicPlugin, Plugin};
 use std::io::Error;
 
@@ -9,16 +11,17 @@ impl Logger {
     }
 }
 
+#[async_trait]
 impl Plugin for Logger {
     fn name(&self) -> String {
         "Logger".to_string()
     }
 
-    fn is_enabled(&self, _message: &String) -> bool {
+    async fn is_enabled(&self, _message: &String) -> bool {
         true
     }
 
-    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         print!("<-- {}", message);
         Ok(vec![])
     }

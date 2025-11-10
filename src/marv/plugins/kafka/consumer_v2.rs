@@ -2,6 +2,7 @@ use crate::marv::{
     config::{self},
     plugins::{DynamicPlugin, Plugin},
 };
+use async_trait::async_trait;
 use rdkafka::{
     ClientConfig, Message,
     consumer::{CommitMode, Consumer, StreamConsumer},
@@ -20,16 +21,17 @@ impl KafkaV2Consumer {
     }
 }
 
+#[async_trait]
 impl Plugin for KafkaV2Consumer {
     fn name(&self) -> String {
         "KafkaV2Consumer".to_string()
     }
 
-    fn is_enabled(&self, _message: &String) -> bool {
+    async fn is_enabled(&self, _message: &String) -> bool {
         false
     }
 
-    fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
         Ok(vec![])
     }
 }

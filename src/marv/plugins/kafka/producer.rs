@@ -4,6 +4,7 @@ use crate::marv::{
     config::{self},
     plugins::{DynamicPlugin, Plugin},
 };
+use async_trait::async_trait;
 use kafka::{
     client::RequiredAcks,
     producer::{Producer, Record},
@@ -31,16 +32,17 @@ impl KafkaProducer {
     }
 }
 
+#[async_trait]
 impl Plugin for KafkaProducer {
     fn name(&self) -> String {
         "KafkaProducer".to_string()
     }
 
-    fn is_enabled(&self, _message: &String) -> bool {
+    async fn is_enabled(&self, _message: &String) -> bool {
         true
     }
 
-    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         let record = &Record::from_value(&self.topic, message.as_bytes());
         self.producer
             .send(record)

@@ -1,5 +1,6 @@
 use std::io::Error;
 
+use async_trait::async_trait;
 use log::info;
 
 use crate::marv::{
@@ -21,16 +22,17 @@ impl Login {
     }
 }
 
+#[async_trait]
 impl Plugin for Login {
     fn name(&self) -> String {
         "Login".to_string()
     }
 
-    fn is_enabled(&self, message: &String) -> bool {
+    async fn is_enabled(&self, message: &String) -> bool {
         message.contains("Could not resolve your hostname")
     }
 
-    fn perform(&mut self, _: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&mut self, _: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Login");
 
         return Ok(vec![

@@ -1,3 +1,5 @@
+use async_trait::async_trait;
+
 use crate::marv::plugins::{DynamicPlugin, Plugin};
 use std::io::{Error, ErrorKind};
 
@@ -9,16 +11,17 @@ impl Pong {
     }
 }
 
+#[async_trait]
 impl Plugin for Pong {
     fn name(&self) -> String {
         "Pong".to_string()
     }
 
-    fn is_enabled(&self, message: &String) -> bool {
+    async fn is_enabled(&self, message: &String) -> bool {
         message.contains("PING")
     }
 
-    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         let code = message
             .split(":")
             .last()

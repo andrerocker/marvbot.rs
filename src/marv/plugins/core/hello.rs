@@ -1,3 +1,5 @@
+use async_trait::async_trait;
+
 use crate::marv::plugins::{DynamicPlugin, Plugin, helper};
 use std::io::Error;
 
@@ -9,16 +11,17 @@ impl Hello {
     }
 }
 
+#[async_trait]
 impl Plugin for Hello {
     fn name(&self) -> String {
         "Hello".to_string()
     }
 
-    fn is_enabled(&self, message: &String) -> bool {
+    async fn is_enabled(&self, message: &String) -> bool {
         message.contains(" JOIN :")
     }
 
-    fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) JOIN :#(?<channel>\w+)";
         let metadata = helper::regex_to_map(pattern, message);
 

@@ -1,5 +1,6 @@
 use std::io::Error;
 
+use async_trait::async_trait;
 use log::info;
 
 use crate::marv::{
@@ -21,16 +22,17 @@ impl Channel {
     }
 }
 
+#[async_trait]
 impl Plugin for Channel {
     fn name(&self) -> String {
         "Channel".to_string()
     }
 
-    fn is_enabled(&self, message: &String) -> bool {
+    async fn is_enabled(&self, message: &String) -> bool {
         message.contains("End of message of the da")
     }
 
-    fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Channel");
         Ok(vec![format!("JOIN {}\r\n", self.channel)])
     }

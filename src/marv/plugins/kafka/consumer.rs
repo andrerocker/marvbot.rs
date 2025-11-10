@@ -4,6 +4,7 @@ use std::{
     thread,
 };
 
+use async_trait::async_trait;
 use kafka::{
     client::{FetchOffset, GroupOffsetStorage},
     consumer::{Consumer, Message},
@@ -25,6 +26,21 @@ impl KafkaConsumer {
         });
 
         Box::new(KafkaConsumer {})
+    }
+}
+
+#[async_trait]
+impl Plugin for KafkaConsumer {
+    fn name(&self) -> String {
+        "KafkaConsumer".to_string()
+    }
+
+    async fn is_enabled(&self, _message: &String) -> bool {
+        false
+    }
+
+    async fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
+        Ok(vec![])
     }
 }
 
@@ -71,18 +87,4 @@ fn save_message(message: &Message) {
 
     file.write_all(contents)
         .expect("Problems trying to write to the messages file")
-}
-
-impl Plugin for KafkaConsumer {
-    fn name(&self) -> String {
-        "KafkaConsumer".to_string()
-    }
-
-    fn is_enabled(&self, _message: &String) -> bool {
-        false
-    }
-
-    fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
-        Ok(vec![])
-    }
 }
