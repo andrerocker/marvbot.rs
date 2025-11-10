@@ -1,3 +1,7 @@
+use diesel::{
+    PgConnection,
+    r2d2::{ConnectionManager, Pool},
+};
 use once_cell::sync::Lazy;
 use serde::Deserialize;
 use std::fs;
@@ -51,4 +55,13 @@ fn test_read_configuration() -> Result<(), Box<dyn std::error::Error>> {
 
 pub static MARV: Lazy<MarvSetup> = Lazy::new(|| {
     read_configuration().expect("Problems trying to process Marv.toml configuration file")
+});
+
+pub static POOL: Lazy<Pool<ConnectionManager<PgConnection>>> = Lazy::new(|| {
+    Pool::builder()
+        .max_size(5)
+        .build(ConnectionManager::<PgConnection>::new(
+            &MARV.config.database_url,
+        ))
+        .expect("Problems trying to process Marv.toml configuration file")
 });
