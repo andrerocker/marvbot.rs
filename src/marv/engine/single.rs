@@ -34,8 +34,8 @@ pub fn stream() -> Result<(), Error> {
     let mut plugins = plugins::default().unwrap();
 
     internal(|writer, protocol| {
-        plugins::dispatch(&mut plugins, &protocol, |response: String| {
-            Ok(writer.write_all(response.as_bytes())?)
-        });
+        // plugins::dispatch(&mut plugins, &protocol, |response: String| {
+        //     Ok(writer.write_all(response.as_bytes())?)
+        // });
     })
 }

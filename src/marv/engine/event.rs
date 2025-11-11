@@ -33,10 +33,14 @@ pub async fn stream() -> Result<()> {
                 break;
             }
 
-            plugins::dispatch_async(&mut plugins, &protocol, async |response: String| {
-                writer.write_all(response.as_bytes()).await
-            })
-            .await;
+            let results = plugins::dispatch(&mut plugins, &protocol).await?;
+
+            for result in results {
+                if let Err(error) = writer.write_all(result.as_bytes()).await {
+                    log::error!("Problems trying to write to the network: {}", error);
+                    break;
+                };
+            }
 
             if let Err(error) = writer.flush().await {
                 log::error!("Problems trying to flush data to the network: {}", error);

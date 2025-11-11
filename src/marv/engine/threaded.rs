@@ -84,20 +84,20 @@ fn plugin_handler(network_input: Receiver<String>, network_output: Sender<String
     loop {
         match network_input.recv() {
             Ok(message) => {
-                plugins::dispatch(
-                    &mut plugins,
-                    &message,
-                    |response: String| match network_output.send(response) {
-                        Ok(_) => Ok(()),
-                        Err(error) => helper::create_result_error(
-                            format!(
-                                "Problems sending message to network_output_queue: {}",
-                                error
-                            )
-                            .as_str(),
-                        ),
-                    },
-                );
+                // plugins::dispatch(
+                //     &mut plugins,
+                //     &message,
+                //     |response: String| match network_output.send(response) {
+                //         Ok(_) => Ok(()),
+                //         Err(error) => helper::create_result_error(
+                //             format!(
+                //                 "Problems sending message to network_output_queue: {}",
+                //                 error
+                //             )
+                //             .as_str(),
+                //         ),
+                //     },
+                // );
             }
             Err(error) => {
                 log::error!("Problems to fetch network input: {}", error);

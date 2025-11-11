@@ -7,15 +7,22 @@ use super::metrics::MARV_PLUGIN_HIT_COUNTER;
 use async_trait::async_trait;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
 use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
-use std::io::Error;
+use std::{
+    any::Any,
+    io::{self, Error},
+};
 use todo::Todo;
 
 pub type DynamicPlugin = Box<dyn Plugin>;
 pub type DynamicPluginVec = Vec<DynamicPlugin>;
 
 #[async_trait]
-pub trait Plugin {
+pub trait Plugin: Any {
     fn name(&self) -> String;
+    fn blocking(&self) -> bool {
+        false
+    }
+
     async fn is_enabled(&self, message: &String) -> bool;
     async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error>;
 }
@@ -50,64 +57,36 @@ fn test_default_plugins() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub async fn dispatch<F: FnMut(String) -> Result<(), Error>>(
+pub async fn dispatch(
     plugins: &mut DynamicPluginVec,
     protocol: &String,
-    mut callback: F,
-) {
+) -> io::Result<Vec<String>> {
+    let mut results: Vec<String> = Vec::new();
+
     for plugin in plugins.iter_mut() {
         if plugin.is_enabled(&protocol).await {
             MARV_PLUGIN_HIT_COUNTER
                 .with_label_values(&[&plugin.name()])
                 .inc();
 
-            match plugin.perform(&protocol).await {
-                Ok(response) => {
-                    for result in response {
-                        log::info!("Sending response to the server: '{}'", result.trim());
-                        match callback(result) {
-                            Ok(_) => continue,
-                            Err(error) => {
-                                log::error!("Problems trying to call callback: {}", error)
-                            }
-                        }
-                    }
-                }
-                Err(error) => {
-                    log::error!("Problems processing plugin: {}", error)
-                }
+            for result in plugin.perform(&protocol).await? {
+                // log::info!("Sending response to the server: '{}'", result.trim());
+                // if let Err(error) = callback(result).await {
+                //     log::error!("Problems trying to call callback: {}", error)
+                // }
+
+                results.push(result);
             }
         }
     }
+
+    Ok(results)
 }
 
-pub async fn dispatch_async<F: AsyncFnMut(String) -> Result<(), Error>>(
-    plugins: &mut DynamicPluginVec,
-    protocol: &String,
-    mut callback: F,
-) {
-    for plugin in plugins.iter_mut() {
-        if plugin.is_enabled(&protocol).await {
-            MARV_PLUGIN_HIT_COUNTER
-                .with_label_values(&[&plugin.name()])
-                .inc();
-
-            match plugin.perform(&protocol).await {
-                Ok(response) => {
-                    for result in response {
-                        log::info!("Sending response to the server: '{}'", result.trim());
-                        match callback(result).await {
-                            Ok(_) => continue,
-                            Err(error) => {
-                                log::error!("Problems trying to call callback: {}", error)
-                            }
-                        }
-                    }
-                }
-                Err(error) => {
-                    log::error!("Problems processing plugin: {}", error)
-                }
-            }
-        }
-    }
-}
+// async fn execute_async<F: AsyncFn(String) -> Result<(), Error>>(
+//     plugin: &mut DynamicPlugin,
+//     protocol: &String,
+//     callback: &F,
+// ) -> Result<(), Error> {
+//     Ok(())
+// }
