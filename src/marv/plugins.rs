@@ -7,22 +7,15 @@ use super::metrics::MARV_PLUGIN_HIT_COUNTER;
 use async_trait::async_trait;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
 use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
-use std::{
-    any::Any,
-    io::{self, Error},
-};
+use std::io::{self, Error};
 use todo::Todo;
 
 pub type DynamicPlugin = Box<dyn Plugin>;
 pub type DynamicPluginVec = Vec<DynamicPlugin>;
 
 #[async_trait]
-pub trait Plugin: Any {
+pub trait Plugin {
     fn name(&self) -> String;
-    fn blocking(&self) -> bool {
-        false
-    }
-
     async fn is_enabled(&self, message: &String) -> bool;
     async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error>;
 }
@@ -70,11 +63,6 @@ pub async fn dispatch(
                 .inc();
 
             for result in plugin.perform(&protocol).await? {
-                // log::info!("Sending response to the server: '{}'", result.trim());
-                // if let Err(error) = callback(result).await {
-                //     log::error!("Problems trying to call callback: {}", error)
-                // }
-
                 results.push(result);
             }
         }
@@ -82,11 +70,3 @@ pub async fn dispatch(
 
     Ok(results)
 }
-
-// async fn execute_async<F: AsyncFn(String) -> Result<(), Error>>(
-//     plugin: &mut DynamicPlugin,
-//     protocol: &String,
-//     callback: &F,
-// ) -> Result<(), Error> {
-//     Ok(())
-// }

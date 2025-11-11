@@ -29,13 +29,11 @@ pub async fn stream() -> Result<()> {
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
             if bytes_read == 0 {
-                info!("Connection closed");
+                log::error!("Problems trying to read from the network (connection closed)");
                 break;
             }
 
-            let results = plugins::dispatch(&mut plugins, &protocol).await?;
-
-            for result in results {
+            for result in plugins::dispatch(&mut plugins, &protocol).await? {
                 if let Err(error) = writer.write_all(result.as_bytes()).await {
                     log::error!("Problems trying to write to the network: {}", error);
                     break;
