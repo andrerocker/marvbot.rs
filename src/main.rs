@@ -1,9 +1,6 @@
 mod marv;
 
 use env_logger;
-use log;
-use log::info;
-use marv::config;
 use marv::engine;
 use marv::plugins::helper;
 use prometheus_exporter;
@@ -20,14 +17,5 @@ fn initialize() -> Result<()> {
 }
 pub fn main() -> io::Result<()> {
     initialize()?;
-    let config = &config::MARV.config;
-
-    match config.mode.as_str() {
-        "event" => engine::event::stream(),
-        "single" => engine::single::stream(),
-        "thread" => engine::threaded::stream(),
-        _ => Ok(info!(
-            "Set a execution mode on the configuration file [thread|event|single]"
-        )),
-    }
+    engine::start()
 }

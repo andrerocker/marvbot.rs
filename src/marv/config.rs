@@ -7,6 +7,14 @@ use serde::Deserialize;
 use std::fs;
 use toml;
 
+use crate::marv::plugins::{
+    core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong},
+    kafka::{consumer::KafkaConsumer, producer::KafkaProducer},
+    todo::Todo,
+};
+
+use super::plugins::DynamicPluginVec;
+
 #[derive(Deserialize, Debug, Clone)]
 pub struct MarvConfig {
     pub hostname: String,

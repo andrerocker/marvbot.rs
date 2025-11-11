@@ -6,7 +6,7 @@ pub mod todo;
 use super::metrics::MARV_PLUGIN_HIT_COUNTER;
 use async_trait::async_trait;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
+use kafka::{consumer_v2::KafkaV2Consumer, producer::KafkaProducer};
 use std::io::{self, Error};
 use todo::Todo;
 
@@ -20,22 +20,22 @@ pub trait Plugin {
     async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error>;
 }
 
-pub fn default() -> Result<DynamicPluginVec, Error> {
-    Ok(vec![
+pub fn default() -> DynamicPluginVec {
+    vec![
         Logger::new(),
         Login::new(),
         Pong::new(),
         Channel::new(),
         Hello::new(),
         KafkaProducer::new(),
-        KafkaConsumer::new(),
+        KafkaV2Consumer::new(),
         Todo::new(),
-    ])
+    ]
 }
 
 #[test]
 fn test_default_plugins() -> Result<(), Box<dyn std::error::Error>> {
-    let plugins = default()?;
+    let plugins = default();
     let detect = |name: &str| plugins.iter().find(|p| p.name() == name);
 
     assert!(detect("Logger").is_some());
