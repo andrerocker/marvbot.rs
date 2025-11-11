@@ -27,9 +27,13 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] evented-io
 - [x] kafka: rdkafka: consumer / tokio
 - [ ] kafka: rdkafka: producer / tokio
-- [ ] plugins: plugin sync vs async
-- [ ] async
-- [ ] threads / mutex - individual plugin execution
+- [x] plugins: plugin sync vs async
+- [x] async
+- [x] threads / mutex - individual plugin execution
+- [x] bot muilti thread
+- [x] bot evented / async
+- [x] bot actor model
+- [x] bot even driven
 - [ ] data-parallelism / rayon
 - [ ] thread pool
 - [ ] macros
@@ -41,10 +45,6 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] tracing
 - [ ] debug
 - [ ] tests
-- [ ] bot muilti thread
-- [ ] bot evented / async
-- [ ] bot actor model
-- [ ] bot even driven
 - [ ] build (using docker and pipelines)
 - [ ] cross platform build (arm, x86, windows, linux, macos)
 - [ ] argparse
