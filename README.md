@@ -27,6 +27,8 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] evented-io
 - [x] kafka: rdkafka: consumer / tokio
 - [ ] kafka: rdkafka: producer / tokio
+- [ ] kafka: remove rust-kafka
+- [ ] kafka: up service to the latest version
 - [x] plugins: plugin sync vs async
 - [x] async
 - [x] threads / mutex - individual plugin execution
