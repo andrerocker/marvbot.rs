@@ -1,3 +1,5 @@
+use tokio::time::Instant;
+
 use super::{adapter::TodoAdapter, service::TodoService};
 use crate::marv::plugins::helper;
 use std::{collections::HashMap, io};
@@ -7,7 +9,7 @@ pub struct TodoController {
 }
 
 impl TodoController {
-    pub fn create(&mut self, metadata: HashMap<String, String>) -> io::Result<Vec<String>> {
+    pub fn create(&mut self, metadata: &HashMap<String, String>) -> io::Result<Vec<String>> {
         let message = helper::safe_get(&metadata, "argument")?;
         let todo = TodoAdapter::from_request_to_create(message)?;
 
@@ -19,7 +21,7 @@ impl TodoController {
         }
     }
 
-    pub fn update(&mut self, metadata: HashMap<String, String>) -> io::Result<Vec<String>> {
+    pub fn update(&mut self, metadata: &HashMap<String, String>) -> io::Result<Vec<String>> {
         let message = helper::safe_get(&metadata, "argument")?;
         let todo = TodoAdapter::from_request_to_update(message)?;
 
@@ -39,7 +41,7 @@ impl TodoController {
         }
     }
 
-    pub fn list(&mut self, metadata: HashMap<String, String>) -> io::Result<Vec<String>> {
+    pub fn list(&mut self, metadata: &HashMap<String, String>) -> io::Result<Vec<String>> {
         match self.service.list() {
             Ok(todos) => self.current_or_default(
                 TodoAdapter::from_todos_to_response(&metadata, todos)?,
@@ -52,7 +54,7 @@ impl TodoController {
         }
     }
 
-    pub fn delete(&mut self, metadata: HashMap<String, String>) -> io::Result<Vec<String>> {
+    pub fn delete(&mut self, metadata: &HashMap<String, String>) -> io::Result<Vec<String>> {
         let message = helper::safe_get(&metadata, "argument")?;
         let id = TodoAdapter::from_request_to_delete(message)?;
 
@@ -66,23 +68,34 @@ impl TodoController {
 
     pub fn default(
         &self,
-        metadata: HashMap<String, String>,
+        metadata: &HashMap<String, String>,
         message: &str,
     ) -> io::Result<Vec<String>> {
         Ok(vec![helper::channel_message(&metadata, message)?])
     }
 
     pub fn dispatch(&mut self, message: &String) -> io::Result<Vec<String>> {
+        let started = Instant::now();
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :todo: (?<command>\w+)(: (?<argument>.*))?";
         let metadata = helper::regex_to_map(pattern, message);
         let command = helper::safe_get(&metadata, "command")?;
 
-        match command.as_str() {
-            "create" => self.create(metadata),
-            "list" => self.list(metadata),
-            "update" => self.update(metadata),
-            "delete" => self.delete(metadata),
-            _ => self.default(metadata, "Nothing to do!"),
+        let mut result = match command.as_str() {
+            "create" => self.create(&metadata),
+            "list" => self.list(&metadata),
+            "update" => self.update(&metadata),
+            "delete" => self.delete(&metadata),
+            _ => self.default(&metadata, "Nothing to do!"),
         }
+        .unwrap();
+
+        let elapsed = started.elapsed();
+        let elapsed_message = helper::channel_message(
+            &metadata,
+            format!("--- success: time elapsed: {:?}", elapsed).as_str(),
+        )?;
+
+        result.push(elapsed_message);
+        Ok(result)
     }
 }
