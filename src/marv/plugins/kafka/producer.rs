@@ -1,6 +1,9 @@
 use std::{io::Error, time::Duration};
 
-use crate::marv::plugins::{DynamicPlugin, Plugin};
+use crate::marv::{
+    config,
+    plugins::{DynamicPlugin, Plugin},
+};
 use async_trait::async_trait;
 use rdkafka::{
     ClientConfig,
@@ -14,6 +17,8 @@ pub struct KafkaProducer {
 
 impl KafkaProducer {
     pub fn new() -> DynamicPlugin {
+        let config = &config::MARV.config;
+
         let producer: FutureProducer = ClientConfig::new()
             .set("bootstrap.servers", "localhost:9092")
             .set("message.timeout.ms", "5000")
@@ -21,7 +26,7 @@ impl KafkaProducer {
             .expect("Producer creation error");
 
         Box::new(KafkaProducer {
-            topic: "Bacon".to_string(),
+            topic: config.topic.to_string(),
             producer: producer,
         })
     }
