@@ -4,7 +4,7 @@ services:
     ports:
       - 6667:6667
   kafka:
-    image: apache/kafka:3.7.0
+    image: apache/kafka-native:4.1.1-rc2
     ports:
       - 9092:9092
   postgresql:
