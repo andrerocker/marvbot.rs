@@ -27,11 +27,11 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] evented-io
 - [x] kafka: rdkafka: consumer / tokio
 - [x] kafka: rdkafka: producer / tokio
-- [ ] kafka: serialize messages with: cbor, protobuf, messagepack
+- [x] kafka: serialize messages with: cbor, protobuf, messagepack
 - [ ] plugin: that track the execution time
 - [ ] macro: create a macro that wrap function and add execution time
 - [x] kafka: remove rust-kafka
-- [ ] kafka: up service to the latest version
+- [x] kafka: up service to the latest version / kafka-native
 - [x] plugins: plugin sync vs async
 - [x] async
 - [x] threads / mutex - individual plugin execution
