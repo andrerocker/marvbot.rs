@@ -6,7 +6,7 @@ pub mod todo;
 use super::metrics::MARV_PLUGIN_HIT_COUNTER;
 use async_trait::async_trait;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use kafka::{consumer_v2::KafkaV2Consumer, producer::KafkaProducer};
+use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
 use std::io::{self, Error};
 use todo::Todo;
 
@@ -28,7 +28,7 @@ pub fn default() -> DynamicPluginVec {
         Channel::new(),
         Hello::new(),
         KafkaProducer::new(),
-        KafkaV2Consumer::new(),
+        KafkaConsumer::new(),
         Todo::new(),
     ]
 }

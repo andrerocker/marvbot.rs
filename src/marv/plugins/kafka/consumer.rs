@@ -1,28 +1,20 @@
-use std::{
-    fs::OpenOptions,
-    io::{Error, Write},
-    thread,
-};
-
-use async_trait::async_trait;
-use kafka::{
-    client::{FetchOffset, GroupOffsetStorage},
-    consumer::{Consumer, Message},
-    error::Error as KafkaError,
-};
-
 use crate::marv::{
     config::{self},
-    metrics::MARV_PLUGIN_KAFKA_CONSUME_COUNTER,
     plugins::{DynamicPlugin, Plugin},
 };
+use async_trait::async_trait;
+use rdkafka::{
+    ClientConfig, Message,
+    consumer::{CommitMode, Consumer, StreamConsumer},
+};
+use std::io::Error;
 
 pub struct KafkaConsumer {}
 
 impl KafkaConsumer {
     pub fn new() -> DynamicPlugin {
-        thread::spawn(|| {
-            handle_messages().unwrap();
+        tokio::task::spawn(async {
+            handle_messages().await;
         });
 
         Box::new(KafkaConsumer {})
@@ -44,47 +36,33 @@ impl Plugin for KafkaConsumer {
     }
 }
 
-fn handle_messages() -> Result<(), KafkaError> {
+async fn handle_messages() {
     let config = &config::MARV.config;
     let topic = config.topic.clone();
+    let group = config.group.clone();
+    let brokers = config.broker.clone();
 
-    let group = config.group.clone() + "-legacy";
-    let brokers = vec![config.broker.clone()];
-
-    let mut consumer = Consumer::from_hosts(brokers)
-        .with_topic(topic)
-        .with_group(group)
-        .with_fallback_offset(FetchOffset::Earliest)
-        .with_offset_storage(Some(GroupOffsetStorage::Kafka))
+    let consumer: StreamConsumer = ClientConfig::new()
+        .set("bootstrap.servers", brokers)
+        .set("group.id", group)
         .create()
-        .expect("Problems trying to initialize Consumer");
+        .expect("Consumer creation failed");
+
+    consumer.subscribe(&[topic.as_str()]).unwrap();
 
     loop {
-        for ms in consumer.poll().unwrap().iter() {
-            for message in ms.messages() {
-                MARV_PLUGIN_KAFKA_CONSUME_COUNTER.inc();
-                save_message(message);
+        match consumer.recv().await {
+            Ok(msg) => {
+                let payload = msg
+                    .payload_view()
+                    .map(|res| res.unwrap_or("<invalid utf-8>"))
+                    .unwrap_or("<no payload>");
+
+                log::info!("+++>> {}: {}", msg.offset(), payload);
+
+                consumer.commit_message(&msg, CommitMode::Async).unwrap();
             }
-            consumer.consume_messageset(ms).unwrap();
+            Err(e) => log::error!("Kafka error: {e}"),
         }
-
-        consumer
-            .commit_consumed()
-            .expect("Problems trying to commit consumed messages");
     }
-}
-
-fn save_message(message: &Message) {
-    //TODO: Dirty way to deal with files. It's just a Quick and Dirty Impl
-    let config = &config::MARV.config;
-    let target_file = config.messages_log.clone();
-    let contents = message.value; // std::str::from_utf8(message.value).unwrap();
-    let mut file = OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(target_file)
-        .expect("Problems trying to open the messages file");
-
-    file.write_all(contents)
-        .expect("Problems trying to write to the messages file")
 }
