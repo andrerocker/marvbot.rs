@@ -2,11 +2,12 @@ use std::{io::Error, time::Duration};
 
 use crate::marv::{
     config,
-    plugins::{DynamicPlugin, Plugin},
+    plugins::{DynamicPlugin, Plugin, helper},
 };
 use async_trait::async_trait;
 use rdkafka::{
     ClientConfig,
+    message::ToBytes,
     producer::{FutureProducer, FutureRecord},
 };
 
@@ -43,8 +44,12 @@ impl Plugin for KafkaProducer {
     }
 
     async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+        let serialized_message = serde_cbor::to_vec(message).unwrap();
+
         let produce_message = self.producer.send(
-            FutureRecord::to(&self.topic).payload(&message).key("a-key"),
+            FutureRecord::to(&self.topic)
+                .payload(serialized_message.to_bytes())
+                .key("a-key"),
             Duration::from_secs(0),
         );
 

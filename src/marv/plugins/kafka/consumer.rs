@@ -1,5 +1,5 @@
 use crate::marv::{
-    config::{self},
+    config,
     plugins::{DynamicPlugin, Plugin},
 };
 use async_trait::async_trait;
@@ -53,13 +53,10 @@ async fn handle_messages() {
     loop {
         match consumer.recv().await {
             Ok(msg) => {
-                let payload = msg
-                    .payload_view()
-                    .map(|res| res.unwrap_or("<invalid utf-8>"))
-                    .unwrap_or("<no payload>");
+                let serialized_payload = msg.payload().unwrap();
+                let deserialized: String = serde_cbor::from_slice(serialized_payload).unwrap();
 
-                log::info!("+++>> {}: {}", msg.offset(), payload);
-
+                log::info!("+++>> {}: {}", msg.offset(), deserialized);
                 consumer.commit_message(&msg, CommitMode::Async).unwrap();
             }
             Err(e) => log::error!("Kafka error: {e}"),
