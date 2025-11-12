@@ -186,3 +186,14 @@ pub fn join<T: ToString>(items: &Vec<T>, separator: &str) -> String {
 fn test_join() {
     assert_eq!(join(&vec!["we", "are", "hiring"], "-"), "we-are-hiring");
 }
+
+#[macro_export]
+macro_rules! elapsed {
+    ($label:expr, $expr:expr) => {{
+        let __start = ::std::time::Instant::now();
+        let __ret = ($expr).await;
+        let __elapsed = __start.elapsed();
+        eprintln!("[elapsed] {} took {:?}", $label, __elapsed);
+        __ret
+    }};
+}
