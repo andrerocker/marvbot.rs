@@ -1,32 +1,27 @@
-use std::io::Error;
+use std::{io::Error, time::Duration};
 
-use crate::marv::{
-    config::{self},
-    plugins::{DynamicPlugin, Plugin},
-};
+use crate::marv::plugins::{DynamicPlugin, Plugin};
 use async_trait::async_trait;
-use kafka::{
-    client::RequiredAcks,
-    producer::{Producer, Record},
+use rdkafka::{
+    ClientConfig,
+    producer::{FutureProducer, FutureRecord},
 };
 
 pub struct KafkaProducer {
     pub topic: String,
-    pub producer: Producer,
+    pub producer: FutureProducer,
 }
 
 impl KafkaProducer {
     pub fn new() -> DynamicPlugin {
-        let config = &config::MARV.config;
-
-        let brokers = vec![config.broker.to_string()];
-        let producer = Producer::from_hosts(brokers)
-            .with_required_acks(RequiredAcks::One)
+        let producer: FutureProducer = ClientConfig::new()
+            .set("bootstrap.servers", "localhost:9092")
+            .set("message.timeout.ms", "5000")
             .create()
-            .expect("Problems trying to initialize Producer");
+            .expect("Producer creation error");
 
         Box::new(KafkaProducer {
-            topic: config.topic.to_string(),
+            topic: "Bacon".to_string(),
             producer: producer,
         })
     }
@@ -43,10 +38,17 @@ impl Plugin for KafkaProducer {
     }
 
     async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
-        let record = &Record::from_value(&self.topic, message.as_bytes());
-        self.producer
-            .send(record)
-            .expect("Problems trying to write message");
+        let produce_message = self.producer.send(
+            FutureRecord::to(&self.topic).payload(&message).key("a-key"),
+            Duration::from_secs(0),
+        );
+
+        if let Err((error, _msg)) = produce_message.await {
+            log::error!(
+                "Problems trying to produce message to the broker: {}",
+                error
+            );
+        }
 
         Ok(vec![])
     }
