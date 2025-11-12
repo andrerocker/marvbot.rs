@@ -26,8 +26,11 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] threads / mutex - network-io and plugin dispatch
 - [x] evented-io
 - [x] kafka: rdkafka: consumer / tokio
-- [ ] kafka: rdkafka: producer / tokio
-- [ ] kafka: remove rust-kafka
+- [x] kafka: rdkafka: producer / tokio
+- [ ] kafka: serialize messages with: cbor, protobuf, messagepack
+- [ ] plugin: that track the execution time
+- [ ] macro: create a macro that wrap function and add execution time
+- [x] kafka: remove rust-kafka
 - [ ] kafka: up service to the latest version
 - [x] plugins: plugin sync vs async
 - [x] async
@@ -36,6 +39,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] bot evented / async
 - [x] bot actor model
 - [x] bot even driven
+- [ ] a way to check for blocking code
 - [ ] data-parallelism / rayon
 - [ ] thread pool
 - [ ] macros
@@ -52,7 +56,6 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] argparse
 - [ ] housekeeping
 - [ ] binstall
-- [ ] kafka: serialize messages with: cbor, protobuf, messagepack
 - [ ] FFI
 - [ ] change log level by using signals
 - [ ] logs: add debug messages

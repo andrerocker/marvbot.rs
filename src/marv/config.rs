@@ -15,9 +15,7 @@ pub struct MarvConfig {
     pub broker: String,
     pub topic: String,
     pub group: String,
-    pub messages_log: String,
     pub database_url: String,
-    pub mode: String,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -43,8 +41,6 @@ fn test_read_configuration() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(config.broker, "localhost:9092");
     assert_eq!(config.topic, "MARV.MESSAGES");
     assert_eq!(config.group, "MARV");
-    assert_eq!(config.messages_log, "messages.txt");
-    assert_eq!(config.mode, "thread");
     assert_eq!(
         config.database_url,
         "postgres://deploy42:deploy42@localhost:5432/deploy42"
