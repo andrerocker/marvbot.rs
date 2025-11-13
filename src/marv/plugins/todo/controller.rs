@@ -1,8 +1,16 @@
 use tokio::time::Instant;
 
-use super::{adapter::TodoAdapter, service::TodoService};
+use super::{adapter::TodoAdapter, repository::TodoRepository, service::TodoService};
 use crate::marv::plugins::helper;
 use std::{collections::HashMap, io};
+
+pub fn new() -> TodoController {
+    TodoController {
+        service: TodoService {
+            repository: TodoRepository {},
+        },
+    }
+}
 
 pub struct TodoController {
     pub service: TodoService,

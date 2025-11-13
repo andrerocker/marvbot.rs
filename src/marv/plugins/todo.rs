@@ -3,14 +3,11 @@ pub mod controller;
 pub mod repository;
 pub mod service;
 
+use super::DynamicPlugin;
 use crate::marv::plugins::Plugin;
 use async_trait::async_trait;
 use controller::TodoController;
-use repository::TodoRepository;
-use service::TodoService;
 use std::io::Error;
-
-use super::DynamicPlugin;
 
 pub struct Todo {
     pub controller: TodoController,
@@ -19,11 +16,7 @@ pub struct Todo {
 impl Todo {
     pub fn new() -> DynamicPlugin {
         Box::new(Todo {
-            controller: controller::TodoController {
-                service: TodoService {
-                    repository: TodoRepository {},
-                },
-            },
+            controller: controller::new(),
         })
     }
 }
