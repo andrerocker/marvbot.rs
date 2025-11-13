@@ -43,3 +43,6 @@ migrate:
 	diesel migration run
 
 setup: produce migrate
+
+fix:
+	cargo fix --allow-dirty
