@@ -16,7 +16,7 @@ pub fn safe_get(metadata: &HashMap<String, String>, key: &str) -> Result<String,
 #[test]
 fn test_safe_get() {
     let mut metadata: HashMap<String, String> = HashMap::new();
-    metadata.insert("hack3d".to_string(), "1337".to_string());
+    metadata.insert("hack3d".into(), "1337".into());
 
     assert!(safe_get(&metadata, "hack3d").is_ok());
     assert_eq!(safe_get(&metadata, "hack3d").unwrap(), "1337");
@@ -31,7 +31,7 @@ pub fn regex_to_map(pattern: &str, payload: &String) -> HashMap<String, String> 
         for name in regex.capture_names() {
             if let Some(name_str) = name {
                 if let Some(matched_value) = caps.name(name_str) {
-                    results.insert(name_str.to_string(), matched_value.as_str().to_string());
+                    results.insert(name_str.into(), matched_value.as_str().into());
                 }
             }
         }

@@ -25,7 +25,7 @@ impl Channel {
 #[async_trait]
 impl Plugin for Channel {
     fn name(&self) -> String {
-        "Channel".to_string()
+        "Channel".into()
     }
 
     async fn is_enabled(&self, message: &String) -> bool {

@@ -25,7 +25,7 @@ impl Login {
 #[async_trait]
 impl Plugin for Login {
     fn name(&self) -> String {
-        "Login".to_string()
+        "Login".into()
     }
 
     async fn is_enabled(&self, message: &String) -> bool {

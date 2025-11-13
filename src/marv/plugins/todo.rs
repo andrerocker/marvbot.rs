@@ -24,7 +24,7 @@ impl Todo {
 #[async_trait]
 impl Plugin for Todo {
     fn name(&self) -> String {
-        "Todo".to_string()
+        "Todo".into()
     }
 
     async fn is_enabled(&self, message: &String) -> bool {

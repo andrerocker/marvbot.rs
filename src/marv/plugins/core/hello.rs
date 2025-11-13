@@ -14,7 +14,7 @@ impl Hello {
 #[async_trait]
 impl Plugin for Hello {
     fn name(&self) -> String {
-        "Hello".to_string()
+        "Hello".into()
     }
 
     async fn is_enabled(&self, message: &String) -> bool {

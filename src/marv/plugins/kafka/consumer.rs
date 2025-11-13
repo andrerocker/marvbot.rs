@@ -24,7 +24,7 @@ impl KafkaConsumer {
 #[async_trait]
 impl Plugin for KafkaConsumer {
     fn name(&self) -> String {
-        "KafkaConsumer".to_string()
+        "KafkaConsumer".into()
     }
 
     async fn is_enabled(&self, _message: &String) -> bool {

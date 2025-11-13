@@ -14,7 +14,7 @@ impl Logger {
 #[async_trait]
 impl Plugin for Logger {
     fn name(&self) -> String {
-        "Logger".to_string()
+        "Logger".into()
     }
 
     async fn is_enabled(&self, _message: &String) -> bool {

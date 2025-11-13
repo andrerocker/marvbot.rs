@@ -27,7 +27,7 @@ impl KafkaProducer {
             .expect("Producer creation error");
 
         Box::new(KafkaProducer {
-            topic: config.topic.to_string(),
+            topic: config.topic.clone(),
             producer: producer,
         })
     }
@@ -36,7 +36,7 @@ impl KafkaProducer {
 #[async_trait]
 impl Plugin for KafkaProducer {
     fn name(&self) -> String {
-        "KafkaProducer".to_string()
+        "KafkaProducer".into()
     }
 
     async fn is_enabled(&self, _message: &String) -> bool {

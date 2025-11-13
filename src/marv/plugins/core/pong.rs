@@ -14,7 +14,7 @@ impl Pong {
 #[async_trait]
 impl Plugin for Pong {
     fn name(&self) -> String {
-        "Pong".to_string()
+        "Pong".into()
     }
 
     async fn is_enabled(&self, message: &String) -> bool {

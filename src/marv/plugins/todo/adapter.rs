@@ -10,7 +10,7 @@ impl TodoAdapter {
     pub fn from_request_to_create(message: String) -> io::Result<NewTodo> {
         Ok(NewTodo {
             body: message,
-            status: "created".to_string(),
+            status: "created".into(),
         })
     }
 
@@ -27,7 +27,7 @@ impl TodoAdapter {
             .last()
             .ok_or(helper::create_error(":status is a required field"))?
             .trim()
-            .to_string();
+            .into();
 
         Ok(UpdateTodo {
             id: id,
