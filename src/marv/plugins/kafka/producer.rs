@@ -2,7 +2,7 @@ use std::{io::Error, time::Duration};
 
 use crate::marv::{
     config,
-    plugins::{DynamicPlugin, Plugin, helper},
+    plugins::{DynamicPlugin, Plugin},
 };
 use async_trait::async_trait;
 use rdkafka::{
