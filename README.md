@@ -39,8 +39,11 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] bot evented / async
 - [x] bot actor model
 - [x] bot even driven
-- [ ] a way to check for blocking code
+- [ ] config: read file using tokio
+- [x] a way to check for blocking code (tokio flags and log)
+- [ ] marv using event driven
 - [ ] data-parallelism / rayon
+- [ ] rust: use once_cell/Lazy instead of lazy_static!
 - [ ] thread pool
 - [ ] macros
 - [ ] dispatch: static vs dynamic (templates vs dyn)
