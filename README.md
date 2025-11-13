@@ -28,6 +28,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] kafka: rdkafka: consumer / tokio
 - [x] kafka: rdkafka: producer / tokio
 - [x] kafka: serialize messages with: cbor, protobuf, messagepack
+- [ ] housekeeping: remove all unsafe :unwrap and :expect from the code
 - [ ] plugin: that track the execution time
 - [ ] macro: create a macro that wrap function and add execution time
 - [x] kafka: remove rust-kafka

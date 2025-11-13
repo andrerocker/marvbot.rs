@@ -154,6 +154,7 @@ fn test_create_err() {
     assert_eq!(create_error("super-error").to_string(), "super-error");
 }
 
+#[allow(dead_code)]
 pub fn create_result_error<T>(message: &str) -> io::Result<T> {
     Err(create_error(message))
 }
@@ -174,6 +175,7 @@ fn test_create_closure_error() {
     assert_eq!(callme(error).err().unwrap().kind(), ErrorKind::Other);
 }
 
+#[allow(dead_code)]
 pub fn join<T: ToString>(items: &Vec<T>, separator: &str) -> String {
     items
         .iter()
