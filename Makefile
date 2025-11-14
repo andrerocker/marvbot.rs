@@ -1,5 +1,5 @@
 run:
-	RUST_BACKTRACE=1 RUST_LOG=tokio=trace cargo run
+	RUST_BACKTRACE=1 RUST_LOG=info cargo run
 
 build: 
 	cargo build
