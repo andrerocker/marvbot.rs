@@ -32,6 +32,6 @@ impl Plugin for Todo {
     }
 
     async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
-        self.controller.dispatch(message)
+        self.controller.dispatch(message).await
     }
 }

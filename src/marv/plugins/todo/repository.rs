@@ -2,44 +2,56 @@ use crate::marv::config;
 use crate::marv::models::{NewTodo, Todo, UpdateTodo};
 use crate::marv::plugins::helper;
 
+use bb8::PooledConnection;
 use diesel::associations::HasTable;
 use diesel::prelude::*;
-use diesel::r2d2::{ConnectionManager, PooledConnection};
+use diesel_async::AsyncPgConnection;
+use diesel_async::RunQueryDsl;
+use diesel_async::pooled_connection::AsyncDieselConnectionManager;
 use std::io::{self, Error};
 
 pub struct TodoRepository {}
 
 impl TodoRepository {
-    fn get_connection(&self) -> Result<PooledConnection<ConnectionManager<PgConnection>>, Error> {
-        config::POOL.get().or(helper::create_result_error(
-            "Problems trying to get a connection from the pool",
-        ))
+    async fn connection(
+        &self,
+    ) -> io::Result<PooledConnection<'_, AsyncDieselConnectionManager<AsyncPgConnection>>> {
+        config::POOL
+            .get()
+            .unwrap()
+            .get()
+            .await
+            .or(helper::create_result_error(
+                "Problems trying to fetch a connection",
+            ))
     }
 
-    pub fn create(&mut self, new_todo: NewTodo) -> Result<Todo, Error> {
+    pub async fn create(&mut self, new_todo: NewTodo) -> Result<Todo, Error> {
         use crate::marv::schema::todos::dsl::*;
 
-        let mut connection = self.get_connection()?;
+        let mut connection = self.connection().await?;
         let result = diesel::insert_into(todos::table())
             .values(&new_todo)
             .returning(Todo::as_returning())
-            .get_result(&mut connection);
+            .get_result(&mut connection)
+            .await;
 
         match result {
-            Ok(result) => Ok(result),
+            Ok(todo) => Ok(todo),
             Err(error) => helper::create_result_error(
                 format!("Problems trying to create Todo, {}", error).as_str(),
             ),
         }
     }
 
-    pub fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
+    pub async fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
         use crate::marv::schema::todos::dsl::*;
 
-        let mut connection = self.get_connection()?;
+        let mut connection = self.connection().await?;
         let result = diesel::update(todos.filter(id.eq(todo.id)))
             .set(status.eq(todo.status))
-            .get_result(&mut connection);
+            .get_result(&mut connection)
+            .await;
 
         match result {
             Ok(result) => Ok(result),
@@ -49,26 +61,30 @@ impl TodoRepository {
         }
     }
 
-    pub fn list(&mut self) -> Result<Vec<Todo>, Error> {
+    pub async fn list(&mut self) -> Result<Vec<Todo>, Error> {
         use crate::marv::schema::todos::dsl::*;
 
-        let mut connection = self.get_connection()?;
-        let results = todos.select(Todo::as_select()).load(&mut connection);
+        let mut connection = self.connection().await?;
+        let results = todos.select(Todo::as_select()).load(&mut connection).await;
 
         match results {
-            Ok(results) => Ok(results),
+            Ok(todo_list) => Ok(todo_list),
             Err(error) => helper::create_result_error(
                 format!("Problems trying to list Todo, {}", error).as_str(),
             ),
         }
     }
 
-    pub fn delete(&mut self, current_id: i32) -> Result<usize, Error> {
+    pub async fn delete(&mut self, current_id: i32) -> Result<usize, Error> {
         use crate::marv::schema::todos::dsl::*;
-        let mut connection = self.get_connection()?;
 
-        match diesel::delete(todos.filter(id.eq(current_id))).execute(&mut connection) {
-            Ok(results) => Ok(results),
+        let mut connection = self.connection().await?;
+        let result = diesel::delete(todos.filter(id.eq(current_id)))
+            .execute(&mut connection)
+            .await;
+
+        match result {
+            Ok(affected) => Ok(affected),
             Err(error) => helper::create_result_error(
                 format!("Problems trying to delete Todo, {}", error).as_str(),
             ),
