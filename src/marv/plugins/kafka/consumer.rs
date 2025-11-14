@@ -59,7 +59,9 @@ async fn attach_and_handle() -> Result<(), Error> {
                             .commit_message(&message, CommitMode::Async)
                             .is_err()
                         {
-                            log::error!("Problems trying to commit kafka messager");
+                            log::error!(
+                                "Problems trying to commit kafka messager (it'll probrably make the consumption unstable)"
+                            );
                         }
                     }
                 }
@@ -67,7 +69,7 @@ async fn attach_and_handle() -> Result<(), Error> {
 
             Err(e) => {
                 log::error!("Problems trying to receive message from Kafka: {}", e);
-                continue;
+                break Ok(());
             }
         }
     }
@@ -85,6 +87,8 @@ fn create_consumer_and_subscribe(
     let consumer: StreamConsumer = ClientConfig::new()
         .set("bootstrap.servers", brokers)
         .set("group.id", group)
+        .set("auto.offset.reset", "latest")
+        .set("enable.auto.commit", "false")
         .create()
         .or(helper::create_result_error(
             "Problems trying to create Kafka Consumer",
