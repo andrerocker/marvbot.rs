@@ -18,7 +18,7 @@ pub struct KafkaProducer {
 
 impl KafkaProducer {
     pub fn new() -> DynamicPlugin {
-        let config = &config::MARV.config;
+        let config = config::config();
 
         let producer: FutureProducer = ClientConfig::new()
             .set("bootstrap.servers", "localhost:9092")

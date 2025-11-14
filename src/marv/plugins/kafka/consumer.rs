@@ -44,7 +44,7 @@ impl Plugin for KafkaConsumer {
 }
 
 async fn attach_and_handle() -> Result<(), Error> {
-    let config = &config::MARV.config;
+    let config = &config::MARV.get().unwrap().config;
     let topic = config.topic.clone();
     let group = config.group.clone();
     let brokers = config.broker.clone();

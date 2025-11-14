@@ -14,7 +14,7 @@ pub struct Channel {
 
 impl Channel {
     pub fn new() -> DynamicPlugin {
-        let config = &config::MARV.config;
+        let config = config::config();
 
         Box::new(Channel {
             channel: config.channel.clone(),

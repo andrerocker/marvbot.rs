@@ -14,7 +14,7 @@ pub struct Login {
 
 impl Login {
     pub fn new() -> DynamicPlugin {
-        let config = &config::MARV.config;
+        let config = config::config();
 
         Box::new(Login {
             nickname: config.nickname.clone(),
