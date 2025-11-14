@@ -85,8 +85,8 @@ fn create_consumer_and_subscribe(
     brokers: String,
 ) -> Result<StreamConsumer, Error> {
     let consumer: StreamConsumer = ClientConfig::new()
-        .set("bootstrap.servers", brokers)
         .set("group.id", group)
+        .set("bootstrap.servers", brokers)
         .set("auto.offset.reset", "latest")
         .set("enable.auto.commit", "false")
         .create()
@@ -105,7 +105,7 @@ fn create_consumer_and_subscribe(
 
 async fn extract_metadata_and_deserialize(message: &BorrowedMessage<'_>) -> Result<String, Error> {
     let serialized = message.payload().ok_or(helper::create_error(
-        "Problems trying to fetch Kafka Message",
+        "Problems trying to fetch Kafka Message".into(),
     ))?;
 
     let payload = serde_cbor::from_slice::<String>(serialized).or(helper::create_result_error(

@@ -5,7 +5,7 @@ use crate::marv::plugins::helper;
 use diesel::associations::HasTable;
 use diesel::prelude::*;
 use diesel::r2d2::{ConnectionManager, PooledConnection};
-use std::io::{self, Error, ErrorKind};
+use std::io::{self, Error};
 
 pub struct TodoRepository {}
 
@@ -27,10 +27,9 @@ impl TodoRepository {
 
         match result {
             Ok(result) => Ok(result),
-            Err(error) => Err(Error::new(
-                ErrorKind::Other,
-                format!("Problems trying to save Todo, {}", error),
-            )),
+            Err(error) => helper::create_result_error(
+                format!("Problems trying to create Todo, {}", error).as_str(),
+            ),
         }
     }
 
@@ -44,10 +43,9 @@ impl TodoRepository {
 
         match result {
             Ok(result) => Ok(result),
-            Err(error) => Err(Error::new(
-                ErrorKind::Other,
-                format!("Problems trying to update Todo, {}", error),
-            )),
+            Err(error) => helper::create_result_error(
+                format!("Problems trying to update Todo, {}", error).as_str(),
+            ),
         }
     }
 
@@ -59,10 +57,9 @@ impl TodoRepository {
 
         match results {
             Ok(results) => Ok(results),
-            Err(error) => Err(Error::new(
-                ErrorKind::Other,
-                format!("Problems trying to save Todo, {}", error),
-            )),
+            Err(error) => helper::create_result_error(
+                format!("Problems trying to list Todo, {}", error).as_str(),
+            ),
         }
     }
 
@@ -72,10 +69,9 @@ impl TodoRepository {
 
         match diesel::delete(todos.filter(id.eq(current_id))).execute(&mut connection) {
             Ok(results) => Ok(results),
-            Err(error) => Err(Error::new(
-                ErrorKind::Other,
-                format!("Problems trying to delete Todo, {}", error),
-            )),
+            Err(error) => helper::create_result_error(
+                format!("Problems trying to delete Todo, {}", error).as_str(),
+            ),
         }
     }
 }
