@@ -20,7 +20,7 @@ pub struct MarvSetup {
     pub config: MarvConfig,
 }
 
-pub fn read_configuration() -> Result<MarvSetup, Box<dyn std::error::Error>> {
+pub fn read_configuration() -> anyhow::Result<MarvSetup> {
     let toml_str = fs::read_to_string("Marv.toml")?;
     let config: MarvSetup = toml::from_str(&toml_str)?;
 
@@ -28,7 +28,7 @@ pub fn read_configuration() -> Result<MarvSetup, Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn test_read_configuration() -> Result<(), Box<dyn std::error::Error>> {
+fn test_read_configuration() -> anyhow::Result<()> {
     let setup = read_configuration()?;
     let config = &setup.config;
 

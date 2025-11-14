@@ -17,19 +17,19 @@ async fn connection() -> Pool<AsyncPgConnection> {
     pool
 }
 
-async fn initialize() -> io::Result<()> {
+async fn initialize() -> anyhow::Result<()> {
     env_logger::init();
     prometheus_exporter::start("127.0.0.1:9184".parse().unwrap()).or_else(
         helper::create_closure_error("Can't initialize Prometheus Exporter"),
     )?;
 
-    config::MARV.set(config::read_configuration().unwrap());
+    config::MARV.set(config::read_configuration()?);
     config::POOL.set(connection().await);
 
     Ok(())
 }
 #[tokio::main]
-pub async fn main() -> io::Result<()> {
+pub async fn main() -> anyhow::Result<()> {
     initialize().await?;
     engine::start().await
 }

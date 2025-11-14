@@ -7,7 +7,7 @@ use tokio::{
     net::TcpSocket,
 };
 
-pub async fn start() -> Result<()> {
+pub async fn start() -> anyhow::Result<()> {
     let config = config::config();
 
     let addr = config.hostname.clone().parse().unwrap();
