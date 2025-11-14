@@ -7,9 +7,8 @@ use tokio::{
     net::TcpSocket,
 };
 
-#[tokio::main]
 pub async fn start() -> Result<()> {
-    let config = &config::MARV.config;
+    let config = config::config();
 
     let addr = config.hostname.clone().parse().unwrap();
     let socket = TcpSocket::new_v4()?;
