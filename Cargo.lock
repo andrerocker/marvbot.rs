@@ -2098,34 +2098,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
-name = "hello-rust"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "bb8",
- "cargo",
- "diesel",
- "diesel-async",
- "dotenv",
- "env_logger",
- "ferris-says",
- "lazy_static",
- "log",
- "once_cell",
- "prometheus",
- "prometheus_exporter",
- "r2d2_postgres",
- "rand",
- "rdkafka",
- "regex",
- "serde",
- "serde_cbor",
- "tokio",
- "toml",
-]
-
-[[package]]
 name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2559,6 +2531,39 @@ name = "log"
 version = "0.4.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "34080505efa8e45a4b816c349525ebe327ceaa8559756f0356cba97ef3bf7432"
+
+[[package]]
+name = "marv-core"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "bb8",
+ "cargo",
+ "diesel",
+ "diesel-async",
+ "dotenv",
+ "env_logger",
+ "ferris-says",
+ "lazy_static",
+ "log",
+ "marv_api",
+ "once_cell",
+ "prometheus",
+ "prometheus_exporter",
+ "r2d2_postgres",
+ "rand",
+ "rdkafka",
+ "regex",
+ "serde",
+ "serde_cbor",
+ "tokio",
+ "toml",
+]
+
+[[package]]
+name = "marv_api"
+version = "0.1.0"
 
 [[package]]
 name = "matchers"

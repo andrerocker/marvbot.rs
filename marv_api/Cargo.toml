@@ -1,0 +1,8 @@
+[package]
+name = "marv_api"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "marv_api"
+path = "src/lib.rs"
