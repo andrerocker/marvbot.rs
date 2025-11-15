@@ -7,7 +7,6 @@ use env_logger;
 use marv::plugins::helper;
 use marv::{config, engine};
 use prometheus_exporter;
-use std::io;
 
 async fn connection() -> Pool<AsyncPgConnection> {
     let database_url = config::config().database_url.clone();
@@ -23,8 +22,8 @@ async fn initialize() -> anyhow::Result<()> {
         helper::create_closure_error("Can't initialize Prometheus Exporter"),
     )?;
 
-    config::MARV.set(config::read_configuration()?);
-    config::POOL.set(connection().await);
+    let _ = config::MARV.set(config::read_configuration()?);
+    let _ = config::POOL.set(connection().await);
 
     Ok(())
 }

@@ -1,5 +1,3 @@
-use std::io::Result;
-
 use crate::marv::config;
 use crate::marv::plugins;
 use tokio::{
