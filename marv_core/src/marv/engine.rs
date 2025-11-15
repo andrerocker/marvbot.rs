@@ -20,7 +20,7 @@ pub async fn initialize() {
         .expect("Problems trying to initialize Connection Pool");
 }
 
-pub async fn start() -> anyhow::Result<()> {
+pub async fn execute() -> anyhow::Result<()> {
     let config = config::config();
 
     let addr = config.hostname.clone().parse().unwrap();
