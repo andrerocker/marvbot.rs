@@ -1,4 +1,7 @@
-use diesel_async::{AsyncPgConnection, pooled_connection::bb8::Pool};
+use diesel_async::{
+    AsyncPgConnection,
+    pooled_connection::{AsyncDieselConnectionManager, bb8::Pool},
+};
 use once_cell::sync::OnceCell;
 use serde::Deserialize;
 use std::fs;
@@ -44,6 +47,13 @@ fn test_read_configuration() -> anyhow::Result<()> {
     );
 
     Ok(())
+}
+
+pub async fn connection_pool() -> Pool<AsyncPgConnection> {
+    let database_url = config().database_url.clone();
+    let manager = AsyncDieselConnectionManager::<AsyncPgConnection>::new(database_url);
+
+    Pool::builder().build(manager).await.unwrap()
 }
 
 pub static MARV: OnceCell<MarvSetup> = OnceCell::new();

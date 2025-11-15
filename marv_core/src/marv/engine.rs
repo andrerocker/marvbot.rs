@@ -5,6 +5,21 @@ use tokio::{
     net::TcpSocket,
 };
 
+pub async fn initialize() {
+    env_logger::init();
+
+    prometheus_exporter::start("127.0.0.1:9184".parse().unwrap())
+        .expect("Problems trying to initialize Prometheus Exporter");
+
+    config::MARV
+        .set(config::read_configuration().unwrap())
+        .expect("Problems trying to read Configuration File");
+
+    config::POOL
+        .set(config::connection_pool().await)
+        .expect("Problems trying to initialize Connection Pool");
+}
+
 pub async fn start() -> anyhow::Result<()> {
     let config = config::config();
 
