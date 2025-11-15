@@ -11,13 +11,11 @@ pub async fn initialize() {
     prometheus_exporter::start("127.0.0.1:9184".parse().unwrap())
         .expect("Problems trying to initialize Prometheus Exporter");
 
-    config::MARV
-        .set(config::read_configuration().unwrap())
-        .expect("Problems trying to read Configuration File");
+    config::set_config(
+        config::read_configuration().expect("Problems trying to read Configuration File"),
+    );
 
-    config::POOL
-        .set(config::connection_pool().await)
-        .expect("Problems trying to initialize Connection Pool");
+    config::set_pool(config::connection_pool().await);
 }
 
 pub async fn execute() -> anyhow::Result<()> {

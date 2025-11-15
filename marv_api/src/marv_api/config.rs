@@ -56,14 +56,21 @@ pub async fn connection_pool() -> Pool<AsyncPgConnection> {
     Pool::builder().build(manager).await.unwrap()
 }
 
-pub static MARV: OnceCell<MarvSetup> = OnceCell::new();
+static MARV: OnceCell<MarvSetup> = OnceCell::new();
+static POOL: OnceCell<Pool<AsyncPgConnection>> = OnceCell::new();
 
 pub fn config() -> &'static MarvConfig {
     &MARV.get().unwrap().config
 }
 
-pub static POOL: OnceCell<Pool<AsyncPgConnection>> = OnceCell::new();
+pub fn set_config(config: MarvSetup) {
+    MARV.get_or_init(|| config);
+}
 
 pub fn pool() -> &'static Pool<AsyncPgConnection> {
     POOL.get().unwrap()
+}
+
+pub fn set_pool(pool: Pool<AsyncPgConnection>) {
+    POOL.get_or_init(|| pool);
 }
