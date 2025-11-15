@@ -25,13 +25,11 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] custom types (to :return signature and :parameters)
 - [x] threads / mutex - network-io and plugin dispatch
 - [x] evented-io
+- [x] tests / unit
 - [x] kafka: rdkafka: consumer / tokio
 - [x] kafka: rdkafka: producer / tokio
 - [x] kafka: serialize messages with: cbor, protobuf, messagepack
 - [x] housekeeping: remove all unsafe :unwrap and :expect from the code
-- [ ] plugin: that track the execution time
-- [ ] errors: play with anyhow
-- [ ] macro: create a macro that wrap function and add execution time
 - [x] kafka: remove rust-kafka
 - [x] kafka: up service to the latest version / kafka-native
 - [x] plugins: plugin sync vs async
@@ -41,21 +39,22 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] bot evented / async
 - [x] bot actor model
 - [x] bot even driven
-- [ ] config: read file using tokio
 - [x] a way to check for blocking code (tokio flags and log)
-- [ ] marv using event driven
-- [ ] data-parallelism / rayon
 - [x] rust: use once_cell/Lazy instead of lazy_static!
 - [x] thread pool
-- [ ] macros
+- [x] config: read file using tokio
+- [ ] monorepo
+- [ ] marv using event driven
+- [ ] data-parallelism / rayon
+- [ ] plugin: that track the execution time
+- [ ] errors: play with anyhow
+- [ ] macro: create a macro that wrap function and add execution time
 - [ ] dispatch: static vs dynamic (templates vs dyn)
-- [ ] actor model
 - [ ] use plugin as crate / external modules
 - [ ] config: custom segments for plugins
 - [ ] prometheus / metrics / aumentar cobertura
 - [ ] tracing
 - [ ] debug
-- [ ] tests
 - [ ] build (using docker and pipelines)
 - [ ] cross platform build (arm, x86, windows, linux, macos)
 - [ ] argparse
