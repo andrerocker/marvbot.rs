@@ -43,7 +43,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] rust: use once_cell/Lazy instead of lazy_static!
 - [x] thread pool
 - [x] config: read file using tokio
-- [ ] monorepo
+- [x] monorepo
 - [ ] marv using event driven
 - [ ] data-parallelism / rayon
 - [ ] plugin: that track the execution time
