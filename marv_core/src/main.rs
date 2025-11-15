@@ -5,8 +5,7 @@ use diesel_async::pooled_connection::AsyncDieselConnectionManager;
 use diesel_async::pooled_connection::bb8::Pool;
 use env_logger;
 use marv::engine;
-use marv::plugins::helper;
-use marv_api::config;
+use marv_api::{config, helper};
 use prometheus_exporter;
 
 async fn connection() -> Pool<AsyncPgConnection> {
