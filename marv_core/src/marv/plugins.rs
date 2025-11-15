@@ -1,24 +1,14 @@
 pub mod core;
 pub mod helper;
-pub mod kafka;
-pub mod todo;
 
 use super::metrics::MARV_PLUGIN_HIT_COUNTER;
-use async_trait::async_trait;
 use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use kafka::{consumer::KafkaConsumer, producer::KafkaProducer};
-use std::io::{self, Error};
-use todo::Todo;
-
-pub type DynamicPlugin = Box<dyn Plugin>;
-pub type DynamicPluginVec = Vec<DynamicPlugin>;
-
-#[async_trait]
-pub trait Plugin {
-    fn name(&self) -> String;
-    async fn is_enabled(&self, message: &String) -> bool;
-    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error>;
-}
+use marv_api::plugins::DynamicPluginVec;
+use marv_plugins::{
+    kafka::{consumer::KafkaConsumer, producer::KafkaProducer},
+    todo::Todo,
+};
+use std::io;
 
 pub fn default() -> DynamicPluginVec {
     vec![

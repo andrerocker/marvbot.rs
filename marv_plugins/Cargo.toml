@@ -1,0 +1,20 @@
+[package]
+name = "marv_plugins"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "marv_plugins"
+path = "src/lib.rs"
+
+[dependencies]
+async-trait = "0.1.89"
+bb8 = "0.9.0"
+diesel = "2.3.3"
+diesel-async = "0.7.4"
+env_logger = "0.11.8"
+log = "0.4.28"
+marv_api = { path = "../marv_api" }
+rdkafka = "0.38.0"
+serde_cbor = "0.11.2"
+tokio = "1.48.0"

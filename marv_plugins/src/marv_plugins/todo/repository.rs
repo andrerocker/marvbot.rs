@@ -1,6 +1,3 @@
-use crate::marv::models::{NewTodo, Todo, UpdateTodo};
-use crate::marv::plugins::helper;
-
 use bb8::PooledConnection;
 use diesel::associations::HasTable;
 use diesel::prelude::*;
@@ -8,7 +5,12 @@ use diesel_async::AsyncPgConnection;
 use diesel_async::RunQueryDsl;
 use diesel_async::pooled_connection::AsyncDieselConnectionManager;
 use marv_api::config;
+use marv_api::helper;
 use std::io::{self, Error};
+
+use super::models::NewTodo;
+use super::models::Todo;
+use super::models::UpdateTodo;
 
 pub struct TodoRepository {}
 
@@ -27,7 +29,7 @@ impl TodoRepository {
     }
 
     pub async fn create(&mut self, new_todo: NewTodo) -> Result<Todo, Error> {
-        use crate::marv::schema::todos::dsl::*;
+        use crate::marv_plugins::todo::schema::todos::dsl::*;
 
         let mut connection = self.connection().await?;
         let result = diesel::insert_into(todos::table())
@@ -45,7 +47,7 @@ impl TodoRepository {
     }
 
     pub async fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
-        use crate::marv::schema::todos::dsl::*;
+        use crate::marv_plugins::todo::schema::todos::dsl::*;
 
         let mut connection = self.connection().await?;
         let result = diesel::update(todos.filter(id.eq(todo.id)))
@@ -62,7 +64,7 @@ impl TodoRepository {
     }
 
     pub async fn list(&mut self) -> Result<Vec<Todo>, Error> {
-        use crate::marv::schema::todos::dsl::*;
+        use crate::marv_plugins::todo::schema::todos::dsl::*;
 
         let mut connection = self.connection().await?;
         let results = todos.select(Todo::as_select()).load(&mut connection).await;
@@ -76,7 +78,7 @@ impl TodoRepository {
     }
 
     pub async fn delete(&mut self, current_id: i32) -> Result<usize, Error> {
-        use crate::marv::schema::todos::dsl::*;
+        use crate::marv_plugins::todo::schema::todos::dsl::*;
 
         let mut connection = self.connection().await?;
         let result = diesel::delete(todos.filter(id.eq(current_id)))

@@ -1,13 +1,14 @@
-use std::{io::Error, time::Duration};
-
-use crate::marv::plugins::{DynamicPlugin, Plugin};
 use async_trait::async_trait;
-use marv_api::config;
+use marv_api::{
+    config,
+    plugins::{DynamicPlugin, Plugin},
+};
 use rdkafka::{
     ClientConfig,
     message::ToBytes,
     producer::{FutureProducer, FutureRecord},
 };
+use std::{io::Error, time::Duration};
 
 pub struct KafkaProducer {
     pub topic: String,

@@ -1,6 +1,5 @@
 use async_trait::async_trait;
-
-use crate::marv::plugins::{DynamicPlugin, Plugin};
+use marv_api::plugins::{DynamicPlugin, Plugin};
 use std::io::{Error, ErrorKind};
 
 pub struct Pong {}

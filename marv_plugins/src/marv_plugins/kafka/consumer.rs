@@ -1,6 +1,8 @@
-use crate::marv::plugins::{DynamicPlugin, Plugin, helper};
 use async_trait::async_trait;
-use marv_api::config;
+use marv_api::{
+    config, helper,
+    plugins::{DynamicPlugin, Plugin},
+};
 use rdkafka::{
     ClientConfig, Message,
     consumer::{CommitMode, Consumer, StreamConsumer},

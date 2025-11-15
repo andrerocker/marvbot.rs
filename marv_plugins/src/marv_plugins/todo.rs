@@ -1,12 +1,13 @@
 pub mod adapter;
 pub mod controller;
+pub mod models;
 pub mod repository;
+pub mod schema;
 pub mod service;
 
-use super::DynamicPlugin;
-use crate::marv::plugins::Plugin;
 use async_trait::async_trait;
 use controller::TodoController;
+use marv_api::plugins::{DynamicPlugin, Plugin};
 use std::io::Error;
 
 pub struct Todo {

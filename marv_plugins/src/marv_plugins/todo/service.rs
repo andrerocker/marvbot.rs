@@ -1,5 +1,7 @@
-use super::repository::TodoRepository;
-use crate::marv::models::{NewTodo, Todo, UpdateTodo};
+use super::{
+    models::{NewTodo, Todo, UpdateTodo},
+    repository::TodoRepository,
+};
 use std::io::{self, Error};
 
 pub struct TodoService {

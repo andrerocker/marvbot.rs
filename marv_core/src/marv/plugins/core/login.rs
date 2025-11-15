@@ -1,10 +1,10 @@
-use std::io::Error;
-
 use async_trait::async_trait;
 use log::info;
-use marv_api::config;
-
-use crate::marv::plugins::{DynamicPlugin, Plugin};
+use marv_api::{
+    config,
+    plugins::{DynamicPlugin, Plugin},
+};
+use std::io::Error;
 
 pub struct Login {
     pub nickname: String,

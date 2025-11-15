@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 
 #[derive(Queryable, Selectable)]
-#[diesel(table_name = crate::marv::schema::todos)]
+#[diesel(table_name = crate::marv_plugins::todo::schema::todos)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Todo {
     pub id: i32,
@@ -10,7 +10,7 @@ pub struct Todo {
 }
 
 #[derive(Insertable)]
-#[diesel(table_name = crate::marv::schema::todos)]
+#[diesel(table_name = crate::marv_plugins::todo::schema::todos)]
 pub struct NewTodo {
     pub body: String,
     pub status: String,

@@ -3,9 +3,10 @@ use std::io::Error;
 use async_trait::async_trait;
 use log::info;
 
-use crate::marv::plugins::{DynamicPlugin, Plugin};
-
-use marv_api::config;
+use marv_api::{
+    config,
+    plugins::{DynamicPlugin, Plugin},
+};
 
 pub struct Channel {
     pub channel: String,

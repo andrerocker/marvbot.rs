@@ -1,10 +1,12 @@
 [workspace]
 members = [
-    "marv_core",
     "marv_api",
+    "marv_core",
+    "marv_plugins",
 ]
 
 default-members = [
-    "marv_core",
     "marv_api",
+    "marv_core",
+    "marv_plugins",
 ]
