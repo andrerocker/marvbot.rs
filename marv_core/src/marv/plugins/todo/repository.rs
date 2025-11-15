@@ -1,4 +1,3 @@
-use crate::marv::config;
 use crate::marv::models::{NewTodo, Todo, UpdateTodo};
 use crate::marv::plugins::helper;
 
@@ -8,6 +7,7 @@ use diesel::prelude::*;
 use diesel_async::AsyncPgConnection;
 use diesel_async::RunQueryDsl;
 use diesel_async::pooled_connection::AsyncDieselConnectionManager;
+use marv_api::config;
 use std::io::{self, Error};
 
 pub struct TodoRepository {}

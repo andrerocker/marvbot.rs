@@ -1,3 +1,6 @@
+use async_trait::async_trait;
+use std::io::Error;
+
 pub type DynamicPlugin = Box<dyn Plugin>;
 pub type DynamicPluginVec = Vec<DynamicPlugin>;
 

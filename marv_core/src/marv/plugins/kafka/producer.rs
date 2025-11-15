@@ -1,10 +1,8 @@
 use std::{io::Error, time::Duration};
 
-use crate::marv::{
-    config,
-    plugins::{DynamicPlugin, Plugin},
-};
+use crate::marv::plugins::{DynamicPlugin, Plugin};
 use async_trait::async_trait;
+use marv_api::config;
 use rdkafka::{
     ClientConfig,
     message::ToBytes,
