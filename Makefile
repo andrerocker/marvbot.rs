@@ -41,7 +41,8 @@ postgresql:
 
 migrate:
 	DATABASE_URL=postgres://deploy42:deploy42@localhost:5432/deploy42 \
-		diesel migration run --config-file marv-core/diesel.toml
+	DIESEL_CONFIG_FILE=marv_plugins/diesel.toml \
+		diesel migration run
 
 setup: produce migrate
 
