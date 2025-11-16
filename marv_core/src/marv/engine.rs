@@ -53,17 +53,14 @@ pub async fn execute() -> anyhow::Result<()> {
                 log::error!("Problems trying to read from the network (connection closed)");
                 break;
             }
-
             for response in plugins::dispatch(&mut plugins, &protocol).await? {
                 if let Err(error) = writer.write_all(response.as_bytes()).await {
                     log::error!("Problems trying to write to the network: {}", error);
-                    break;
                 };
             }
 
             if let Err(error) = writer.flush().await {
                 log::error!("Problems trying to flush data to the network: {}", error);
-                break;
             }
 
             protocol.clear();

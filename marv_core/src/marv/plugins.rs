@@ -1,7 +1,10 @@
 pub mod core;
 
 use marv_api::plugins::DynamicPluginVec;
-use std::io;
+use std::{
+    io::{self, Error},
+    pin::Pin,
+};
 
 // static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
 
@@ -41,60 +44,18 @@ pub async fn dispatch(
     plugins: &mut DynamicPluginVec,
     protocol: &String,
 ) -> io::Result<Vec<String>> {
-    // let mut results = Vec::new();
-    // let mut plugins = PLUGINS.lock().unwrap();
-
-    // let (output, handles) = unsafe {
-    //     TokioScope::scope_and_collect(|scope| {
-    //         for plugin in plugins.iter_mut() {
-    //             if plugin.is_enabled(&protocol) {
-    //                 scope.spawn(async move { plugin.perform(&protocol).await.unwrap() });
-    //             }
-    //         }
-    //     })
-    // }
-    // .await;
-
-    // for current in &handles.iter_mut() {}
-
-    // let mut results = Vec::new();
-    // let mut handles = Vec::new();
-    // let mut plugins = Arc::new(Mutex::new(vec![
-    //     Logger::new(),
-    //     Login::new(),
-    //     Pong::new(),
-    //     Channel::new(),
-    //     Hello::new(),
-    //     KafkaProducer::new(),
-    //     KafkaConsumer::new(),
-    //     Todo::new(),
-    // ]));
-    // let acme = plugins.lock().unwrap();
-
-    // for plugin in acme.iter_mut() {
-    //     if plugin.is_enabled(&protocol) {
-    //         // let plugin = Arc::new(Mutex::new(plugin));
-    //         let protocol = protocol.clone();
-
-    //         let handle = tokio::spawn(async move {
-    //             // let plugin = plugin.lock().unwrap();
-    //             plugin.perform(&protocol).await.unwrap()
-    //         });
-
-    //         handles.push(handle);
-    //     }
-    // }
-
-    // for handle in handles.iter_mut() {
-    //     results.append(&mut handle.await.unwrap());
-    // }
-
     let mut results = Vec::new();
+    let mut handles: Vec<Pin<Box<dyn Future<Output = Result<Vec<String>, Error>> + Send>>> =
+        Vec::new();
 
     for plugin in plugins.iter_mut() {
         if plugin.is_enabled(&protocol) {
-            results.append(&mut plugin.perform(&protocol).await.unwrap());
+            handles.push(plugin.perform(&protocol));
         }
+    }
+
+    for handle in handles {
+        results.append(&mut handle.await.unwrap());
     }
 
     Ok(results)
