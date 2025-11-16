@@ -1,10 +1,6 @@
 pub mod core;
 
-use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
-use marv_plugins::{
-    kafka::{consumer::KafkaConsumer, producer::KafkaProducer},
-    todo::Todo,
-};
+use marv_api::plugins::DynamicPluginVec;
 use std::io;
 
 // static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
@@ -41,7 +37,10 @@ use std::io;
 //     Ok(())
 // }
 
-pub async fn dispatch(protocol: &String) -> io::Result<Vec<String>> {
+pub async fn dispatch(
+    plugins: &mut DynamicPluginVec,
+    protocol: &String,
+) -> io::Result<Vec<String>> {
     // let mut results = Vec::new();
     // let mut plugins = PLUGINS.lock().unwrap();
 
@@ -60,15 +59,25 @@ pub async fn dispatch(protocol: &String) -> io::Result<Vec<String>> {
 
     // let mut results = Vec::new();
     // let mut handles = Vec::new();
-    // let mut plugins = plugins();
-    //let mut plugins = PLUGINS.lock().unwrap();
+    // let mut plugins = Arc::new(Mutex::new(vec![
+    //     Logger::new(),
+    //     Login::new(),
+    //     Pong::new(),
+    //     Channel::new(),
+    //     Hello::new(),
+    //     KafkaProducer::new(),
+    //     KafkaConsumer::new(),
+    //     Todo::new(),
+    // ]));
+    // let acme = plugins.lock().unwrap();
 
-    // for plugin in plugins.iter_mut() {
+    // for plugin in acme.iter_mut() {
     //     if plugin.is_enabled(&protocol) {
-    //         let plugin = Arc::new(Mutex::new(plugin));
+    //         // let plugin = Arc::new(Mutex::new(plugin));
+    //         let protocol = protocol.clone();
 
     //         let handle = tokio::spawn(async move {
-    //             let plugin = plugin.lock().unwrap();
+    //             // let plugin = plugin.lock().unwrap();
     //             plugin.perform(&protocol).await.unwrap()
     //         });
 
@@ -81,16 +90,6 @@ pub async fn dispatch(protocol: &String) -> io::Result<Vec<String>> {
     // }
 
     let mut results = Vec::new();
-    let mut plugins = vec![
-        Logger::new(),
-        Login::new(),
-        Pong::new(),
-        Channel::new(),
-        Hello::new(),
-        KafkaProducer::new(),
-        KafkaConsumer::new(),
-        Todo::new(),
-    ];
 
     for plugin in plugins.iter_mut() {
         if plugin.is_enabled(&protocol) {

@@ -1,5 +1,12 @@
-use crate::marv::plugins;
+use crate::marv::plugins::{
+    self,
+    core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong},
+};
 use marv_api::config;
+use marv_plugins::{
+    kafka::{consumer::KafkaConsumer, producer::KafkaProducer},
+    todo::Todo,
+};
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
     net::TcpSocket,
@@ -29,6 +36,16 @@ pub async fn execute() -> anyhow::Result<()> {
     let mut protocol = String::new();
     let mut reader = BufReader::new(reader);
     let mut writer = BufWriter::new(writer);
+    let mut plugins = vec![
+        Logger::new(),
+        Login::new(),
+        Pong::new(),
+        Channel::new(),
+        Hello::new(),
+        KafkaProducer::new(),
+        KafkaConsumer::new(),
+        Todo::new(),
+    ];
 
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
@@ -37,7 +54,7 @@ pub async fn execute() -> anyhow::Result<()> {
                 break;
             }
 
-            for response in plugins::dispatch(&protocol).await? {
+            for response in plugins::dispatch(&mut plugins, &protocol).await? {
                 if let Err(error) = writer.write_all(response.as_bytes()).await {
                     log::error!("Problems trying to write to the network: {}", error);
                     break;
