@@ -28,7 +28,7 @@ impl Plugin for Todo {
         "Todo".into()
     }
 
-    async fn is_enabled(&self, message: &String) -> bool {
+    fn is_enabled(&self, message: &String) -> bool {
         message.contains(" PRIVMSG ") && message.contains(" :todo: ")
     }
 

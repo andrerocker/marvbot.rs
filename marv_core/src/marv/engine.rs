@@ -20,18 +20,15 @@ pub async fn initialize() {
 
 pub async fn execute() -> anyhow::Result<()> {
     let config = config::config();
-
     let addr = config.hostname.clone().parse().unwrap();
     let socket = TcpSocket::new_v4()?;
 
     let stream = socket.connect(addr).await?;
     let (reader, writer) = stream.into_split();
 
+    let mut protocol = String::new();
     let mut reader = BufReader::new(reader);
     let mut writer = BufWriter::new(writer);
-    let mut protocol = String::new();
-
-    let mut plugins = plugins::default();
 
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
@@ -40,8 +37,8 @@ pub async fn execute() -> anyhow::Result<()> {
                 break;
             }
 
-            for result in plugins::dispatch(&mut plugins, &protocol).await? {
-                if let Err(error) = writer.write_all(result.as_bytes()).await {
+            for response in plugins::dispatch(&protocol).await? {
+                if let Err(error) = writer.write_all(response.as_bytes()).await {
                     log::error!("Problems trying to write to the network: {}", error);
                     break;
                 };

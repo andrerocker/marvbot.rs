@@ -16,7 +16,7 @@ impl Plugin for Logger {
         "Logger".into()
     }
 
-    async fn is_enabled(&self, _message: &String) -> bool {
+    fn is_enabled(&self, _message: &String) -> bool {
         true
     }
 
