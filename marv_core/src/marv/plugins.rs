@@ -1,6 +1,9 @@
 pub mod core;
 
-use core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong};
+use core::{
+    channel::Channel, hello::Hello, hello_fast::HelloFast, hello_slow::HelloSlow, log::Logger,
+    login::Login, pong::Pong,
+};
 use marv_api::plugins::DynamicPluginVec;
 use marv_plugins::{
     kafka::{consumer::KafkaConsumer, producer::KafkaProducer},
@@ -23,6 +26,8 @@ fn plugins() -> &'static DynamicPluginVec {
             KafkaProducer::new(),
             KafkaConsumer::new(),
             Todo::new(),
+            HelloFast::new(),
+            HelloSlow::new(),
         ]
     })
 }
@@ -59,7 +64,7 @@ pub async fn dispatch(protocol: &String) -> io::Result<Vec<String>> {
     while let Some(join_response) = sets.join_next().await {
         match join_response {
             Ok(response) => results.append(&mut response.unwrap()),
-            Err(error) => eprintln!("Problems trying with join all results: {error}"),
+            Err(error) => eprintln!("Problems trying to join all results: {error}"),
         }
     }
 
