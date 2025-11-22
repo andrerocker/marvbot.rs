@@ -23,7 +23,7 @@ impl TodoRepository {
         ))
     }
 
-    pub async fn create(&mut self, new_todo: NewTodo) -> Result<Todo, Error> {
+    pub async fn create(&self, new_todo: NewTodo) -> Result<Todo, Error> {
         use crate::marv_plugins::todo::schema::todos::dsl::*;
 
         let mut connection = self.connection().await?;
@@ -41,7 +41,7 @@ impl TodoRepository {
         }
     }
 
-    pub async fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
+    pub async fn update(&self, todo: UpdateTodo) -> io::Result<Todo> {
         use crate::marv_plugins::todo::schema::todos::dsl::*;
 
         let mut connection = self.connection().await?;
@@ -58,7 +58,7 @@ impl TodoRepository {
         }
     }
 
-    pub async fn list(&mut self) -> Result<Vec<Todo>, Error> {
+    pub async fn list(&self) -> Result<Vec<Todo>, Error> {
         use crate::marv_plugins::todo::schema::todos::dsl::*;
 
         let mut connection = self.connection().await?;
@@ -72,7 +72,7 @@ impl TodoRepository {
         }
     }
 
-    pub async fn delete(&mut self, current_id: i32) -> Result<usize, Error> {
+    pub async fn delete(&self, current_id: i32) -> Result<usize, Error> {
         use crate::marv_plugins::todo::schema::todos::dsl::*;
 
         let mut connection = self.connection().await?;

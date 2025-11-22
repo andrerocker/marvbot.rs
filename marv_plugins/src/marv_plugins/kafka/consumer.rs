@@ -38,7 +38,7 @@ impl Plugin for KafkaConsumer {
         false
     }
 
-    async fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&self, _message: &String) -> Result<Vec<String>, Error> {
         Ok(vec![])
     }
 }

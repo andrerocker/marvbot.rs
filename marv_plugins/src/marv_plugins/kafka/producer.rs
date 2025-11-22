@@ -42,7 +42,7 @@ impl Plugin for KafkaProducer {
         true
     }
 
-    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&self, message: &String) -> Result<Vec<String>, Error> {
         let serialized_message = serde_cbor::to_vec(message).unwrap();
 
         let produce_message = self.producer.send(

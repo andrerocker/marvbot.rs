@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::marv::plugins::{
     self,
     core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong},
@@ -11,6 +13,8 @@ use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
     net::TcpSocket,
 };
+
+use super::plugins::core::login;
 
 pub async fn initialize() {
     env_logger::init();
@@ -36,16 +40,6 @@ pub async fn execute() -> anyhow::Result<()> {
     let mut protocol = String::new();
     let mut reader = BufReader::new(reader);
     let mut writer = BufWriter::new(writer);
-    let mut plugins = vec![
-        Logger::new(),
-        Login::new(),
-        Pong::new(),
-        Channel::new(),
-        Hello::new(),
-        KafkaProducer::new(),
-        KafkaConsumer::new(),
-        Todo::new(),
-    ];
 
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
@@ -53,7 +47,9 @@ pub async fn execute() -> anyhow::Result<()> {
                 log::error!("Problems trying to read from the network (connection closed)");
                 break;
             }
-            for response in plugins::dispatch(&mut plugins, &protocol).await? {
+
+            for response in plugins::dispatch(&protocol).await? {
+                log::info!("Plugins Response: {}", response);
                 if let Err(error) = writer.write_all(response.as_bytes()).await {
                     log::error!("Problems trying to write to the network: {}", error);
                 };

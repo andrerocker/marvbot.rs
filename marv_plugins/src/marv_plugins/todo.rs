@@ -32,7 +32,7 @@ impl Plugin for Todo {
         message.contains(" PRIVMSG ") && message.contains(" :todo: ")
     }
 
-    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&self, message: &String) -> Result<Vec<String>, Error> {
         self.controller.dispatch(message).await
     }
 }

@@ -9,19 +9,19 @@ pub struct TodoService {
 }
 
 impl TodoService {
-    pub async fn create(&mut self, todo: NewTodo) -> Result<Todo, Error> {
+    pub async fn create(&self, todo: NewTodo) -> Result<Todo, Error> {
         self.repository.create(todo).await
     }
 
-    pub async fn update(&mut self, todo: UpdateTodo) -> io::Result<Todo> {
+    pub async fn update(&self, todo: UpdateTodo) -> io::Result<Todo> {
         self.repository.update(todo).await
     }
 
-    pub async fn list(&mut self) -> Result<Vec<Todo>, Error> {
+    pub async fn list(&self) -> Result<Vec<Todo>, Error> {
         self.repository.list().await
     }
 
-    pub async fn delete(&mut self, id: i32) -> Result<usize, Error> {
+    pub async fn delete(&self, id: i32) -> Result<usize, Error> {
         self.repository.delete(id).await
     }
 }
