@@ -20,7 +20,7 @@ impl Plugin for Logger {
         true
     }
 
-    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&self, message: &String) -> Result<Vec<String>, Error> {
         print!("<-- {}", message);
         Ok(vec![])
     }

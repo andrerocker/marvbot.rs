@@ -23,7 +23,7 @@ impl Plugin for Hello {
         message.contains(" JOIN :")
     }
 
-    async fn perform(&mut self, message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&self, message: &String) -> Result<Vec<String>, Error> {
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) JOIN :#(?<channel>\w+)";
         let metadata = helper::regex_to_map(pattern, message);
 

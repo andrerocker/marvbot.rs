@@ -30,7 +30,7 @@ impl Plugin for Login {
         message.contains("Could not resolve your hostname")
     }
 
-    async fn perform(&mut self, _: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&self, _: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Login");
 
         return Ok(vec![

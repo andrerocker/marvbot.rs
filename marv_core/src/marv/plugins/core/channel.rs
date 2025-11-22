@@ -32,7 +32,7 @@ impl Plugin for Channel {
         message.contains("End of message of the da")
     }
 
-    async fn perform(&mut self, _message: &String) -> Result<Vec<String>, Error> {
+    async fn perform(&self, _message: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Channel");
         Ok(vec![format!("JOIN {}\r\n", self.channel)])
     }
