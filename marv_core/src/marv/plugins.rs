@@ -7,10 +7,8 @@ use marv_plugins::{
     todo::Todo,
 };
 use once_cell::sync::OnceCell;
-use std::{
-    io::{self, Error},
-    pin::Pin,
-};
+use std::io::{self};
+use tokio::task::JoinSet;
 
 static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
 
@@ -49,11 +47,19 @@ fn plugins() -> &'static DynamicPluginVec {
 pub async fn dispatch(protocol: &String) -> io::Result<Vec<String>> {
     let plugins = plugins();
     let mut results = Vec::new();
+    let mut sets = JoinSet::new();
 
     for plugin in plugins {
         if plugin.is_enabled(&protocol) {
-            let mut result = plugin.perform(protocol).await.unwrap();
-            results.append(&mut result);
+            let protocol = protocol.clone();
+            sets.spawn(async move { plugin.perform(&protocol).await });
+        }
+    }
+
+    while let Some(join_response) = sets.join_next().await {
+        match join_response {
+            Ok(response) => results.append(&mut response.unwrap()),
+            Err(error) => eprintln!("Problems trying with join all results: {error}"),
         }
     }
 

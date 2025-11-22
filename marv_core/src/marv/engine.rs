@@ -1,20 +1,13 @@
-use std::collections::HashMap;
 
 use crate::marv::plugins::{
     self,
-    core::{channel::Channel, hello::Hello, log::Logger, login::Login, pong::Pong},
 };
 use marv_api::config;
-use marv_plugins::{
-    kafka::{consumer::KafkaConsumer, producer::KafkaProducer},
-    todo::Todo,
-};
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
     net::TcpSocket,
 };
 
-use super::plugins::core::login;
 
 pub async fn initialize() {
     env_logger::init();
