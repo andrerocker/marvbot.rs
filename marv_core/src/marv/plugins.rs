@@ -47,24 +47,14 @@ fn plugins() -> &'static DynamicPluginVec {
 // }
 
 pub async fn dispatch(protocol: &String) -> io::Result<Vec<String>> {
-    let mut plugins = plugins();
+    let plugins = plugins();
     let mut results = Vec::new();
-    let mut handles: Vec<Pin<Box<dyn Future<Output = Result<Vec<String>, Error>> + Send>>> =
-        Vec::new();
-
-    // for plugin in plugins.into_iter() {
-    //     if plugin.is_enabled(&protocol) {
-    //         handles.push(plugin.perform(&protocol));
-    //     }
-    // }
-
-    // for handle in handles {
-    //     results.append(&mut handle.await.unwrap());
-    // }
 
     for plugin in plugins {
-        let mut result = plugin.perform(protocol).await.unwrap();
-        results.append(&mut result);
+        if plugin.is_enabled(&protocol) {
+            let mut result = plugin.perform(protocol).await.unwrap();
+            results.append(&mut result);
+        }
     }
 
     Ok(results)
