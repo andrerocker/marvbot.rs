@@ -37,9 +37,9 @@ pub async fn execute() -> anyhow::Result<()> {
                 break;
             }
 
-            let dispached = plugins::dispatch(&protocol, async |items: Vec<String>| {
-                for current in items {
-                    if let Err(error) = writer.write_all(current.as_bytes()).await {
+            let dispached = plugins::dispatch(&protocol, async |responses: Vec<String>| {
+                for response in responses {
+                    if let Err(error) = writer.write_all(response.as_bytes()).await {
                         log::error!("Problems trying to write data to the network: {}", error);
                     }
 
