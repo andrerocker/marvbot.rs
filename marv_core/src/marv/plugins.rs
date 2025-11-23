@@ -57,7 +57,7 @@ pub async fn dispatch<F: AsyncFnMut(Vec<String>)>(
     let mut handles = JoinSet::new();
 
     for plugin in plugins {
-        if plugin.is_enabled(&protocol) {
+        if plugin.responds_to(&protocol) {
             let protocol = protocol.clone();
             handles.spawn(async move { plugin.perform(&protocol).await });
         }

@@ -38,7 +38,7 @@ impl Plugin for KafkaProducer {
         "KafkaProducer".into()
     }
 
-    fn is_enabled(&self, _message: &String) -> bool {
+    fn responds_to(&self, _message: &String) -> bool {
         true
     }
 

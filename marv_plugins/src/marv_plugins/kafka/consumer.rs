@@ -34,7 +34,7 @@ impl Plugin for KafkaConsumer {
         "KafkaConsumer".into()
     }
 
-    fn is_enabled(&self, _message: &String) -> bool {
+    fn responds_to(&self, _message: &String) -> bool {
         false
     }
 

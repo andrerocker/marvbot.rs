@@ -20,7 +20,7 @@ impl Plugin for HelloSlow {
         "HelloSlow".into()
     }
 
-    fn is_enabled(&self, message: &String) -> bool {
+    fn responds_to(&self, message: &String) -> bool {
         message.to_lowercase().contains("hello")
     }
 

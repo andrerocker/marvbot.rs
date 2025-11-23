@@ -7,6 +7,6 @@ pub type DynamicPluginVec = Vec<DynamicPlugin>;
 #[async_trait]
 pub trait Plugin: Sync + Send {
     fn name(&self) -> String;
-    fn is_enabled(&self, message: &String) -> bool;
+    fn responds_to(&self, message: &String) -> bool;
     async fn perform(&self, message: &String) -> Result<Vec<String>, Error>;
 }

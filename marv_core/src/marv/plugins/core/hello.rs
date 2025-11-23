@@ -19,7 +19,7 @@ impl Plugin for Hello {
         "Hello".into()
     }
 
-    fn is_enabled(&self, message: &String) -> bool {
+    fn responds_to(&self, message: &String) -> bool {
         message.contains(" JOIN :")
     }
 
