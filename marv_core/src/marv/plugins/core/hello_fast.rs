@@ -25,7 +25,9 @@ impl Plugin for HelloFast {
     }
 
     async fn perform(&self, message: &String) -> Result<Vec<String>, Error> {
+        log::info!("FAST - Executando");
         sleep(Duration::from_secs(10)).await;
+        log::info!("FAST - DONE");
 
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :(?<extras>\w+.+)";
         let metadata = helper::regex_to_map(pattern, message);

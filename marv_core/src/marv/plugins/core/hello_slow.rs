@@ -25,7 +25,9 @@ impl Plugin for HelloSlow {
     }
 
     async fn perform(&self, message: &String) -> Result<Vec<String>, Error> {
+        log::info!("SLOW - Executando");
         sleep(Duration::from_secs(20)).await;
+        log::info!("SLOW - DONE");
 
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :(?<extras>\w+.+)";
         let metadata = helper::regex_to_map(pattern, message);

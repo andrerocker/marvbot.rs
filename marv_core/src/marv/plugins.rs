@@ -10,12 +10,15 @@ use marv_plugins::{
     todo::Todo,
 };
 use once_cell::sync::OnceCell;
-use std::io::{self};
+use std::{
+    io::{self},
+    sync::mpsc::Sender,
+};
 use tokio::task::JoinSet;
 
 static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
 
-fn plugins() -> &'static DynamicPluginVec {
+fn default_plugins() -> &'static DynamicPluginVec {
     PLUGINS.get_or_init(|| {
         vec![
             Logger::new(),
@@ -23,9 +26,9 @@ fn plugins() -> &'static DynamicPluginVec {
             Pong::new(),
             Channel::new(),
             Hello::new(),
-            KafkaProducer::new(),
-            KafkaConsumer::new(),
-            Todo::new(),
+            // KafkaProducer::new(),
+            // KafkaConsumer::new(),
+            // Todo::new(),
             HelloFast::new(),
             HelloSlow::new(),
         ]
@@ -49,9 +52,11 @@ fn plugins() -> &'static DynamicPluginVec {
 //     Ok(())
 // }
 
-pub async fn dispatch(protocol: &String) -> io::Result<Vec<String>> {
-    let plugins = plugins();
-    let mut results = Vec::new();
+pub async fn dispatch<F: AsyncFnMut(Vec<String>)>(
+    protocol: &String,
+    mut callback: F,
+) -> io::Result<bool> {
+    let plugins = default_plugins();
     let mut sets = JoinSet::new();
 
     for plugin in plugins {
@@ -63,10 +68,10 @@ pub async fn dispatch(protocol: &String) -> io::Result<Vec<String>> {
 
     while let Some(join_response) = sets.join_next().await {
         match join_response {
-            Ok(response) => results.append(&mut response.unwrap()),
-            Err(error) => eprintln!("Problems trying to join all results: {error}"),
+            Ok(response) => callback(response.unwrap()).await,
+            Err(error) => log::error!("Problems trying to join task and add to results: {error}"),
         }
     }
 
-    Ok(results)
+    Ok(true)
 }
