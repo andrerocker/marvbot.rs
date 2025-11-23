@@ -40,7 +40,7 @@ pub async fn execute() -> anyhow::Result<()> {
             let dispached = plugins::dispatch(&protocol, async |items: Vec<String>| {
                 for current in items {
                     if let Err(error) = writer.write_all(current.as_bytes()).await {
-                        log::error!("Problems trying to flush data to the network: {}", error);
+                        log::error!("Problems trying to write data to the network: {}", error);
                     }
 
                     if let Err(error) = writer.flush().await {

@@ -54,19 +54,24 @@ pub async fn dispatch<F: AsyncFnMut(Vec<String>)>(
     mut callback: F,
 ) -> io::Result<bool> {
     let plugins = default_plugins();
-    let mut sets = JoinSet::new();
+    let mut handles = JoinSet::new();
 
     for plugin in plugins {
         if plugin.is_enabled(&protocol) {
             let protocol = protocol.clone();
-            sets.spawn(async move { plugin.perform(&protocol).await });
+            handles.spawn(async move { plugin.perform(&protocol).await });
         }
     }
 
-    while let Some(join_response) = sets.join_next().await {
-        match join_response {
-            Ok(response) => callback(response.unwrap()).await,
-            Err(error) => log::error!("Problems trying to join task and add to results: {error}"),
+    while let Some(response) = handles.join_next().await {
+        match response {
+            Ok(response) => match response {
+                Ok(response) => callback(response).await,
+                Err(error) => {
+                    log::error!("Problems trying calling plugin: {error}")
+                }
+            },
+            Err(error) => log::error!("Problems trying to join next task: {error}"),
         }
     }
 
