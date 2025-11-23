@@ -10,10 +10,7 @@ use marv_plugins::{
     todo::Todo,
 };
 use once_cell::sync::OnceCell;
-use std::{
-    io::{self},
-    sync::mpsc::Sender,
-};
+use std::io::{self};
 use tokio::task::JoinSet;
 
 static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
@@ -26,9 +23,9 @@ fn default_plugins() -> &'static DynamicPluginVec {
             Pong::new(),
             Channel::new(),
             Hello::new(),
-            // KafkaProducer::new(),
-            // KafkaConsumer::new(),
-            // Todo::new(),
+            KafkaProducer::new(),
+            KafkaConsumer::new(),
+            Todo::new(),
             HelloFast::new(),
             HelloSlow::new(),
         ]

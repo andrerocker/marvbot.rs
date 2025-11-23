@@ -1,13 +1,9 @@
-
-use crate::marv::plugins::{
-    self,
-};
+use crate::marv::plugins::{self};
 use marv_api::config;
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
     net::TcpSocket,
 };
-
 
 pub async fn initialize() {
     env_logger::init();
@@ -41,15 +37,24 @@ pub async fn execute() -> anyhow::Result<()> {
                 break;
             }
 
-            for response in plugins::dispatch(&protocol).await? {
-                log::info!("Plugins Response: {}", response);
-                if let Err(error) = writer.write_all(response.as_bytes()).await {
-                    log::error!("Problems trying to write to the network: {}", error);
-                };
-            }
+            let dispached = plugins::dispatch(&protocol, async |items: Vec<String>| {
+                for current in items {
+                    if let Err(error) = writer.write_all(current.as_bytes()).await {
+                        log::error!("Problems trying to flush data to the network: {}", error);
+                    }
 
-            if let Err(error) = writer.flush().await {
-                log::error!("Problems trying to flush data to the network: {}", error);
+                    if let Err(error) = writer.flush().await {
+                        log::error!("Problems trying to flush data to the network: {}", error);
+                    }
+                }
+            })
+            .await;
+
+            if let Err(error) = dispached {
+                log::error!(
+                    "Problems trying to dispatch a call to the plugins: {}",
+                    error
+                );
             }
 
             protocol.clear();
