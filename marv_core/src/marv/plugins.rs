@@ -6,6 +6,7 @@ use core::{
 };
 use marv_api::plugins::DynamicPluginVec;
 use marv_plugins::{
+    ask_chatgpt::AskChatGPT,
     kafka::{consumer::KafkaConsumer, producer::KafkaProducer},
     todo::Todo,
 };
@@ -28,6 +29,7 @@ fn default_plugins() -> &'static DynamicPluginVec {
             Todo::new(),
             HelloFast::new(),
             HelloSlow::new(),
+            AskChatGPT::new(),
         ]
     })
 }
