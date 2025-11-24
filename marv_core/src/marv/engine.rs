@@ -1,3 +1,5 @@
+use std::env;
+
 use crate::marv::plugins::{self};
 use marv_api::config;
 use tokio::{
@@ -6,7 +8,11 @@ use tokio::{
 };
 
 pub async fn initialize() {
+    let environment = env::var("RUST_ENV").unwrap_or_else(|_| "development".into());
+    dotenvy::from_filename(format!(".env.{}", environment)).unwrap();
+
     env_logger::init();
+    log::info!("ENV VAR VALUES = {:?}", std::env::var("HACK3D").unwrap());
 
     prometheus_exporter::start("127.0.0.1:9184".parse().unwrap())
         .expect("Problems trying to initialize Prometheus Exporter");
