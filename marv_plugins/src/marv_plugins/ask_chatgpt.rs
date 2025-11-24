@@ -4,7 +4,7 @@ use marv_api::{
     plugins::{DynamicPlugin, Plugin},
 };
 use serde_json::{Value, json};
-use std::{collections::HashMap, io::Error};
+use std::{collections::HashMap, env, io::Error};
 
 pub struct AskChatGPT {}
 
@@ -21,6 +21,7 @@ fn build_metadata(message: &String) -> HashMap<String, String> {
 
 async fn ask_chat(question: &str) -> String {
     let url = "https://api.openai.com/v1/chat/completions";
+    let token = env::var("CHATGPT_SECRET_TOKEN").expect("You need to set CHATGPT_SECRET_TOKEN");
 
     let payload = serde_json::to_string(&json!({
         "model": "gpt-4.1-mini",
@@ -31,22 +32,16 @@ async fn ask_chat(question: &str) -> String {
     }))
     .unwrap();
 
-    log::info!("chatgpt request: {:?}", payload);
-
     let client = reqwest::Client::new()
         .post(url)
         .header("Content-Type", "application/json")
-        .header("Authorization", "Bearer hack3d")
+        .header("Authorization", format!("Bearer {}", token))
         .body(payload)
         .send()
         .await
         .unwrap();
 
-    let response = client.text().await.unwrap();
-
-    log::info!("chatgpt response: {:?}", response);
-
-    response
+    client.text().await.unwrap()
 }
 
 #[async_trait]
