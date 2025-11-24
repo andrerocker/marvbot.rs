@@ -16,5 +16,6 @@ env_logger = "0.11.8"
 log = "0.4.28"
 marv_api = { path = "../marv_api" }
 rdkafka = "0.38.0"
+reqwest = "0.12.24"
 serde_cbor = "0.11.2"
 tokio = "1.48.0"
