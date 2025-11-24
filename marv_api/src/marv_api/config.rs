@@ -23,7 +23,7 @@ pub struct MarvSetup {
     pub config: MarvConfig,
 }
 
-pub fn read_configuration() -> anyhow::Result<MarvSetup> {
+fn read_configuration() -> anyhow::Result<MarvSetup> {
     let toml_str = fs::read_to_string("Marv.toml")?;
     let config: MarvSetup = toml::from_str(&toml_str)?;
 
@@ -49,28 +49,32 @@ fn test_read_configuration() -> anyhow::Result<()> {
     Ok(())
 }
 
-pub async fn connection_pool() -> Pool<AsyncPgConnection> {
+async fn build_connection_pool() -> Pool<AsyncPgConnection> {
     let database_url = config().database_url.clone();
     let manager = AsyncDieselConnectionManager::<AsyncPgConnection>::new(database_url);
 
-    Pool::builder().build(manager).await.unwrap()
+    Pool::builder()
+        .build(manager)
+        .await
+        .expect("Problems trying to build connection pool")
 }
 
 static MARV: OnceCell<MarvSetup> = OnceCell::new();
 static POOL: OnceCell<Pool<AsyncPgConnection>> = OnceCell::new();
 
+pub fn initialize_config() {
+    MARV.get_or_init(|| read_configuration().expect("Problems truing to initialize configuration"));
+}
+
 pub fn config() -> &'static MarvConfig {
     &MARV.get().unwrap().config
 }
 
-pub fn set_config(config: MarvSetup) {
-    MARV.get_or_init(|| config);
-}
-
-pub fn pool() -> &'static Pool<AsyncPgConnection> {
-    POOL.get().unwrap()
-}
-
-pub fn set_pool(pool: Pool<AsyncPgConnection>) {
+pub async fn initialize_pool() {
+    let pool = build_connection_pool().await;
     POOL.get_or_init(|| pool);
+}
+
+pub async fn pool() -> &'static Pool<AsyncPgConnection> {
+    POOL.get().unwrap()
 }

@@ -10,18 +10,13 @@ use tokio::{
 pub async fn initialize() {
     let environment = env::var("RUST_ENV").unwrap_or_else(|_| "development".into());
     dotenvy::from_filename(format!(".env.{}", environment)).unwrap();
-
     env_logger::init();
-    log::info!("ENV VAR VALUES = {:?}", std::env::var("HACK3D").unwrap());
 
     prometheus_exporter::start("127.0.0.1:9184".parse().unwrap())
         .expect("Problems trying to initialize Prometheus Exporter");
 
-    config::set_config(
-        config::read_configuration().expect("Problems trying to read Configuration File"),
-    );
-
-    config::set_pool(config::connection_pool().await);
+    config::initialize_config();
+    config::initialize_pool().await;
 }
 
 pub async fn execute() -> anyhow::Result<()> {

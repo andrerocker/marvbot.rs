@@ -18,9 +18,13 @@ impl TodoRepository {
     async fn connection(
         &self,
     ) -> io::Result<PooledConnection<'_, AsyncDieselConnectionManager<AsyncPgConnection>>> {
-        config::pool().get().await.or(helper::create_result_error(
-            "Problems trying to fetch a connection",
-        ))
+        config::pool()
+            .await
+            .get()
+            .await
+            .or(helper::create_result_error(
+                "Problems trying to fetch a connection",
+            ))
     }
 
     pub async fn create(&self, new_todo: NewTodo) -> Result<Todo, Error> {
