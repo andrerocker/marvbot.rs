@@ -48,3 +48,6 @@ setup: produce migrate
 
 fix:
 	cargo fix --allow-dirty
+
+prune:
+	docker system prune -a
