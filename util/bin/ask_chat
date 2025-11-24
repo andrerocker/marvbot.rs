@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+
+curl -s https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer hack3d" \
+  -d '{
+        "model": "gpt-4.1-mini",
+        "messages": [
+          { "role": "user", "content": "Explicá en argentino qué es un HashMap en Rust" }
+        ]
+      }' 
