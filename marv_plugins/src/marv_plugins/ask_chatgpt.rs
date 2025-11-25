@@ -27,7 +27,7 @@ async fn ask_chat(question: &str) -> String {
         "model": "gpt-4.1-mini",
         "messages": [{
             "role": "user",
-            "content": format!("Responder com uma linha: {}", question)
+            "content": format!("Responda em uma linha: {}", question)
         }]
     }))
     .unwrap();
