@@ -63,7 +63,7 @@ static MARV: OnceCell<MarvSetup> = OnceCell::new();
 static POOL: OnceCell<Pool<AsyncPgConnection>> = OnceCell::new();
 
 pub fn initialize_config() {
-    MARV.get_or_init(|| read_configuration().expect("Problems truing to initialize configuration"));
+    MARV.get_or_init(|| read_configuration().expect("Problems trying to initialize configuration"));
 }
 
 pub fn config() -> &'static MarvConfig {
