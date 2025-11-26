@@ -17,7 +17,7 @@ impl Plugin for Logger {
     }
 
     fn schedule(&self) -> Option<String> {
-        Some("0 * * * * *".into())
+        None
     }
 
     fn responds_to(&self, _message: &String) -> bool {

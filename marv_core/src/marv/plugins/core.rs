@@ -5,3 +5,4 @@ pub mod hello_slow;
 pub mod log;
 pub mod login;
 pub mod pong;
+pub mod spam;
