@@ -30,7 +30,6 @@ impl Plugin for Hello {
     async fn perform(&self, message: &String) -> Result<Vec<String>, Error> {
         let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) JOIN :#(?<channel>\w+)";
         let metadata = helper::regex_to_map(pattern, message);
-        log::info!("message: {} extract: {:?}", message, metadata);
 
         match metadata["nick"].as_str() {
             "marvy" => helper::simple_channel_message(&metadata, "Salveeeee doideeraada!"),
