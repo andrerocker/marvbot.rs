@@ -1,10 +1,11 @@
 use std::env;
 
-use crate::marv::plugins::{self};
+use crate::marv::plugins;
 use marv_api::config;
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
     net::TcpSocket,
+    sync::mpsc::channel,
 };
 
 pub async fn initialize() {
@@ -31,43 +32,54 @@ pub async fn execute() -> anyhow::Result<()> {
     let mut reader = BufReader::new(reader);
     let mut writer = BufWriter::new(writer);
 
-    tokio::task::spawn(async {
-        plugins::scheduled::execute(async |response: Vec<String>| {
-            log::info!("=============> callback: {:?}", response);
+    let (sender, mut receiver) = channel(10);
+
+    let sched_sender = sender.clone();
+    tokio::task::spawn(async move {
+        plugins::scheduled::execute(async move |responses: Vec<String>| {
+            sched_sender.send(responses).await.unwrap();
         })
         .await
         .unwrap();
     });
 
-    loop {
-        if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
-            if bytes_read == 0 {
-                log::error!("Problems trying to read from the network (connection closed)");
-                break;
+    let dispatch_sender = sender.clone();
+    tokio::task::spawn(async move {
+        loop {
+            if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
+                if bytes_read == 0 {
+                    log::error!("Problems trying to read from the network (connection closed)");
+                    break;
+                }
+
+                let dispatch_sender = dispatch_sender.clone();
+                let dispached =
+                    plugins::dispatch::execute(&protocol, async move |responses: Vec<String>| {
+                        dispatch_sender.send(responses).await.unwrap();
+                    })
+                    .await;
+
+                if let Err(error) = dispached {
+                    log::error!(
+                        "Problems trying to dispatch a call to the plugins: {}",
+                        error
+                    );
+                }
+
+                protocol.clear();
+            }
+        }
+    });
+
+    while let Some(responses) = receiver.recv().await {
+        for response in responses {
+            if let Err(error) = writer.write_all(response.as_bytes()).await {
+                log::error!("Problems trying to write data to the network: {}", error);
             }
 
-            let dispached =
-                plugins::dispatch::execute(&protocol, async |responses: Vec<String>| {
-                    for response in responses {
-                        if let Err(error) = writer.write_all(response.as_bytes()).await {
-                            log::error!("Problems trying to write data to the network: {}", error);
-                        }
-
-                        if let Err(error) = writer.flush().await {
-                            log::error!("Problems trying to flush data to the network: {}", error);
-                        }
-                    }
-                })
-                .await;
-
-            if let Err(error) = dispached {
-                log::error!(
-                    "Problems trying to dispatch a call to the plugins: {}",
-                    error
-                );
+            if let Err(error) = writer.flush().await {
+                log::error!("Problems trying to flush data to the network: {}", error);
             }
-
-            protocol.clear();
         }
     }
 
