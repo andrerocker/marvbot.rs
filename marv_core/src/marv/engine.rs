@@ -31,6 +31,14 @@ pub async fn execute() -> anyhow::Result<()> {
     let mut reader = BufReader::new(reader);
     let mut writer = BufWriter::new(writer);
 
+    tokio::task::spawn(async {
+        plugins::schedule(async |response: Vec<String>| {
+            log::info!("=============> callback: {:?}", response);
+        })
+        .await
+        .unwrap();
+    });
+
     loop {
         if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
             if bytes_read == 0 {
