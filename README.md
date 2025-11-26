@@ -44,6 +44,7 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] thread pool
 - [x] config: read file using tokio
 - [x] monorepo
+- [ ] plugin types: schedule, task (default), blocking
 - [ ] marv using event driven
 - [ ] data-parallelism / rayon
 - [ ] plugin: that track the execution time
@@ -79,4 +80,4 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] kafka produce
 - [x] database
 - [x] todo (create a todolist)
-- [ ] default ask chatgpt
+- [x] default ask chatgpt
