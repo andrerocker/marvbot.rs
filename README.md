@@ -44,7 +44,9 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] thread pool
 - [x] config: read file using tokio
 - [x] monorepo
-- [ ] plugin types: schedule, task (default), blocking
+- [x] plugin types: schedule, task (default)
+- [ ] housekeeping: remove all unwrap / improve error handling
+- [ ] plugin types: blocking
 - [ ] marv using event driven
 - [ ] data-parallelism / rayon
 - [ ] plugin: that track the execution time
