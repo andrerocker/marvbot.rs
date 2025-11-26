@@ -1,5 +1,6 @@
 pub mod core;
 
+use cargo::util::context::StringList;
 use core::{
     channel::Channel, hello::Hello, hello_fast::HelloFast, hello_slow::HelloSlow, log::Logger,
     login::Login, pong::Pong,
@@ -12,7 +13,7 @@ use marv_plugins::{
 };
 use once_cell::sync::OnceCell;
 use std::io::{self};
-use tokio::task::JoinSet;
+use tokio::{sync::mpsc, task::JoinSet};
 use tokio_cron_scheduler::{Job, JobScheduler};
 
 static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
@@ -81,9 +82,10 @@ pub async fn dispatch<F: AsyncFnMut(Vec<String>)>(
     Ok(true)
 }
 
-pub async fn schedule<F: AsyncFnMut(Vec<String>)>(callback: F) -> io::Result<()> {
+pub async fn schedule<F: AsyncFnMut(Vec<String>)>(mut callback: F) -> io::Result<()> {
     let mut candidates = Vec::new();
     let scheduler = JobScheduler::new().await.unwrap();
+    let (writer, mut receiver) = mpsc::channel::<Vec<String>>(10);
 
     for plugin in default_plugins() {
         if let Some(schedulable) = plugin.schedule() {
@@ -92,10 +94,12 @@ pub async fn schedule<F: AsyncFnMut(Vec<String>)>(callback: F) -> io::Result<()>
     }
 
     for (appointment, plugin) in candidates {
+        let writer = writer.clone();
         let job = Job::new_async(appointment, move |_uuid, _l| {
+            let writer = writer.clone();
             Box::pin(async move {
                 let response = plugin.perform(&"schedule".to_string()).await.unwrap();
-                // callback(response);
+                writer.send(response).await.unwrap();
                 ()
             })
         })
@@ -105,6 +109,11 @@ pub async fn schedule<F: AsyncFnMut(Vec<String>)>(callback: F) -> io::Result<()>
     }
 
     scheduler.start().await.unwrap();
+
+    while let Some(msg) = receiver.recv().await {
+        log::info!("----------------------------> sched: response: {:?}", msg);
+        callback(msg).await;
+    }
 
     Ok(())
 }
