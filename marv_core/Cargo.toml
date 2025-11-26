@@ -28,3 +28,4 @@ marv_api = { path = "../marv_api" }
 marv_plugins = { path = "../marv_plugins" }
 futures = "0.3.31"
 dotenvy = "0.15.7"
+tokio-cron-scheduler = "0.15.1"
