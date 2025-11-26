@@ -16,6 +16,10 @@ impl Plugin for Logger {
         "Logger".into()
     }
 
+    fn schedule(&self) -> Option<String> {
+        None
+    }
+
     fn responds_to(&self, _message: &String) -> bool {
         true
     }

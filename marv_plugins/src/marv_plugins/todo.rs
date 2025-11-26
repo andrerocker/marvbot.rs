@@ -28,6 +28,10 @@ impl Plugin for Todo {
         "Todo".into()
     }
 
+    fn schedule(&self) -> Option<String> {
+        None
+    }
+
     fn responds_to(&self, message: &String) -> bool {
         message.contains(" PRIVMSG ") && message.contains(" :todo: ")
     }

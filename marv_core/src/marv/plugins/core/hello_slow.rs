@@ -20,6 +20,10 @@ impl Plugin for HelloSlow {
         "HelloSlow".into()
     }
 
+    fn schedule(&self) -> Option<String> {
+        None
+    }
+
     fn responds_to(&self, message: &String) -> bool {
         message.to_lowercase().contains("hello")
     }

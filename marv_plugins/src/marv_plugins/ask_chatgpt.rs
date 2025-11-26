@@ -50,6 +50,10 @@ impl Plugin for AskChatGPT {
         "AskChatGPT".into()
     }
 
+    fn schedule(&self) -> Option<String> {
+        None
+    }
+
     fn responds_to(&self, message: &String) -> bool {
         !build_metadata(message).is_empty()
     }

@@ -42,6 +42,10 @@ impl Plugin for KafkaProducer {
         true
     }
 
+    fn schedule(&self) -> Option<String> {
+        None
+    }
+
     async fn perform(&self, message: &String) -> Result<Vec<String>, Error> {
         let serialized_message = serde_cbor::to_vec(message).unwrap();
 

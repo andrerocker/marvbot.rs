@@ -41,6 +41,10 @@ impl Plugin for KafkaConsumer {
     async fn perform(&self, _message: &String) -> Result<Vec<String>, Error> {
         Ok(vec![])
     }
+
+    fn schedule(&self) -> Option<String> {
+        None
+    }
 }
 
 async fn attach_and_handle() -> Result<(), Error> {

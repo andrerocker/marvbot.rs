@@ -30,6 +30,10 @@ impl Plugin for Login {
         message.contains("Could not resolve your hostname")
     }
 
+    fn schedule(&self) -> Option<String> {
+        None
+    }
+
     async fn perform(&self, _: &String) -> Result<Vec<String>, Error> {
         info!("--> Executando Login");
 

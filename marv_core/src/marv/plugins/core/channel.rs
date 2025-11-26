@@ -28,6 +28,10 @@ impl Plugin for Channel {
         "Channel".into()
     }
 
+    fn schedule(&self) -> Option<String> {
+        None
+    }
+
     fn responds_to(&self, message: &String) -> bool {
         message.contains("End of message of the da")
     }
