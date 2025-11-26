@@ -32,7 +32,7 @@ pub async fn execute() -> anyhow::Result<()> {
     let mut writer = BufWriter::new(writer);
 
     tokio::task::spawn(async {
-        plugins::schedule(async |response: Vec<String>| {
+        plugins::scheduled::execute(async |response: Vec<String>| {
             log::info!("=============> callback: {:?}", response);
         })
         .await
@@ -46,18 +46,19 @@ pub async fn execute() -> anyhow::Result<()> {
                 break;
             }
 
-            let dispached = plugins::dispatch(&protocol, async |responses: Vec<String>| {
-                for response in responses {
-                    if let Err(error) = writer.write_all(response.as_bytes()).await {
-                        log::error!("Problems trying to write data to the network: {}", error);
-                    }
+            let dispached =
+                plugins::dispatch::execute(&protocol, async |responses: Vec<String>| {
+                    for response in responses {
+                        if let Err(error) = writer.write_all(response.as_bytes()).await {
+                            log::error!("Problems trying to write data to the network: {}", error);
+                        }
 
-                    if let Err(error) = writer.flush().await {
-                        log::error!("Problems trying to flush data to the network: {}", error);
+                        if let Err(error) = writer.flush().await {
+                            log::error!("Problems trying to flush data to the network: {}", error);
+                        }
                     }
-                }
-            })
-            .await;
+                })
+                .await;
 
             if let Err(error) = dispached {
                 log::error!(
