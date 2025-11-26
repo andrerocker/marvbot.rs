@@ -13,6 +13,7 @@ use marv_plugins::{
 use once_cell::sync::OnceCell;
 use std::io::{self};
 use tokio::task::JoinSet;
+use tokio_cron_scheduler::{Job, JobScheduler};
 
 static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
 
@@ -78,4 +79,32 @@ pub async fn dispatch<F: AsyncFnMut(Vec<String>)>(
     }
 
     Ok(true)
+}
+
+pub async fn schedule<F: AsyncFnMut(Vec<String>)>(callback: F) -> io::Result<()> {
+    let mut candidates = Vec::new();
+    let scheduler = JobScheduler::new().await.unwrap();
+
+    for plugin in default_plugins() {
+        if let Some(schedulable) = plugin.schedule() {
+            candidates.push((schedulable, plugin));
+        }
+    }
+
+    for (appointment, plugin) in candidates {
+        let job = Job::new_async(appointment, move |_uuid, _l| {
+            Box::pin(async move {
+                let response = plugin.perform(&"schedule".to_string()).await.unwrap();
+                // callback(response);
+                ()
+            })
+        })
+        .unwrap();
+
+        scheduler.add(job).await.unwrap();
+    }
+
+    scheduler.start().await.unwrap();
+
+    Ok(())
 }
