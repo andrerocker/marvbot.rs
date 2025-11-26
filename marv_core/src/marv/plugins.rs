@@ -4,18 +4,15 @@ pub mod scheduled;
 
 use core::{
     channel::Channel, hello::Hello, hello_fast::HelloFast, hello_slow::HelloSlow, log::Logger,
-    login::Login, pong::Pong,
+    login::Login, pong::Pong, spam::Spam,
 };
-use marv_api::plugins::DynamicPluginVec;
+use marv_api::plugins::{DynamicPlugin, DynamicPluginVec};
 use marv_plugins::{
     ask_chatgpt::AskChatGPT,
     kafka::{consumer::KafkaConsumer, producer::KafkaProducer},
     todo::Todo,
 };
 use once_cell::sync::OnceCell;
-use std::io::{self};
-use tokio::sync::mpsc;
-use tokio_cron_scheduler::{Job, JobScheduler};
 
 static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
 
@@ -33,8 +30,21 @@ fn default_plugins() -> &'static DynamicPluginVec {
             HelloFast::new(),
             HelloSlow::new(),
             AskChatGPT::new(),
+            Spam::new(),
         ]
     })
+}
+
+fn default_schedulables() -> Vec<(String, &'static DynamicPlugin)> {
+    let mut candidates = Vec::new();
+
+    for plugin in crate::marv::plugins::default_plugins() {
+        if let Some(schedulable) = plugin.schedule() {
+            candidates.push((schedulable, plugin));
+        }
+    }
+
+    candidates
 }
 
 // #[test]
