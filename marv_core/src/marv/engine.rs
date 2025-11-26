@@ -4,8 +4,11 @@ use crate::marv::plugins;
 use marv_api::config;
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
-    net::TcpSocket,
-    sync::mpsc::channel,
+    net::{
+        TcpSocket,
+        tcp::{OwnedReadHalf, OwnedWriteHalf},
+    },
+    sync::mpsc::{Receiver, Sender, channel},
 };
 
 pub async fn initialize() {
@@ -20,31 +23,22 @@ pub async fn initialize() {
     config::initialize_pool().await;
 }
 
-pub async fn execute() -> anyhow::Result<()> {
-    let config = config::config();
-    let addr = config.hostname.clone().parse().unwrap();
-    let socket = TcpSocket::new_v4()?;
-
-    let stream = socket.connect(addr).await?;
-    let (reader, writer) = stream.into_split();
-
-    let mut protocol = String::new();
-    let mut reader = BufReader::new(reader);
-    let mut writer = BufWriter::new(writer);
-
-    let (sender, mut receiver) = channel(10);
-
-    let sched_sender = sender.clone();
+async fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) {
     tokio::task::spawn(async move {
         plugins::scheduled::execute(async move |responses: Vec<String>| {
-            sched_sender.send(responses).await.unwrap();
+            sender.send(responses).await.unwrap();
         })
         .await
         .unwrap();
     });
+}
 
-    let dispatch_sender = sender.clone();
+async fn spawn_dispatcher_plugins(
+    mut reader: BufReader<OwnedReadHalf>,
+    sender: Sender<Vec<String>>,
+) {
     tokio::task::spawn(async move {
+        let mut protocol = String::new();
         loop {
             if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
                 if bytes_read == 0 {
@@ -52,7 +46,7 @@ pub async fn execute() -> anyhow::Result<()> {
                     break;
                 }
 
-                let dispatch_sender = dispatch_sender.clone();
+                let dispatch_sender = sender.clone();
                 let dispached =
                     plugins::dispatch::execute(&protocol, async move |responses: Vec<String>| {
                         dispatch_sender.send(responses).await.unwrap();
@@ -70,7 +64,12 @@ pub async fn execute() -> anyhow::Result<()> {
             }
         }
     });
+}
 
+async fn wait_and_write(
+    mut receiver: Receiver<Vec<String>>,
+    mut writer: BufWriter<OwnedWriteHalf>,
+) {
     while let Some(responses) = receiver.recv().await {
         for response in responses {
             if let Err(error) = writer.write_all(response.as_bytes()).await {
@@ -82,6 +81,23 @@ pub async fn execute() -> anyhow::Result<()> {
             }
         }
     }
+}
+
+pub async fn execute() -> anyhow::Result<()> {
+    let config = config::config();
+    let addr = config.hostname.clone().parse().unwrap();
+    let socket = TcpSocket::new_v4()?;
+
+    let stream = socket.connect(addr).await?;
+    let (reader, writer) = stream.into_split();
+
+    let reader = BufReader::new(reader);
+    let writer = BufWriter::new(writer);
+    let (sender, receiver) = channel(10);
+
+    let _ = spawn_scheduled_plugins(sender.clone());
+    let _ = spawn_dispatcher_plugins(reader, sender.clone());
+    let _ = wait_and_write(receiver, writer).await;
 
     Ok(())
 }
