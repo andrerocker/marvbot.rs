@@ -23,7 +23,7 @@ pub async fn initialize() {
     config::initialize_pool().await;
 }
 
-async fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) {
+fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) {
     tokio::task::spawn(async move {
         plugins::scheduled::execute(async move |responses: Vec<String>| {
             sender.send(responses).await.unwrap();
@@ -33,10 +33,7 @@ async fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) {
     });
 }
 
-async fn spawn_dispatcher_plugins(
-    mut reader: BufReader<OwnedReadHalf>,
-    sender: Sender<Vec<String>>,
-) {
+fn spawn_dispatcher_plugins(mut reader: BufReader<OwnedReadHalf>, sender: Sender<Vec<String>>) {
     tokio::task::spawn(async move {
         let mut protocol = String::new();
         loop {
@@ -46,10 +43,10 @@ async fn spawn_dispatcher_plugins(
                     break;
                 }
 
-                let dispatch_sender = sender.clone();
+                let sender = sender.clone();
                 let dispached =
                     plugins::dispatch::execute(&protocol, async move |responses: Vec<String>| {
-                        dispatch_sender.send(responses).await.unwrap();
+                        sender.send(responses).await.unwrap();
                     })
                     .await;
 
