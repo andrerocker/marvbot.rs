@@ -15,7 +15,7 @@ impl AskChatGPT {
 }
 
 fn build_metadata(message: &String) -> HashMap<String, String> {
-    let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :marvy: (?<command>\w+.+)";
+    let pattern = r"^:(?<nick>\w+)!(?<name>\w+)@(?<server>\w+.+) PRIVMSG #(?<channel>\w+) :chatgpt: (?<command>\w+.+)";
     helper::regex_to_map(pattern, message)
 }
 
