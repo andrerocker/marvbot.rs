@@ -23,17 +23,20 @@ pub async fn initialize() {
     config::initialize_pool().await;
 }
 
-fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) {
+fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) -> tokio::task::JoinHandle<()> {
     tokio::task::spawn(async move {
         plugins::scheduled::execute(async move |responses: Vec<String>| {
             sender.send(responses).await.unwrap();
         })
         .await
         .unwrap();
-    });
+    })
 }
 
-fn spawn_dispatcher_plugins(mut reader: BufReader<OwnedReadHalf>, sender: Sender<Vec<String>>) {
+fn spawn_dispatcher_plugins(
+    mut reader: BufReader<OwnedReadHalf>,
+    sender: Sender<Vec<String>>,
+) -> tokio::task::JoinHandle<()> {
     tokio::task::spawn(async move {
         let mut protocol = String::new();
         loop {
@@ -60,7 +63,7 @@ fn spawn_dispatcher_plugins(mut reader: BufReader<OwnedReadHalf>, sender: Sender
                 protocol.clear();
             }
         }
-    });
+    })
 }
 
 async fn wait_and_write(
@@ -92,9 +95,9 @@ pub async fn execute() -> anyhow::Result<()> {
     let writer = BufWriter::new(writer);
     let (sender, receiver) = channel(10);
 
-    let _ = spawn_scheduled_plugins(sender.clone());
-    let _ = spawn_dispatcher_plugins(reader, sender.clone());
-    let _ = wait_and_write(receiver, writer).await;
+    spawn_scheduled_plugins(sender.clone());
+    spawn_dispatcher_plugins(reader, sender.clone());
+    wait_and_write(receiver, writer).await;
 
     Ok(())
 }
