@@ -29,7 +29,7 @@ fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) -> tokio::task::JoinHand
             sender.send(responses).await.unwrap();
         })
         .await
-        .unwrap();
+        .unwrap()
     })
 }
 
@@ -47,13 +47,13 @@ fn spawn_dispatcher_plugins(
                 }
 
                 let sender = sender.clone();
-                let dispached =
+                let dispatched =
                     plugins::dispatch::execute(&protocol, async move |responses: Vec<String>| {
                         sender.send(responses).await.unwrap();
                     })
                     .await;
 
-                if let Err(error) = dispached {
+                if let Err(error) = dispatched {
                     log::error!(
                         "Problems trying to dispatch a call to the plugins: {}",
                         error
