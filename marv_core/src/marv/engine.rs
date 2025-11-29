@@ -1,6 +1,7 @@
-use std::{any, env};
+use std::env;
 
 use crate::marv::plugins;
+use anyhow::Context;
 use marv_api::config;
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
@@ -72,8 +73,15 @@ async fn wait_and_write(
 ) -> anyhow::Result<()> {
     while let Some(responses) = receiver.recv().await {
         for response in responses {
-            writer.write_all(response.as_bytes()).await?;
-            writer.flush().await?;
+            writer
+                .write_all(response.as_bytes())
+                .await
+                .context("Writing date to the Network")?;
+
+            writer
+                .flush()
+                .await
+                .context("Flushing data to the Network")?;
         }
     }
 
@@ -82,10 +90,17 @@ async fn wait_and_write(
 
 pub async fn execute() -> anyhow::Result<()> {
     let config = config::config();
-    let addr = config.hostname.clone().parse()?;
     let socket = TcpSocket::new_v4()?;
+    let addr = config
+        .hostname
+        .clone()
+        .parse()
+        .context("Creating socket addr from hostname")?;
 
-    let stream = socket.connect(addr).await?;
+    let stream = socket
+        .connect(addr)
+        .await
+        .context("Creating socket to the IRC Server")?;
     let (reader, writer) = stream.into_split();
 
     let network_reader = BufReader::new(reader);
