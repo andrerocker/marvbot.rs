@@ -1,4 +1,4 @@
-use std::env;
+use std::{any, env};
 
 use crate::marv::plugins;
 use marv_api::config;
@@ -69,18 +69,15 @@ fn spawn_dispatcher_plugins(
 async fn wait_and_write(
     mut writer: BufWriter<OwnedWriteHalf>,
     mut receiver: Receiver<Vec<String>>,
-) {
+) -> anyhow::Result<()> {
     while let Some(responses) = receiver.recv().await {
         for response in responses {
-            if let Err(error) = writer.write_all(response.as_bytes()).await {
-                log::error!("Problems trying to write data to the network: {}", error);
-            }
-
-            if let Err(error) = writer.flush().await {
-                log::error!("Problems trying to flush data to the network: {}", error);
-            }
+            writer.write_all(response.as_bytes()).await?;
+            writer.flush().await?;
         }
     }
+
+    Ok(())
 }
 
 pub async fn execute() -> anyhow::Result<()> {
@@ -100,7 +97,7 @@ pub async fn execute() -> anyhow::Result<()> {
 
     spawn_scheduled_plugins(scheduler_sender);
     spawn_dispatcher_plugins(network_reader, dispatcher_sender);
-    wait_and_write(network_writer, receiver).await;
+    wait_and_write(network_writer, receiver).await?;
 
     Ok(())
 }
