@@ -67,8 +67,8 @@ fn spawn_dispatcher_plugins(
 }
 
 async fn wait_and_write(
-    mut receiver: Receiver<Vec<String>>,
     mut writer: BufWriter<OwnedWriteHalf>,
+    mut receiver: Receiver<Vec<String>>,
 ) {
     while let Some(responses) = receiver.recv().await {
         for response in responses {
@@ -85,19 +85,22 @@ async fn wait_and_write(
 
 pub async fn execute() -> anyhow::Result<()> {
     let config = config::config();
-    let addr = config.hostname.clone().parse().unwrap();
+    let addr = config.hostname.clone().parse()?;
     let socket = TcpSocket::new_v4()?;
 
     let stream = socket.connect(addr).await?;
     let (reader, writer) = stream.into_split();
 
-    let reader = BufReader::new(reader);
-    let writer = BufWriter::new(writer);
+    let network_reader = BufReader::new(reader);
+    let network_writer = BufWriter::new(writer);
     let (sender, receiver) = channel(10);
 
-    spawn_scheduled_plugins(sender.clone());
-    spawn_dispatcher_plugins(reader, sender.clone());
-    wait_and_write(receiver, writer).await;
+    let scheduler_sender = sender.clone();
+    let dispatcher_sender = sender.clone();
+
+    spawn_scheduled_plugins(scheduler_sender);
+    spawn_dispatcher_plugins(network_reader, dispatcher_sender);
+    wait_and_write(network_writer, receiver).await;
 
     Ok(())
 }
