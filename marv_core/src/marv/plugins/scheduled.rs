@@ -1,9 +1,8 @@
-use std::io;
 use tokio::sync::mpsc;
 use tokio_cron_scheduler::{Job, JobScheduler};
 
-pub async fn execute<F: AsyncFnMut(Vec<String>)>(mut callback: F) -> io::Result<()> {
-    let scheduler = JobScheduler::new().await.unwrap();
+pub async fn execute<F: AsyncFnMut(Vec<String>)>(mut callback: F) -> anyhow::Result<()> {
+    let scheduler = JobScheduler::new().await?;
     let schedulables = crate::marv::plugins::default_schedulables();
     let (writer, mut receiver) = mpsc::channel::<Vec<String>>(10);
 
@@ -16,13 +15,12 @@ pub async fn execute<F: AsyncFnMut(Vec<String>)>(mut callback: F) -> io::Result<
                 writer.send(response).await.unwrap();
                 ()
             })
-        })
-        .unwrap();
+        })?;
 
-        scheduler.add(job).await.unwrap();
+        scheduler.add(job).await?;
     }
 
-    scheduler.start().await.unwrap();
+    scheduler.start().await?;
 
     while let Some(msg) = receiver.recv().await {
         callback(msg).await;
