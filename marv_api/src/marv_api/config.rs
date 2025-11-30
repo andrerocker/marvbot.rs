@@ -2,9 +2,9 @@ use diesel_async::{
     AsyncPgConnection,
     pooled_connection::{AsyncDieselConnectionManager, bb8::Pool},
 };
-use once_cell::sync::OnceCell;
 use serde::Deserialize;
 use std::fs;
+use tokio::sync::OnceCell;
 use toml;
 
 #[derive(Deserialize, Debug, Clone)]
@@ -59,11 +59,14 @@ async fn build_connection_pool() -> Pool<AsyncPgConnection> {
         .expect("Problems trying to build connection pool")
 }
 
-static MARV: OnceCell<MarvSetup> = OnceCell::new();
-static POOL: OnceCell<Pool<AsyncPgConnection>> = OnceCell::new();
+static MARV: OnceCell<MarvSetup> = OnceCell::const_new();
+static POOL: OnceCell<Pool<AsyncPgConnection>> = OnceCell::const_new();
 
-pub fn initialize_config() {
-    MARV.get_or_init(|| read_configuration().expect("Problems trying to initialize configuration"));
+pub async fn initialize_config() {
+    MARV.get_or_init(async || {
+        read_configuration().expect("Problems trying to initialize configuration")
+    })
+    .await;
 }
 
 pub fn config() -> &'static MarvConfig {
@@ -71,8 +74,8 @@ pub fn config() -> &'static MarvConfig {
 }
 
 pub async fn initialize_pool() {
-    let pool = build_connection_pool().await;
-    POOL.get_or_init(|| pool);
+    POOL.get_or_init(async || build_connection_pool().await)
+        .await;
 }
 
 pub async fn pool() -> &'static Pool<AsyncPgConnection> {

@@ -20,7 +20,7 @@ pub async fn initialize() {
     prometheus_exporter::start("127.0.0.1:9184".parse().unwrap())
         .expect("Problems trying to initialize Prometheus Exporter");
 
-    config::initialize_config();
+    config::initialize_config().await;
     config::initialize_pool().await;
 }
 
@@ -92,6 +92,7 @@ async fn wait_and_write(
 pub async fn execute() -> anyhow::Result<()> {
     let config = config::config();
     let socket = TcpSocket::new_v4()?;
+
     let addr = config
         .hostname
         .clone()
@@ -102,8 +103,8 @@ pub async fn execute() -> anyhow::Result<()> {
         .connect(addr)
         .await
         .context("Creating socket to the IRC Server")?;
-    let (reader, writer) = stream.into_split();
 
+    let (reader, writer) = stream.into_split();
     let network_reader = BufReader::new(reader);
     let network_writer = BufWriter::new(writer);
     let (sender, receiver) = channel(10);
