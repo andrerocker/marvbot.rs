@@ -25,6 +25,7 @@ pub async fn initialize() {
 }
 
 fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) -> tokio::task::JoinHandle<()> {
+    // TODO: Improve error handling here!
     tokio::task::spawn(async move {
         plugins::scheduled::execute(async move |responses: Vec<String>| {
             sender.send(responses).await.unwrap();

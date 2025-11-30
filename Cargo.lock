@@ -2942,6 +2942,7 @@ dependencies = [
  "regex",
  "serde",
  "serde_cbor",
+ "tokio",
  "toml",
 ]
 
