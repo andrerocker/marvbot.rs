@@ -1,5 +1,19 @@
-use tokio::sync::mpsc;
+use tokio::sync::mpsc::{self, Sender};
 use tokio_cron_scheduler::{Job, JobScheduler};
+
+pub fn spawn(sender: Sender<Vec<String>>) -> tokio::task::JoinHandle<()> {
+    tokio::task::spawn(async move {
+        let scheduled = execute(async move |response: Vec<String>| {
+            sender.send(response).await.unwrap();
+        })
+        .await;
+
+        if let Err(error) = scheduled {
+            log::error!("Problems processeing scheduled tasks: {}", error);
+            // should we interrupt the program execution? just log for now.
+        }
+    })
+}
 
 pub async fn execute<F: AsyncFnMut(Vec<String>)>(mut callback: F) -> anyhow::Result<()> {
     let scheduler = JobScheduler::new().await?;

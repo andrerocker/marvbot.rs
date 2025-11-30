@@ -1,15 +1,13 @@
 use std::env;
 
-use crate::marv::plugins;
-use anyhow::{Context, bail};
+use super::plugins::dispatch;
+use super::plugins::scheduled;
+use anyhow::Context;
 use marv_api::config;
 use tokio::{
-    io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
-    net::{
-        TcpSocket,
-        tcp::{OwnedReadHalf, OwnedWriteHalf},
-    },
-    sync::mpsc::{Receiver, Sender, channel},
+    io::{AsyncWriteExt, BufReader, BufWriter},
+    net::{TcpSocket, tcp::OwnedWriteHalf},
+    sync::mpsc::{Receiver, channel},
 };
 
 pub async fn initialize() {
@@ -22,53 +20,6 @@ pub async fn initialize() {
 
     config::initialize_config().await;
     config::initialize_pool().await;
-}
-
-fn spawn_scheduled_plugins(result: Sender<Vec<String>>) -> tokio::task::JoinHandle<()> {
-    tokio::task::spawn(async move {
-        let scheduled = plugins::scheduled::execute(async move |response: Vec<String>| {
-            result.send(response).await.unwrap();
-        })
-        .await;
-
-        if let Err(error) = scheduled {
-            log::error!("Problems processeing scheduled tasks: {}", error);
-            // should we interrupt the program execution? just log for now.
-        }
-    })
-}
-
-fn spawn_dispatcher_plugins(
-    mut reader: BufReader<OwnedReadHalf>,
-    sender: Sender<Vec<String>>,
-) -> tokio::task::JoinHandle<()> {
-    tokio::task::spawn(async move {
-        let mut protocol = String::new();
-        loop {
-            if let Ok(bytes_read) = reader.read_line(&mut protocol).await {
-                if bytes_read == 0 {
-                    log::error!("Problems trying to read from the network (connection closed)");
-                    break;
-                }
-
-                let sender = sender.clone();
-                let dispatched =
-                    plugins::dispatch::execute(&protocol, async move |responses: Vec<String>| {
-                        sender.send(responses).await.unwrap();
-                    })
-                    .await;
-
-                if let Err(error) = dispatched {
-                    log::error!(
-                        "Problems trying to dispatch a call to the plugins: {}",
-                        error
-                    );
-                }
-
-                protocol.clear();
-            }
-        }
-    })
 }
 
 async fn wait_and_write(
@@ -115,8 +66,8 @@ pub async fn execute() -> anyhow::Result<()> {
     let scheduler_sender = sender.clone();
     let dispatcher_sender = sender.clone();
 
-    spawn_scheduled_plugins(scheduler_sender);
-    spawn_dispatcher_plugins(network_reader, dispatcher_sender);
+    scheduled::spawn(scheduler_sender);
+    dispatch::spawn(network_reader, dispatcher_sender);
     wait_and_write(network_writer, receiver).await?;
 
     Ok(())
