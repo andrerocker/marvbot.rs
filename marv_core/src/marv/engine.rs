@@ -1,7 +1,7 @@
 use std::env;
 
 use crate::marv::plugins;
-use anyhow::Context;
+use anyhow::{Context, bail};
 use marv_api::config;
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
@@ -24,14 +24,17 @@ pub async fn initialize() {
     config::initialize_pool().await;
 }
 
-fn spawn_scheduled_plugins(sender: Sender<Vec<String>>) -> tokio::task::JoinHandle<()> {
-    // TODO: Improve error handling here!
+fn spawn_scheduled_plugins(result: Sender<Vec<String>>) -> tokio::task::JoinHandle<()> {
     tokio::task::spawn(async move {
-        plugins::scheduled::execute(async move |responses: Vec<String>| {
-            sender.send(responses).await.unwrap();
+        let scheduled = plugins::scheduled::execute(async move |response: Vec<String>| {
+            result.send(response).await.unwrap();
         })
-        .await
-        .unwrap()
+        .await;
+
+        if let Err(error) = scheduled {
+            log::error!("Problems processeing scheduled tasks: {}", error);
+            // should we interrupt the program execution? just log for now.
+        }
     })
 }
 
