@@ -45,16 +45,14 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [x] config: read file using tokio
 - [x] monorepo
 - [x] plugin types: schedule, task (default)
-- [ ] housekeeping: remove all unwrap / improve error handling
-- [ ] plugin types: blocking
+- [x] housekeeping: remove all unwrap / improve error handling
+- [x] errors: play with anyhow
+- [x] macro: create a macro that wrap function and add execution time
+- [ ] plugin types: blocking / rayon
 - [ ] marv using event driven
-- [ ] data-parallelism / rayon
 - [ ] plugin: that track the execution time
-- [ ] errors: play with anyhow
-- [ ] macro: create a macro that wrap function and add execution time
 - [ ] dispatch: static vs dynamic (templates vs dyn)
 - [ ] use plugin as crate / external modules
-- [ ] config: custom segments for plugins
 - [ ] prometheus / metrics / aumentar cobertura
 - [ ] tracing
 - [ ] debug
@@ -66,7 +64,6 @@ Your rust Awesome IRC Bot, it's a personal project mainly used to play with Rust
 - [ ] FFI
 - [ ] change log level by using signals
 - [ ] logs: add debug messages
-- [ ] logs: make it possible to change log level by using signals
 
 ### Plugins
 
