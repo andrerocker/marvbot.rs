@@ -26,10 +26,7 @@ pub fn spawn(
                 .await;
 
                 if let Err(error) = dispatched {
-                    log::error!(
-                        "Problems trying to dispatch a call to the plugins: {}",
-                        error
-                    );
+                    log::error!("Problems trying to dispatch plugins: {}", error);
                 }
 
                 protocol.clear();

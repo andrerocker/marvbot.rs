@@ -61,14 +61,13 @@ pub async fn execute() -> anyhow::Result<()> {
     let (reader, writer) = stream.into_split();
     let network_reader = BufReader::new(reader);
     let network_writer = BufWriter::new(writer);
-    let (sender, receiver) = channel(10);
 
+    let (sender, receiver) = channel(10);
     let scheduler_sender = sender.clone();
     let dispatcher_sender = sender.clone();
 
     scheduled::spawn(scheduler_sender);
     dispatch::spawn(network_reader, dispatcher_sender);
-    wait_and_write(network_writer, receiver).await?;
 
-    Ok(())
+    wait_and_write(network_writer, receiver).await
 }
