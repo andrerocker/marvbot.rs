@@ -8,7 +8,7 @@ use once_cell::sync::OnceCell;
 
 static PLUGINS: OnceCell<DynamicPluginVec> = OnceCell::new();
 
-pub fn initialize(custom: DynamicPluginVec) {
+pub fn initialize(extra_plugins: DynamicPluginVec) {
     let mut default = vec![
         Logger::new(),
         Login::new(),
@@ -17,7 +17,7 @@ pub fn initialize(custom: DynamicPluginVec) {
         Hello::new(),
     ];
 
-    default.extend(custom);
+    default.extend(extra_plugins);
     PLUGINS.set(default);
 }
 
